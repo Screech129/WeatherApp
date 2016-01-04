@@ -49,7 +49,7 @@ namespace WeatherApp
 		{
 			int id = item.ItemId;
 			if (id == Resource.Id.action_refresh) {
-				await FetchWeatherTask ("70809");
+				await FetchWeatherTask ("12345");
 				return true;
 			}
 			return base.OnOptionsItemSelected (item);
