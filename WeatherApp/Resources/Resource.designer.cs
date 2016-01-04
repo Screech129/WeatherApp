@@ -60,8 +60,17 @@ namespace WeatherApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050000
-			public const int myButton = 2131034112;
+			// aapt resource value: 0x7f060003
+			public const int action_refresh = 2131099651;
+			
+			// aapt resource value: 0x7f060001
+			public const int list_item_forecast_textview = 2131099649;
+			
+			// aapt resource value: 0x7f060000
+			public const int listview_forecast = 2131099648;
+			
+			// aapt resource value: 0x7f060002
+			public const int myButton = 2131099650;
 			
 			static Id()
 			{
@@ -77,7 +86,13 @@ namespace WeatherApp
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int Main = 2130903040;
+			public const int fragment_main = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int list_item_forecast = 2130903041;
+			
+			// aapt resource value: 0x7f030002
+			public const int Main = 2130903042;
 			
 			static Layout()
 			{
@@ -89,8 +104,27 @@ namespace WeatherApp
 			}
 		}
 		
+		public partial class Menu
+		{
+			
+			// aapt resource value: 0x7f050000
+			public const int forecastfragment = 2131034112;
+			
+			static Menu()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Menu()
+			{
+			}
+		}
+		
 		public partial class String
 		{
+			
+			// aapt resource value: 0x7f040002
+			public const int action_refresh = 2130968578;
 			
 			// aapt resource value: 0x7f040001
 			public const int app_name = 2130968577;
