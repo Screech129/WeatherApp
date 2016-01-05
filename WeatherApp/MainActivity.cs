@@ -21,15 +21,6 @@ namespace WeatherApp
 		{
 			base.OnCreate (bundle);
 			SetContentView (Resource.Layout.Main);
-			FragmentTransaction fragmentTx = FragmentManager.BeginTransaction ();
-			ForecastFragment forecast = new ForecastFragment ();
-			fragmentTx.Add (Resource.Id.fragment_forecast, forecast);
-			fragmentTx.Commit ();
-			// Set our view from the "main" layout resource
-
-
-		
-
 		}
 			
 
