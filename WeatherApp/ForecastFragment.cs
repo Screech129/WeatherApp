@@ -88,7 +88,6 @@ namespace WeatherApp
 					// Stream was empty.  No point in parsing.
 					return null;
 				}
-				Log.Verbose (LOG_TAG,"Forecast JSON String: " + stringBuilder);
 				return getWeatherDataFromJson(stringBuilder.ToString (),7);
 			} catch (IOException e) {
 				Log.WriteLine (LogPriority.Error, "PlaceholderFragment", "Error ", e);
@@ -187,10 +186,6 @@ namespace WeatherApp
 
 				highAndLow = formatHighLows(high, low);
 				resultStrs[i] = day + " - " + description + " - " + highAndLow;
-			}
-
-			foreach (String s in resultStrs) {
-				Log.Verbose(LOG_TAG, "Forecast entry: " + s);
 			}
 			return resultStrs;
 
