@@ -63,14 +63,14 @@ namespace WeatherApp
 			// aapt resource value: 0x7f060003
 			public const int action_refresh = 2131099651;
 			
+			// aapt resource value: 0x7f060002
+			public const int fragment_forecast = 2131099650;
+			
 			// aapt resource value: 0x7f060001
 			public const int list_item_forecast_textview = 2131099649;
 			
 			// aapt resource value: 0x7f060000
 			public const int listview_forecast = 2131099648;
-			
-			// aapt resource value: 0x7f060002
-			public const int myButton = 2131099650;
 			
 			static Id()
 			{
