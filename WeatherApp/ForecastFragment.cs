@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Android.Preferences;
 
 using Android.App;
 using Android.Content;
@@ -48,23 +49,19 @@ namespace WeatherApp
 			listView.Adapter = ForecastAdapter;
 
 			listView.ItemClick += (sender, e) => {
-
-				Context context = this.Activity;
-				string text = ForecastAdapter.GetItem ((int)e.Id).ToString ();
-
-
-				Toast toast = Toast.MakeText (context, text, ToastLength.Short);
-				toast.Show ();
+				var foreCast = ForecastAdapter.GetItem ((int)e.Id);
+				var detailsIntent = new Intent (this.Activity, typeof(DetailActivity));
+				detailsIntent.PutExtra (Intent.ExtraText, foreCast.ToString ());
+				StartActivity (detailsIntent);
 			};
 
 			return view;
 		}
-				
+
 
 
 		public override void OnCreateOptionsMenu (IMenu menu, MenuInflater inflater)
 		{
-			menu.Clear ();
 			inflater.Inflate (Resource.Menu.forecastfragment, menu);
 		}
 
@@ -79,11 +76,25 @@ namespace WeatherApp
 		{
 			int id = item.ItemId;
 			if (id == Resource.Id.action_refresh) {
-				var forecastResult = await FetchWeatherTask ("70809");
-				ForecastAdapter.AddAll (forecastResult.ToList ());
+				await updateWeather ();
 				return true;
 			}
 			return base.OnOptionsItemSelected (item);
+		}
+
+		public async Task updateWeather ()
+		{
+			ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences (Activity);
+			var zipCode = prefs.GetString (Resources.GetString (Resource.String.pref_location_key), Resources.GetString (Resource.String.pref_location_default));
+			var forecastResult = await FetchWeatherTask (zipCode);
+			ForecastAdapter.Clear ();
+			ForecastAdapter.AddAll (forecastResult.ToList ());
+		}
+
+		public override void OnStart ()
+		{
+			base.OnStart ();
+			updateWeather ();
 		}
 
 		public async Task<String[]> FetchWeatherTask (string zipCode)
@@ -143,12 +154,23 @@ namespace WeatherApp
          */
 		private String formatHighLows (double high, double low)
 		{
+
 			// For presentation, assume the user doesn't care about tenths of a degree.
-			long roundedHigh = (long)Math.Round (high);
-			long roundedLow = (long)Math.Round (low);
+			long roundedHigh = (long)convertTempUnits (Math.Round (high));
+			long roundedLow = (long)convertTempUnits (Math.Round (low));
 
 			String highLowStr = roundedHigh + "/" + roundedLow;
 			return highLowStr;
+		}
+
+		private double convertTempUnits (double temp)
+		{
+			ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences (Activity);
+			var tempUnit = prefs.GetString (Resources.GetString (Resource.String.pref_temp_key), Resources.GetString (Resource.String.pref_temp_default));
+			if (tempUnit == "imperial") {
+				return temp * 1.8 + 32;
+			}
+			return temp;
 		}
 
 		/**

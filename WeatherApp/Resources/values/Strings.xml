@@ -3,4 +3,24 @@
 	<string name="hello">Hello World, Click Me!</string>
 	<string name="app_name">WeatherApp</string>
 	<string name="action_refresh" translatable="false">Refresh</string>
+	<string name="action_settings" translatable="false">Settings</string>
+	<string name="hello_world">Hello world!</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="pref_location_label">Location</string>
+    <string name="pref_location_key">location</string>
+    <string name="pref_location_default">70809</string>
+    <string name="pref_location_summary">70809</string>
+    <string name="pref_temp_label">Temperature Units</string>
+    <string name="pref_temp_key">temperature</string>
+    <string name="pref_temp_default">imperial</string>
+    <string name="pref_temp_summary">Imperial</string>
+    <string name="pref_tempDialog_label">Units</string>
+    <string-array name="pref_temp_entries">
+    <item>Imperial</item>
+    <item>Metric</item>
+    </string-array>
+	<string-array name="pref_temp_values">
+    <item>imperial</item>
+    <item>metric</item>
+    </string-array>
 </resources>
