@@ -75,6 +75,7 @@
     <AndroidResource Include="Resources\layout\fragment_detail.axml" />
     <AndroidResource Include="Resources\menu\main.axml" />
     <AndroidResource Include="Resources\xml\pref_general.xml" />
+    <AndroidResource Include="Resources\menu\detail_fragment.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>

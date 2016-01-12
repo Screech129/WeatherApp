@@ -2,14 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="WeatherApp.DetailActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100"/>
-    <item android:id="@+id/action_viewLocation" android:title="@string/action_viewLocation"
-        android:orderInCategory="100"/>
+    tools:context="WeatherApp.DetailActivity.PlaceHolderFragment">
     <item
             android:id="@+id/action_share"
             android:title="@string/action_share"
+            android:showAsAction="always"
             android:actionProviderClass=
                 "android.widget.ShareActionProvider" />
 </menu>
+

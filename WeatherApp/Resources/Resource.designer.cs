@@ -79,11 +79,17 @@ namespace WeatherApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f080006
-			public const int action_refresh = 2131230726;
+			// aapt resource value: 0x7f080008
+			public const int action_refresh = 2131230728;
 			
 			// aapt resource value: 0x7f080005
 			public const int action_settings = 2131230725;
+			
+			// aapt resource value: 0x7f080007
+			public const int action_share = 2131230727;
+			
+			// aapt resource value: 0x7f080006
+			public const int action_viewLocation = 2131230726;
 			
 			// aapt resource value: 0x7f080000
 			public const int container = 2131230720;
@@ -145,10 +151,13 @@ namespace WeatherApp
 			public const int detail = 2131165184;
 			
 			// aapt resource value: 0x7f070001
-			public const int forecastfragment = 2131165185;
+			public const int detail_fragment = 2131165185;
 			
 			// aapt resource value: 0x7f070002
-			public const int main = 2131165186;
+			public const int forecastfragment = 2131165186;
+			
+			// aapt resource value: 0x7f070003
+			public const int main = 2131165187;
 			
 			static Menu()
 			{
@@ -169,44 +178,50 @@ namespace WeatherApp
 			// aapt resource value: 0x7f050003
 			public const int action_settings = 2131034115;
 			
+			// aapt resource value: 0x7f050005
+			public const int action_share = 2131034117;
+			
+			// aapt resource value: 0x7f050004
+			public const int action_viewLocation = 2131034116;
+			
 			// aapt resource value: 0x7f050001
 			public const int app_name = 2131034113;
 			
 			// aapt resource value: 0x7f050000
 			public const int hello = 2131034112;
 			
-			// aapt resource value: 0x7f050004
-			public const int hello_world = 2131034116;
-			
-			// aapt resource value: 0x7f050008
-			public const int pref_location_default = 2131034120;
-			
-			// aapt resource value: 0x7f050007
-			public const int pref_location_key = 2131034119;
-			
 			// aapt resource value: 0x7f050006
-			public const int pref_location_label = 2131034118;
-			
-			// aapt resource value: 0x7f050009
-			public const int pref_location_summary = 2131034121;
-			
-			// aapt resource value: 0x7f05000e
-			public const int pref_tempDialog_label = 2131034126;
-			
-			// aapt resource value: 0x7f05000c
-			public const int pref_temp_default = 2131034124;
-			
-			// aapt resource value: 0x7f05000b
-			public const int pref_temp_key = 2131034123;
+			public const int hello_world = 2131034118;
 			
 			// aapt resource value: 0x7f05000a
-			public const int pref_temp_label = 2131034122;
+			public const int pref_location_default = 2131034122;
+			
+			// aapt resource value: 0x7f050009
+			public const int pref_location_key = 2131034121;
+			
+			// aapt resource value: 0x7f050008
+			public const int pref_location_label = 2131034120;
+			
+			// aapt resource value: 0x7f05000b
+			public const int pref_location_summary = 2131034123;
+			
+			// aapt resource value: 0x7f050010
+			public const int pref_tempDialog_label = 2131034128;
+			
+			// aapt resource value: 0x7f05000e
+			public const int pref_temp_default = 2131034126;
 			
 			// aapt resource value: 0x7f05000d
-			public const int pref_temp_summary = 2131034125;
+			public const int pref_temp_key = 2131034125;
 			
-			// aapt resource value: 0x7f050005
-			public const int title_activity_detail = 2131034117;
+			// aapt resource value: 0x7f05000c
+			public const int pref_temp_label = 2131034124;
+			
+			// aapt resource value: 0x7f05000f
+			public const int pref_temp_summary = 2131034127;
+			
+			// aapt resource value: 0x7f050007
+			public const int title_activity_detail = 2131034119;
 			
 			static String()
 			{

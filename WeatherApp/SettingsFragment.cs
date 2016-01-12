@@ -26,6 +26,7 @@ namespace WeatherApp
 		{
 			base.OnCreate(savedInstanceState);
  			AddPreferencesFromResource (Resource.Xml.pref_general);
+
 		}
 
 		public override void OnResume ()
@@ -49,7 +50,7 @@ namespace WeatherApp
 				var listPref = (ListPreference)pref;
 				pref.Summary = listPref.Entry;
 			} else {
-				pref.Summary = pref.Title;
+				pref.Summary = sharedPreferences.GetString (key,"");
 			}
 			var prefEditor = sharedPreferences.Edit ();
 			prefEditor.PutString (key,sharedPreferences.GetString (key,""));
