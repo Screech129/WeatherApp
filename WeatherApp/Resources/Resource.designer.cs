@@ -66,9 +66,6 @@ namespace WeatherApp
 			// aapt resource value: 0x7f020000
 			public const int Icon = 2130837504;
 			
-			// aapt resource value: 0x7f020001
-			public const int monoandroidsplash = 2130837505;
-			
 			static Drawable()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -82,32 +79,32 @@ namespace WeatherApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f090008
-			public const int action_refresh = 2131296264;
+			// aapt resource value: 0x7f080008
+			public const int action_refresh = 2131230728;
 			
-			// aapt resource value: 0x7f090005
-			public const int action_settings = 2131296261;
+			// aapt resource value: 0x7f080005
+			public const int action_settings = 2131230725;
 			
-			// aapt resource value: 0x7f090007
-			public const int action_share = 2131296263;
+			// aapt resource value: 0x7f080007
+			public const int action_share = 2131230727;
 			
-			// aapt resource value: 0x7f090006
-			public const int action_viewLocation = 2131296262;
+			// aapt resource value: 0x7f080006
+			public const int action_viewLocation = 2131230726;
 			
-			// aapt resource value: 0x7f090000
-			public const int container = 2131296256;
+			// aapt resource value: 0x7f080000
+			public const int container = 2131230720;
 			
-			// aapt resource value: 0x7f090001
-			public const int detail_text = 2131296257;
+			// aapt resource value: 0x7f080001
+			public const int detail_text = 2131230721;
 			
-			// aapt resource value: 0x7f090004
-			public const int fragment_forecast = 2131296260;
+			// aapt resource value: 0x7f080004
+			public const int fragment_forecast = 2131230724;
 			
-			// aapt resource value: 0x7f090003
-			public const int list_item_forecast_textview = 2131296259;
+			// aapt resource value: 0x7f080003
+			public const int list_item_forecast_textview = 2131230723;
 			
-			// aapt resource value: 0x7f090002
-			public const int listview_forecast = 2131296258;
+			// aapt resource value: 0x7f080002
+			public const int listview_forecast = 2131230722;
 			
 			static Id()
 			{
@@ -150,17 +147,17 @@ namespace WeatherApp
 		public partial class Menu
 		{
 			
-			// aapt resource value: 0x7f080000
-			public const int detail = 2131230720;
+			// aapt resource value: 0x7f070000
+			public const int detail = 2131165184;
 			
-			// aapt resource value: 0x7f080001
-			public const int detail_fragment = 2131230721;
+			// aapt resource value: 0x7f070001
+			public const int detail_fragment = 2131165185;
 			
-			// aapt resource value: 0x7f080002
-			public const int forecastfragment = 2131230722;
+			// aapt resource value: 0x7f070002
+			public const int forecastfragment = 2131165186;
 			
-			// aapt resource value: 0x7f080003
-			public const int main = 2131230723;
+			// aapt resource value: 0x7f070003
+			public const int main = 2131165187;
 			
 			static Menu()
 			{
@@ -232,22 +229,6 @@ namespace WeatherApp
 			}
 			
 			private String()
-			{
-			}
-		}
-		
-		public partial class Style
-		{
-			
-			// aapt resource value: 0x7f070000
-			public const int Mono_Android_Theme_Splash = 2131165184;
-			
-			static Style()
-			{
-				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
-			}
-			
-			private Style()
 			{
 			}
 		}

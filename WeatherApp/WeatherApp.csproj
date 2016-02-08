@@ -54,11 +54,6 @@
     <Compile Include="SettingsActivity.cs" />
     <Compile Include="Data\WeatherContract.cs" />
     <Compile Include="Data\WeatherDbHelper.cs" />
-    <Compile Include="androidTest\FullTestSuite.cs" />
-    <Compile Include="androidTest\Data\TestDb.cs" />
-    <Compile Include="androidTest\Data\TestPractice.cs" />
-    <Compile Include="androidTest\Data\TestUtilities.cs" />
-    <Compile Include="androidTest\Utils\PollingCheck.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -87,9 +82,6 @@
   <ItemGroup>
     <Folder Include="Resources\menu\" />
     <Folder Include="Resources\xml\" />
-    <Folder Include="androidTest\" />
     <Folder Include="Data\" />
-    <Folder Include="androidTest\Data\" />
-    <Folder Include="androidTest\Utils\" />
   </ItemGroup>
 </Project>
