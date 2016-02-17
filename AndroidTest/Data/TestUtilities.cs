@@ -7,36 +7,53 @@ using System.Linq;
 using Android.Database;
 using Android.OS;
 using System.Threading.Tasks;
+using WeatherApp;
+using SQLite;
+using System.IO;
+using System.Reflection;
 
 
-namespace WeatherApp
+namespace AndroidTest
 {
 	[TestFixture]
 	public class TestUtilities
 	{
+		[SetUp]
+		public void Setup ()
+		{
+		}
+
+
+		[TearDown]
+		public void Tear ()
+		{
+		}
+
+
 		const string TEST_LOCATION = "99705";
 		const long TEST_DATE = 1419033600L;
 		// December 20th, 2014
+		const String DATABASE_NAME = "weather.db";
+		static string personalFolder = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+		static readonly string DATABASE_PATH = Path.Combine (personalFolder, DATABASE_NAME);
+		SQLiteConnection con = new SQLiteConnection (DATABASE_PATH);
 
-		static void validateCursor (string error, SQLiteCursor valueCursor, ContentValues expectedValues)
-		{
-			Assert.IsTrue (valueCursor.MoveToFirst (), "Empty cursor returned. " + error);
-			validateCurrentRecord (error, valueCursor, expectedValues);
-			valueCursor.Close ();
-		}
 
-		static void validateCurrentRecord (String error, SQLiteCursor valueCursor, ContentValues expectedValues)
+
+
+		public static void validateCurrentRecord (String error, LocationEntry expectedValues)
 		{
-			List<string> valueSet = expectedValues.KeySet ().ToList ();
-			foreach (string entry in valueSet) {
-				String columnName = entry;
-				int idx = valueCursor.GetColumnIndex (columnName);
-				Assert.IsFalse (idx == -1, "Column '" + columnName + "' not found. " + error);
-				String expectedValue = expectedValues.Get (entry).ToString ();
-				Assert.AreEqual ("Value '" + expectedValues.Get (entry) +
-				"' did not match the expected value '" +
-				expectedValue + "'. " + error, expectedValue, valueCursor.GetString (idx));
-			}
+			var test = expectedValues;
+//			
+//			foreach (PropertyInfo entry in properties) {
+//				String columnName = entry.ToString ();
+//				int idx = valueCursor.GetColumnIndex (columnName);
+//				Assert.IsFalse (idx == -1, "Column '" + columnName + "' not found. " + error);
+//				String expectedValue = expectedValues [entry].ToString ();
+//				Assert.AreEqual ("Value '" + expectedValues.Get (entry) +
+//				"' did not match the expected value '" +
+//				expectedValue + "'. " + error, expectedValue, valueCursor.GetString (idx));
+//			}
 		}
 
 		static ContentValues createWeatherValues (long locationRowId)
@@ -61,35 +78,52 @@ namespace WeatherApp
         Students: You can uncomment this helper function once you have finished creating the
         LocationEntry part of the WeatherContract.
      */
-		//    static ContentValues createNorthPoleLocationValues() {
-		//        // Create a new map of values, where column names are the keys
-		//        ContentValues testValues = new ContentValues();
-		//        testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, TEST_LOCATION);
-		//        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole");
-		//        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, 64.7488);
-		//        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
-		//
-		//        return testValues;
-		//    }
+		static List<LocationEntry> createNorthPoleLocationValues ()
+		{
+			// Create a new map of values, where column names are the keys
+			List<LocationEntry> locEntries = new List<LocationEntry> ();
 
-		/*
-        Students: You can uncomment this function once you have finished creating the
-        LocationEntry part of the WeatherContract as well as the WeatherDbHelper.
-     */
-		//    static long insertNorthPoleLocationValues(Context context) {
-		//        // insert our test records into the database
-		//        WeatherDbHelper dbHelper = new WeatherDbHelper(context);
-		//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-		//        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
-		//
-		//        long locationRowId;
-		//        locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
-		//
-		//        // Verify we got a row back.
-		//        assertTrue("Error: Failure to insert North Pole Location Values", locationRowId != -1);
-		//
-		//        return locationRowId;
-		//    }
+			LocationEntry locEntry1 = new LocationEntry () {
+				COLUMN_LOCATION_SETTING = TEST_LOCATION,
+				COLUMN_CITY_NAME = "North Pole",
+				COLUMN_COORD_LAT = 64.7488,
+				COLUMN_COORD_LONG = -147.353
+			};
+			LocationEntry locEntry2 = new LocationEntry () {
+				COLUMN_LOCATION_SETTING = TEST_LOCATION,
+				COLUMN_CITY_NAME = "Your Mom's",
+				COLUMN_COORD_LAT = 61.345,
+				COLUMN_COORD_LONG = -180.353
+			};
+			LocationEntry locEntry3 = new LocationEntry () {
+				COLUMN_LOCATION_SETTING = TEST_LOCATION,
+				COLUMN_CITY_NAME = "Cartel HQ",
+				COLUMN_COORD_LAT = -45.7488,
+				COLUMN_COORD_LONG = -101.353
+			};
+			locEntries.Add (locEntry1);
+			locEntries.Add (locEntry2);
+			locEntries.Add (locEntry3);
+
+			return locEntries;
+		}
+
+
+		static public long insertNorthPoleLocationValues ()
+		{
+			// insert our test records into the database
+			WeatherDbHelper dbHelper = new WeatherDbHelper ();
+			List<LocationEntry> testLocation = TestUtilities.createNorthPoleLocationValues ();
+		
+			long locationRowId = -1;
+
+			foreach (var loc in testLocation) {
+				
+				locationRowId = dbHelper.Insert (loc);
+			}
+		
+			return locationRowId;
+		}
 
 		/*
         Students: The functions we provide inside of TestProvider use this utility class to test

@@ -1,17 +1,28 @@
 ﻿using System;
 using NUnit.Framework;
+using System.Collections.Generic;
+using WeatherApp;
+using SQLite;
+using System.IO;
+using System.Linq;
+using System.Data;
+using AndroidTest;
 
 namespace AndroidTest
 {
 	[TestFixture]
 	public class TestDb
 	{
-        
+		const String DATABASE_NAME = "weather.db";
+		static string personalFolder = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+		static readonly string DATABASE_PATH = Path.Combine (personalFolder, DATABASE_NAME);
 		public const string LOG_TAG = "TestDb";
+		WeatherDbHelper helper = new WeatherDbHelper ();
+		SQLiteConnection con = new SQLiteConnection (DATABASE_PATH);
 
 		void deleteTheDatabase ()
 		{
-			//TestContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
+			helper.DropAll ();
 		}
 
 		[SetUp]
@@ -29,57 +40,41 @@ namespace AndroidTest
 		[Test]
 		public void Create_Database ()
 		{
-			//        final HashSet<String> tableNameHashSet = new HashSet<String>();
-			//        tableNameHashSet.add(WeatherContract.LocationEntry.TABLE_NAME);
-			//        tableNameHashSet.add(WeatherContract.WeatherEntry.TABLE_NAME);
-			//
-			//        mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
-			//        SQLiteDatabase db = new WeatherDbHelper(
-			//                this.mContext).getWritableDatabase();
-			//        assertEquals(true, db.isOpen());
-			//
-			//        // have we created the tables we want?
-			//        Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-			//
-			//        assertTrue("Error: This means that the database has not been created correctly",
-			//                c.moveToFirst());
-			//
-			//        // verify that the tables have been created
-			//        do {
-			//            tableNameHashSet.remove(c.getString(0));
-			//        } while( c.moveToNext() );
-			//
-			//        // if this fails, it means that your database doesn't contain both the location entry
-			//        // and weather entry tables
-			//        assertTrue("Error: Your database was created without both the location entry and weather entry tables",
-			//                tableNameHashSet.isEmpty());
-			//
-			//        // now, do our tables contain the correct columns?
-			//        c = db.rawQuery("PRAGMA table_info(" + WeatherContract.LocationEntry.TABLE_NAME + ")",
-			//                null);
-			//
-			//        assertTrue("Error: This means that we were unable to query the database for table information.",
-			//                c.moveToFirst());
-			//
-			//        // Build a HashSet of all of the column names we want to look for
-			//        final HashSet<String> locationColumnHashSet = new HashSet<String>();
-			//        locationColumnHashSet.add(WeatherContract.LocationEntry._ID);
-			//        locationColumnHashSet.add(WeatherContract.LocationEntry.COLUMN_CITY_NAME);
-			//        locationColumnHashSet.add(WeatherContract.LocationEntry.COLUMN_COORD_LAT);
-			//        locationColumnHashSet.add(WeatherContract.LocationEntry.COLUMN_COORD_LONG);
-			//        locationColumnHashSet.add(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING);
-			//
-			//        int columnNameIndex = c.getColumnIndex("name");
-			//        do {
-			//            String columnName = c.getString(columnNameIndex);
-			//            locationColumnHashSet.remove(columnName);
-			//        } while(c.moveToNext());
-			//
-			//        // if this fails, it means that your database doesn't contain all of the required location
-			//        // entry columns
-			//        assertTrue("Error: The database doesn't contain all of the required location entry columns",
-			//                locationColumnHashSet.isEmpty());
-			//        db.close();
+			TableMapping map = new TableMapping (typeof(SqlDbType));
+			helper.Create ();
+			var tables = helper.Query (map, "SELECT name FROM sqlite_master WHERE type='table'", new object[0]);
+
+
+			// have we created the tables we want?
+			
+			Assert.IsTrue (tables.Count == 2, "Error: This means that the database has not been created correctly");
+
+
+			// now, do our tables contain the correct columns?
+			var columnNames = helper.GetTableInfo ("location");
+		
+			Assert.IsTrue (columnNames.Count > 0, "Error: This means that the database has not been created correctly");
+			
+			// Build a HashSet of all of the column names we want to look for
+			HashSet<String> locationColumnHashSet = new HashSet<String> ();
+			locationColumnHashSet.Add ("Id");
+			locationColumnHashSet.Add ("Count");
+			locationColumnHashSet.Add ("city_name");
+			locationColumnHashSet.Add ("coord_lat");
+			locationColumnHashSet.Add ("coord_long");
+			locationColumnHashSet.Add ("location_setting");
+			var columnList = columnNames.ToList ();
+			var columnNameIndex = 0;
+			do {
+				var columnName = columnList [columnNameIndex].Name;
+				locationColumnHashSet.Remove (columnName);
+				columnNameIndex++;
+			} while(columnNameIndex < columnList.Count);
+
+			// if this fails, it means that your database doesn't contain all of the required location
+			// entry columns
+			Assert.IsTrue (locationColumnHashSet.Count == 0, "Error: The database doesn't contain all of the required location entry columns");
+			//helper.Close ();
 		}
 
 		/*
@@ -92,16 +87,17 @@ namespace AndroidTest
 		public void Insert_and_Query_Location_Database ()
 		{
 			// First step: Get reference to writable database
-
+			helper.Create ();
 			// Create ContentValues of what you want to insert
 			// (you can use the createNorthPoleLocationValues if you wish)
-
+			var result = TestUtilities.insertNorthPoleLocationValues ();
 			// Insert ContentValues into database and get a row ID back
-
+			Assert.IsTrue (result > 0, "Error: No rows were inserted");
 			// Query the database and receive a Cursor back
-
+			var test = helper.Table<LocationEntry> ();
+			var resultSet = helper.Get<LocationEntry> (result);
 			// Move the cursor to a valid database row
-
+			TestUtilities.validateCurrentRecord ("Row is not as expected", resultSet);
 			// Validate data in resulting Cursor with the original ContentValues
 			// (you can use the validateCurrentRecord function in TestUtilities to validate the
 			// query if you like)

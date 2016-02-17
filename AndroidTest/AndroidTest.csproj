@@ -43,6 +43,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
     <Reference Include="Xamarin.Android.NUnitLite" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -60,15 +61,24 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\Icon.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\Icon.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\Icon.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\Icon.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\Icon2.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\Icon2.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\Icon2.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\Icon2.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Utils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WeatherApp\WeatherApp.csproj">
+      <Project>{D56C28C1-4BDC-4DD4-9819-909AD29CA216}</Project>
+      <Name>WeatherApp</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

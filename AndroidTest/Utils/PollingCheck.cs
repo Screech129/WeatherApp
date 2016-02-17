@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System.Threading;
 using Android.Runtime;
 
-namespace WeatherApp
+namespace AndroidTest
 {
 	public class PollingCheck
 	{
