@@ -67,9 +67,9 @@
     <Compile Include="SettingsActivity.cs" />
     <Compile Include="Data\WeatherContract.cs" />
     <Compile Include="Data\WeatherDbHelper.cs" />
-    <Compile Include="SQLite.cs" />
-    <Compile Include="SQLiteAsync.cs" />
     <Compile Include="Data\BaseColumns.cs" />
+    <Compile Include="Data\WeatherDbOpenHelper.cs" />
+    <Compile Include="Data\WeatherContractOpen.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

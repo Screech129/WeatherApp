@@ -1,7 +1,8 @@
 ﻿using System;
 using Android.Content;
 using System.IO;
-using SQLite;
+using SQLite.Net;
+using SQLite.Net.Platform.XamarinAndroid;
 
 namespace WeatherApp
 {
@@ -14,7 +15,8 @@ namespace WeatherApp
 		static readonly string DATABASE_PATH = Path.Combine (personalFolder, DATABASE_NAME);
 
 
-		public WeatherDbHelper () : base (DATABASE_PATH)
+
+		public WeatherDbHelper () : base (new SQLitePlatformAndroid (), DATABASE_PATH)
 		{
 			
 		}

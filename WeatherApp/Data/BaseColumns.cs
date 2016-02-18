@@ -1,4 +1,4 @@
-﻿using SQLite;
+﻿using SQLite.Net.Attributes;
 
 
 namespace WeatherApp
@@ -10,10 +10,12 @@ namespace WeatherApp
 			
 		}
 
-		[PrimaryKey,AutoIncrement,Column ("_id")]
-		public int Id { get; set; }
 
-		public int Count{ get; set; }
+		public  const string _ID = "Id";
+
+
+		public  const string COUNT = "Count";
+
 	}
 }
 

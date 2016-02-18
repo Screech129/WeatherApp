@@ -1,8 +1,9 @@
 ﻿using System;
 using Android.Provider;
-using SQLite;
-using SQLiteNetExtensions.Attributes;
 using System.Collections.Generic;
+using SQLite.Net;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 
 namespace WeatherApp
 {
@@ -45,7 +46,7 @@ namespace WeatherApp
 		[NotNull]
 		public string city_name { get; set; }
 
-		[OneToMany ("WeatherRecordId")]
+		[OneToMany]
 		public List<WeatherEntry> WeatherEntries{ get; set; }
 
 	}
@@ -101,8 +102,8 @@ namespace WeatherApp
 		[NotNull]
 		public  decimal degrees{ get; set; }
 
-		//		[ManyToOne]
-		//		public LocationEntry LocationEntry{ get; set; }
+		[ManyToOne]
+		public LocationEntry LocationEntry{ get; set; }
 
 	}
 }

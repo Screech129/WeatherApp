@@ -11,6 +11,8 @@ using WeatherApp;
 using SQLite;
 using System.IO;
 using System.Reflection;
+using SQLite.Net;
+using SQLite.Net.Platform.XamarinAndroid;
 
 
 namespace AndroidTest
@@ -36,7 +38,7 @@ namespace AndroidTest
 		const String DATABASE_NAME = "weather.db";
 		static string personalFolder = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
 		static readonly string DATABASE_PATH = Path.Combine (personalFolder, DATABASE_NAME);
-		SQLiteConnection con = new SQLiteConnection (DATABASE_PATH);
+		SQLiteConnection con = new SQLiteConnection (new SQLitePlatformAndroid (), DATABASE_PATH);
 
 
 
@@ -129,7 +131,7 @@ namespace AndroidTest
 			var date = 0;
 			int.TryParse (DateTime.Now.ToString (), out date);
 			WeatherEntry weathEntry1 = new WeatherEntry () {
-				date = date,
+				date = date + 1,
 				degrees = 75,
 				humidity = 45,
 				LocationId = 1,
@@ -144,7 +146,7 @@ namespace AndroidTest
 				
 			};
 			WeatherEntry weathEntry2 = new WeatherEntry () {
-				date = date,
+				date = date + 2,
 				degrees = 72,
 				humidity = 42,
 				LocationId = 1,
@@ -156,7 +158,7 @@ namespace AndroidTest
 				wind = 45
 			};
 			WeatherEntry weathEntry3 = new WeatherEntry () {
-				date = date,
+				date = date + 3,
 				degrees = 7,
 				humidity = 4,
 				LocationId = 1,

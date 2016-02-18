@@ -7,8 +7,8 @@ namespace AndroidTest
 {
 	public class PollingCheck
 	{
-		private const int TIME_SLICE = 50;
-		private long _timeout = 3000;
+		public const int TIME_SLICE = 50;
+		public long _timeout = 3000;
 
 		public PollingCheck ()
 		{
@@ -19,14 +19,14 @@ namespace AndroidTest
 			_timeout = timeout;
 		}
 
-		protected virtual bool check ()
+		public virtual bool checkBool ()
 		{
 			return false;
 		}
 
 		public void run ()
 		{
-			if (check ()) {
+			if (checkBool ()) {
 				return;
 			}
 		
@@ -40,7 +40,7 @@ namespace AndroidTest
 					Assert.Fail ("unexpected ThreadInterruptedException");
 				}
 
-				if (check ()) {
+				if (checkBool ()) {
 					return;
 				}
 

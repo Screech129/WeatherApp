@@ -7,6 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Data;
 using AndroidTest;
+using SQLite.Net;
+using SQLite.Net.Platform.XamarinAndroid;
+using System.Reflection;
 
 namespace AndroidTest
 {
@@ -18,7 +21,7 @@ namespace AndroidTest
 		static readonly string DATABASE_PATH = Path.Combine (personalFolder, DATABASE_NAME);
 		public const string LOG_TAG = "TestDb";
 		WeatherDbHelper helper = new WeatherDbHelper ();
-		SQLiteConnection con = new SQLiteConnection (DATABASE_PATH);
+		SQLiteConnection con = new SQLiteConnection (new SQLitePlatformAndroid (), DATABASE_PATH);
 
 		void deleteTheDatabase ()
 		{
@@ -40,43 +43,43 @@ namespace AndroidTest
 		[Test]
 		public void Create_Database ()
 		{
-			using (SQLiteConnection conn = new SQLiteConnection (DATABASE_PATH)) {
-				TableMapping map = new TableMapping (typeof(SqlDbType));
-				helper.Create ();
-				var tables = helper.Query (map, "SELECT name FROM sqlite_master WHERE type='table'", new object[0]);
+			
+			var map = new TableMapping (typeof(SqlDbType), new List<PropertyInfo> ());
+			helper.Create ();
+			var tables = helper.Query (map, "SELECT name FROM sqlite_master WHERE type='table'", new object[0]);
 
 
-				// have we created the tables we want?
+			// have we created the tables we want?
 
-				Assert.IsTrue (tables.Count >= 2, "Error: This means that the database has not been created correctly");
+			Assert.IsTrue (tables.Count >= 2, "Error: This means that the database has not been created correctly");
 
 
-				// now, do our tables contain the correct columns?
-				var columnNames = helper.GetTableInfo ("location");
+			// now, do our tables contain the correct columns?
+			var columnNames = helper.GetTableInfo ("location");
 
-				Assert.IsTrue (columnNames.Count > 0, "Error: This means that the database has not been created correctly");
+			Assert.IsTrue (columnNames.Count > 0, "Error: This means that the database has not been created correctly");
 
-				// Build a HashSet of all of the column names we want to look for
-				HashSet<String> locationColumnHashSet = new HashSet<String> ();
-				locationColumnHashSet.Add ("Count");
-				locationColumnHashSet.Add ("city_name");
-				locationColumnHashSet.Add ("coord_lat");
-				locationColumnHashSet.Add ("coord_long");
-				locationColumnHashSet.Add ("location_setting");
-				var columnList = columnNames.ToList ();
-				var columnNameIndex = 0;
-				do {
-					var columnName = columnList [columnNameIndex].Name;
-					locationColumnHashSet.Remove (columnName);
-					columnNameIndex++;
-				} while(columnNameIndex < columnList.Count);
+			// Build a HashSet of all of the column names we want to look for
+			HashSet<String> locationColumnHashSet = new HashSet<String> ();
+			locationColumnHashSet.Add ("LocationId");
+			locationColumnHashSet.Add ("city_name");
+			locationColumnHashSet.Add ("coord_lat");
+			locationColumnHashSet.Add ("coord_long");
+			locationColumnHashSet.Add ("location_setting");
+			var columnList = columnNames.ToList ();
+			var columnNameIndex = 0;
+			do {
+				var columnName = columnList [columnNameIndex].Name;
+				locationColumnHashSet.Remove (columnName);
+				columnNameIndex++;
+			} while(columnNameIndex < columnList.Count);
 
-				// if this fails, it means that your database doesn't contain all of the required location
-				// entry columns
-				Assert.IsTrue (locationColumnHashSet.Count == 0, "Error: The database doesn't contain all of the required location entry columns");
-			}
-
+			// if this fails, it means that your database doesn't contain all of the required location
+			// entry columns
+			Assert.IsTrue (locationColumnHashSet.Count == 0, "Error: The database doesn't contain all of the required location entry columns");
 		}
+
+
 
 		/*
         Students:  Here is where you will build code to test that we can insert and query the
@@ -87,7 +90,7 @@ namespace AndroidTest
 		[Test]
 		public void Insert_and_Query_Location_Database ()
 		{
-			using (SQLiteConnection conn = new SQLiteConnection (DATABASE_PATH)) {
+			using (SQLiteConnection conn = new SQLiteConnection (new SQLitePlatformAndroid (), DATABASE_PATH)) {
 				
 				helper.Create ();
 
@@ -112,7 +115,7 @@ namespace AndroidTest
 		{
 			// First insert the location, and then use the locationRowId to insert
 			// the weather. Make sure to cover as many failure cases as you can.
-			using (SQLiteConnection conn = new SQLiteConnection (DATABASE_PATH)) {
+			using (SQLiteConnection conn = new SQLiteConnection (new SQLitePlatformAndroid (), DATABASE_PATH)) {
 				helper.Create ();
 				TestUtilities.insertNorthPoleLocationValues ();
 				var locValues = helper.Table<LocationEntry> ();
