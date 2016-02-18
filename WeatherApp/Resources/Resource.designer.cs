@@ -26,6 +26,8 @@ namespace WeatherApp
 		
 		public static void UpdateIdValues()
 		{
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.ApplicationName = global::WeatherApp.Resource.String.ApplicationName;
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.Hello = global::WeatherApp.Resource.String.Hello;
 		}
 		
 		public partial class Array
@@ -172,56 +174,62 @@ namespace WeatherApp
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f050002
-			public const int action_refresh = 2131034114;
-			
-			// aapt resource value: 0x7f050003
-			public const int action_settings = 2131034115;
-			
-			// aapt resource value: 0x7f050005
-			public const int action_share = 2131034117;
-			
-			// aapt resource value: 0x7f050004
-			public const int action_viewLocation = 2131034116;
-			
 			// aapt resource value: 0x7f050001
-			public const int app_name = 2131034113;
+			public const int ApplicationName = 2131034113;
 			
 			// aapt resource value: 0x7f050000
-			public const int hello = 2131034112;
+			public const int Hello = 2131034112;
 			
-			// aapt resource value: 0x7f050006
-			public const int hello_world = 2131034118;
+			// aapt resource value: 0x7f050004
+			public const int action_refresh = 2131034116;
 			
-			// aapt resource value: 0x7f05000a
-			public const int pref_location_default = 2131034122;
-			
-			// aapt resource value: 0x7f050009
-			public const int pref_location_key = 2131034121;
-			
-			// aapt resource value: 0x7f050008
-			public const int pref_location_label = 2131034120;
-			
-			// aapt resource value: 0x7f05000b
-			public const int pref_location_summary = 2131034123;
-			
-			// aapt resource value: 0x7f050010
-			public const int pref_tempDialog_label = 2131034128;
-			
-			// aapt resource value: 0x7f05000e
-			public const int pref_temp_default = 2131034126;
-			
-			// aapt resource value: 0x7f05000d
-			public const int pref_temp_key = 2131034125;
-			
-			// aapt resource value: 0x7f05000c
-			public const int pref_temp_label = 2131034124;
-			
-			// aapt resource value: 0x7f05000f
-			public const int pref_temp_summary = 2131034127;
+			// aapt resource value: 0x7f050005
+			public const int action_settings = 2131034117;
 			
 			// aapt resource value: 0x7f050007
-			public const int title_activity_detail = 2131034119;
+			public const int action_share = 2131034119;
+			
+			// aapt resource value: 0x7f050006
+			public const int action_viewLocation = 2131034118;
+			
+			// aapt resource value: 0x7f050003
+			public const int app_name = 2131034115;
+			
+			// aapt resource value: 0x7f050002
+			public const int hello = 2131034114;
+			
+			// aapt resource value: 0x7f050008
+			public const int hello_world = 2131034120;
+			
+			// aapt resource value: 0x7f05000c
+			public const int pref_location_default = 2131034124;
+			
+			// aapt resource value: 0x7f05000b
+			public const int pref_location_key = 2131034123;
+			
+			// aapt resource value: 0x7f05000a
+			public const int pref_location_label = 2131034122;
+			
+			// aapt resource value: 0x7f05000d
+			public const int pref_location_summary = 2131034125;
+			
+			// aapt resource value: 0x7f050012
+			public const int pref_tempDialog_label = 2131034130;
+			
+			// aapt resource value: 0x7f050010
+			public const int pref_temp_default = 2131034128;
+			
+			// aapt resource value: 0x7f05000f
+			public const int pref_temp_key = 2131034127;
+			
+			// aapt resource value: 0x7f05000e
+			public const int pref_temp_label = 2131034126;
+			
+			// aapt resource value: 0x7f050011
+			public const int pref_temp_summary = 2131034129;
+			
+			// aapt resource value: 0x7f050009
+			public const int title_activity_detail = 2131034121;
 			
 			static String()
 			{

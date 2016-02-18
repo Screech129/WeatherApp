@@ -1,6 +1,8 @@
 ﻿using System;
 using Android.Provider;
 using SQLite;
+using SQLiteNetExtensions.Attributes;
+using System.Collections.Generic;
 
 namespace WeatherApp
 {
@@ -21,90 +23,86 @@ namespace WeatherApp
         done for WeatherEntry)
      */
 	[Table ("Location")]
-	public class LocationEntry:BaseColumns
+	public class LocationEntry
 	{
 		public LocationEntry ()
 		{
 			
 		}
 
-		[Column ("location_setting")]
-		[NotNull]
-		public string COLUMN_LOCATION_SETTING{ get; set; }
+		[PrimaryKey,AutoIncrement]
+		public int LocationId{ get; set; }
 
-		[Column ("coord_lat")]
 		[NotNull]
-		public double COLUMN_COORD_LAT{ get; set; }
+		public string location_setting{ get; set; }
 
-		[Column ("coord_long")]
 		[NotNull]
-		public double COLUMN_COORD_LONG{ get; set; }
+		public double coord_lat{ get; set; }
 
-		[Column ("city_name")]
 		[NotNull]
-		public string COLUMN_CITY_NAME { get; set; }
+		public double coord_long{ get; set; }
+
+		[NotNull]
+		public string city_name { get; set; }
+
+		[OneToMany ("WeatherRecordId")]
+		public List<WeatherEntry> WeatherEntries{ get; set; }
 
 	}
 
 	/* Inner class that defines the table contents of the weather table */
 	[Table ("Weather")]
-	public class WeatherEntry:BaseColumns
+	public class WeatherEntry
 	{
 		public WeatherEntry ()
 		{
 			
 		}
+
+		[PrimaryKey,AutoIncrement]
+		public int WeatherRecordId{ get; set; }
 		// Column with the foreign key into the location table.
-		[Column ("location_id")]
-		[NotNull]
-		[Unique]
-		[Indexed (Name = "LocationDate", Order = 2)]
-		public int COLUMN_LOC_KEY { get; set; }
+		[ForeignKey (typeof(LocationEntry))]
+		public int LocationId { get; set; }
 		// Date, stored as long in milliseconds since the epoch
-		[Column ("date")]
 		[NotNull]
 		[Unique]
 		[Indexed (Name = "LocationDate", Order = 1)]
-		public int COLUMN_DATE{ get; set; }
+		public int date{ get; set; }
 		// Weather id as returned by API, to identify the icon to be used
-		[Column ("weather_id")]
 		[NotNull]
-		public int COLUMN_WEATHER_ID{ get; set; }
+		public int weather_id{ get; set; }
 
 		// Short description and long description of the weather, as provided by API.
 		// e.g "clear" vs "sky is clear".
-		[Column ("short_desc")]
 		[NotNull]
-		public  String COLUMN_SHORT_DESC { get; set; }
+		public  String short_desc { get; set; }
 
 		// Min and max temperatures for the day (stored as floats)
-		[Column ("min")]
 		[NotNull]
-		public  decimal COLUMN_MIN_TEMP{ get; set; }
+		public  decimal min_temp{ get; set; }
 
-		[Column ("max")]
 		[NotNull]
-		public  decimal COLUMN_MAX_TEMP{ get; set; }
+		public  decimal max_temp{ get; set; }
 
 		// Humidity is stored as a float representing percentage
-		[Column ("humidity")]
 		[NotNull]
-		public  decimal COLUMN_HUMIDITY{ get; set; }
+		public  decimal humidity{ get; set; }
 
 		// Humidity is stored as a float representing percentage
-		[Column ("pressure")]
 		[NotNull]
-		public  decimal COLUMN_PRESSURE{ get; set; }
+		public  decimal pressure{ get; set; }
 
 		// Windspeed is stored as a float representing windspeed  mph
-		[Column ("wind")]
 		[NotNull]
-		public  decimal COLUMN_WIND_SPEED{ get; set; }
+		public  decimal wind{ get; set; }
 
 		// Degrees are meteorological degrees (e.g, 0 is north, 180 is south).  Stored as floats.
-		[Column ("degrees")]
 		[NotNull]
-		public  decimal COLUMN_DEGREES{ get; set; }
+		public  decimal degrees{ get; set; }
+
+		//		[ManyToOne]
+		//		public LocationEntry LocationEntry{ get; set; }
 
 	}
 }

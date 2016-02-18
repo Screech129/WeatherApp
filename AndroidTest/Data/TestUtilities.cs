@@ -41,19 +41,16 @@ namespace AndroidTest
 
 
 
-		public static void validateCurrentRecord (String error, LocationEntry expectedValues)
+		public static bool validateCurrentRecord (LocationEntry expectedValues)
 		{
-			var test = expectedValues;
-//			
-//			foreach (PropertyInfo entry in properties) {
-//				String columnName = entry.ToString ();
-//				int idx = valueCursor.GetColumnIndex (columnName);
-//				Assert.IsFalse (idx == -1, "Column '" + columnName + "' not found. " + error);
-//				String expectedValue = expectedValues [entry].ToString ();
-//				Assert.AreEqual ("Value '" + expectedValues.Get (entry) +
-//				"' did not match the expected value '" +
-//				expectedValue + "'. " + error, expectedValue, valueCursor.GetString (idx));
-//			}
+			Assert.IsTrue (expectedValues.LocationId > 0, "Error Row not inserted correctly");
+			return true;
+		}
+
+		public static bool validateCurrentRecordWeath (WeatherEntry expectedValues)
+		{
+			Assert.IsTrue (expectedValues.WeatherRecordId > 0, "Error Row not inserted correctly");
+			return true;
 		}
 
 		static ContentValues createWeatherValues (long locationRowId)
@@ -84,22 +81,22 @@ namespace AndroidTest
 			List<LocationEntry> locEntries = new List<LocationEntry> ();
 
 			LocationEntry locEntry1 = new LocationEntry () {
-				COLUMN_LOCATION_SETTING = TEST_LOCATION,
-				COLUMN_CITY_NAME = "North Pole",
-				COLUMN_COORD_LAT = 64.7488,
-				COLUMN_COORD_LONG = -147.353
+				location_setting = TEST_LOCATION,
+				city_name = "North Pole",
+				coord_lat = 64.7488,
+				coord_long = -147.353
 			};
 			LocationEntry locEntry2 = new LocationEntry () {
-				COLUMN_LOCATION_SETTING = TEST_LOCATION,
-				COLUMN_CITY_NAME = "Your Mom's",
-				COLUMN_COORD_LAT = 61.345,
-				COLUMN_COORD_LONG = -180.353
+				location_setting = TEST_LOCATION,
+				city_name = "Your Mom's",
+				coord_lat = 61.345,
+				coord_long = -180.353
 			};
 			LocationEntry locEntry3 = new LocationEntry () {
-				COLUMN_LOCATION_SETTING = TEST_LOCATION,
-				COLUMN_CITY_NAME = "Cartel HQ",
-				COLUMN_COORD_LAT = -45.7488,
-				COLUMN_COORD_LONG = -101.353
+				location_setting = TEST_LOCATION,
+				city_name = "Cartel HQ",
+				coord_lat = -45.7488,
+				coord_long = -101.353
 			};
 			locEntries.Add (locEntry1);
 			locEntries.Add (locEntry2);
@@ -123,6 +120,74 @@ namespace AndroidTest
 			}
 		
 			return locationRowId;
+		}
+
+		static List<WeatherEntry> createWeatherValues ()
+		{
+			// Create a new map of values, where column names are the keys
+			List<WeatherEntry> weathEntries = new List<WeatherEntry> ();
+			var date = 0;
+			int.TryParse (DateTime.Now.ToString (), out date);
+			WeatherEntry weathEntry1 = new WeatherEntry () {
+				date = date,
+				degrees = 75,
+				humidity = 45,
+				LocationId = 1,
+				max_temp = 80,
+				min_temp = 56,
+				pressure = 32,
+				short_desc = "Warmish",
+				weather_id = 23,
+				wind = 5
+				
+				
+				
+			};
+			WeatherEntry weathEntry2 = new WeatherEntry () {
+				date = date,
+				degrees = 72,
+				humidity = 42,
+				LocationId = 1,
+				max_temp = 82,
+				min_temp = 51,
+				pressure = 34,
+				short_desc = "Warm Kinda",
+				weather_id = 22,
+				wind = 45
+			};
+			WeatherEntry weathEntry3 = new WeatherEntry () {
+				date = date,
+				degrees = 7,
+				humidity = 4,
+				LocationId = 1,
+				max_temp = 80,
+				min_temp = 56,
+				pressure = 32,
+				short_desc = "Impossible",
+				weather_id = 23,
+				wind = 5
+			};
+			weathEntries.Add (weathEntry1);
+			weathEntries.Add (weathEntry2);
+			weathEntries.Add (weathEntry3);
+
+			return weathEntries;
+		}
+
+		static public long insertFakeWeather ()
+		{
+			// insert our test records into the database
+			WeatherDbHelper dbHelper = new WeatherDbHelper ();
+			List<WeatherEntry> testWeather = TestUtilities.createWeatherValues ();
+
+			long weatherRowId = -1;
+
+			foreach (var weath in testWeather) {
+
+				weatherRowId = dbHelper.Insert (weath);
+			}
+
+			return weatherRowId;
 		}
 
 		/*

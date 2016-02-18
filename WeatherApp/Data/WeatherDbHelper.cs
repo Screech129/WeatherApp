@@ -21,22 +21,22 @@ namespace WeatherApp
 
 		public void Create ()
 		{
-			CreateTable<WeatherEntry> ();
 			CreateTable<LocationEntry> ();
+			CreateTable<WeatherEntry> ();
 		}
 
 		public void Update ()
 		{
-			DropTable<WeatherEntry> ();
 			DropTable<LocationEntry> ();
+			DropTable<WeatherEntry> ();
 
 			Create ();
 		}
 
 		public void DropAll ()
 		{
-			DropTable<LocationEntry> ();
 			DropTable<WeatherEntry> ();
+			DropTable<LocationEntry> ();
 		}
 	}
 }

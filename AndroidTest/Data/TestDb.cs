@@ -40,41 +40,42 @@ namespace AndroidTest
 		[Test]
 		public void Create_Database ()
 		{
-			TableMapping map = new TableMapping (typeof(SqlDbType));
-			helper.Create ();
-			var tables = helper.Query (map, "SELECT name FROM sqlite_master WHERE type='table'", new object[0]);
+			using (SQLiteConnection conn = new SQLiteConnection (DATABASE_PATH)) {
+				TableMapping map = new TableMapping (typeof(SqlDbType));
+				helper.Create ();
+				var tables = helper.Query (map, "SELECT name FROM sqlite_master WHERE type='table'", new object[0]);
 
 
-			// have we created the tables we want?
-			
-			Assert.IsTrue (tables.Count == 2, "Error: This means that the database has not been created correctly");
+				// have we created the tables we want?
+
+				Assert.IsTrue (tables.Count >= 2, "Error: This means that the database has not been created correctly");
 
 
-			// now, do our tables contain the correct columns?
-			var columnNames = helper.GetTableInfo ("location");
-		
-			Assert.IsTrue (columnNames.Count > 0, "Error: This means that the database has not been created correctly");
-			
-			// Build a HashSet of all of the column names we want to look for
-			HashSet<String> locationColumnHashSet = new HashSet<String> ();
-			locationColumnHashSet.Add ("Id");
-			locationColumnHashSet.Add ("Count");
-			locationColumnHashSet.Add ("city_name");
-			locationColumnHashSet.Add ("coord_lat");
-			locationColumnHashSet.Add ("coord_long");
-			locationColumnHashSet.Add ("location_setting");
-			var columnList = columnNames.ToList ();
-			var columnNameIndex = 0;
-			do {
-				var columnName = columnList [columnNameIndex].Name;
-				locationColumnHashSet.Remove (columnName);
-				columnNameIndex++;
-			} while(columnNameIndex < columnList.Count);
+				// now, do our tables contain the correct columns?
+				var columnNames = helper.GetTableInfo ("location");
 
-			// if this fails, it means that your database doesn't contain all of the required location
-			// entry columns
-			Assert.IsTrue (locationColumnHashSet.Count == 0, "Error: The database doesn't contain all of the required location entry columns");
-			//helper.Close ();
+				Assert.IsTrue (columnNames.Count > 0, "Error: This means that the database has not been created correctly");
+
+				// Build a HashSet of all of the column names we want to look for
+				HashSet<String> locationColumnHashSet = new HashSet<String> ();
+				locationColumnHashSet.Add ("Count");
+				locationColumnHashSet.Add ("city_name");
+				locationColumnHashSet.Add ("coord_lat");
+				locationColumnHashSet.Add ("coord_long");
+				locationColumnHashSet.Add ("location_setting");
+				var columnList = columnNames.ToList ();
+				var columnNameIndex = 0;
+				do {
+					var columnName = columnList [columnNameIndex].Name;
+					locationColumnHashSet.Remove (columnName);
+					columnNameIndex++;
+				} while(columnNameIndex < columnList.Count);
+
+				// if this fails, it means that your database doesn't contain all of the required location
+				// entry columns
+				Assert.IsTrue (locationColumnHashSet.Count == 0, "Error: The database doesn't contain all of the required location entry columns");
+			}
+
 		}
 
 		/*
@@ -86,23 +87,17 @@ namespace AndroidTest
 		[Test]
 		public void Insert_and_Query_Location_Database ()
 		{
-			// First step: Get reference to writable database
-			helper.Create ();
-			// Create ContentValues of what you want to insert
-			// (you can use the createNorthPoleLocationValues if you wish)
-			var result = TestUtilities.insertNorthPoleLocationValues ();
-			// Insert ContentValues into database and get a row ID back
-			Assert.IsTrue (result > 0, "Error: No rows were inserted");
-			// Query the database and receive a Cursor back
-			var test = helper.Table<LocationEntry> ();
-			var resultSet = helper.Get<LocationEntry> (result);
-			// Move the cursor to a valid database row
-			TestUtilities.validateCurrentRecord ("Row is not as expected", resultSet);
-			// Validate data in resulting Cursor with the original ContentValues
-			// (you can use the validateCurrentRecord function in TestUtilities to validate the
-			// query if you like)
+			using (SQLiteConnection conn = new SQLiteConnection (DATABASE_PATH)) {
+				
+				helper.Create ();
 
-			// Finally, close the cursor and database
+				var result = TestUtilities.insertNorthPoleLocationValues ();
+				Assert.IsTrue (result > 0, "Error: No rows were inserted");
+				var test = helper.Table<LocationEntry> ();
+				var resultSet = helper.Get<LocationEntry> (result);
+				var resultAssert = TestUtilities.validateCurrentRecord (resultSet);
+				Assert.IsTrue (resultAssert, "Error during validation");
+			}
 
 		}
 
@@ -117,7 +112,17 @@ namespace AndroidTest
 		{
 			// First insert the location, and then use the locationRowId to insert
 			// the weather. Make sure to cover as many failure cases as you can.
-
+			using (SQLiteConnection conn = new SQLiteConnection (DATABASE_PATH)) {
+				helper.Create ();
+				TestUtilities.insertNorthPoleLocationValues ();
+				var locValues = helper.Table<LocationEntry> ();
+				var result = TestUtilities.insertFakeWeather ();
+				Assert.IsTrue (result > 0, "Error: No rows were inserted");
+				var test = helper.Table<WeatherEntry> ();
+				var resultSet = helper.Get<WeatherEntry> (result);
+				var resultAssert = TestUtilities.validateCurrentRecordWeath (resultSet);
+				Assert.IsTrue (resultAssert, "Error during validation");
+			}
 			// Instead of rewriting all of the code we've already written in testLocationTable
 			// we can move this code to insertLocation and then call insertLocation from both
 			// tests. Why move it? We need the code to return the ID of the inserted location

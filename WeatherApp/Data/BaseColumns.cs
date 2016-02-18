@@ -7,14 +7,13 @@ namespace WeatherApp
 	{
 		public BaseColumns ()
 		{
-			Id = 0;
-			Count = 0;
+			
 		}
 
 		[PrimaryKey,AutoIncrement,Column ("_id")]
-		int Id { get; set; }
+		public int Id { get; set; }
 
-		int Count{ get; set; }
+		public int Count{ get; set; }
 	}
 }
 
