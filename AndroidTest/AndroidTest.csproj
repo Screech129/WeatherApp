@@ -68,6 +68,10 @@
     <Compile Include="Utils\PollingCheck.cs" />
     <Compile Include="Data\TestDbOpen.cs" />
     <Compile Include="Data\TestUtilitiesOpen.cs" />
+    <Compile Include="Data\TestProvider.cs" />
+    <Compile Include="Data\TestUriMatcher.cs" />
+    <Compile Include="Data\TestWeatherContract.cs" />
+    <Compile Include="TestFetchWeatherTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

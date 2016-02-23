@@ -20,7 +20,7 @@ namespace WeatherApp
 		
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
-			base.OnCreate(savedInstanceState);
+			base.OnCreate (savedInstanceState);
 			SetContentView (Resource.Layout.activity_detail);
 			// For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
 			// updated when the preference changes.
