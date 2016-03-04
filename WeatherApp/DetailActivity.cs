@@ -19,6 +19,7 @@ namespace WeatherApp
 	public class DetailActivity : Activity
 	{
 		
+
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
@@ -74,6 +75,30 @@ namespace WeatherApp
 			string forecastString = "";
 			private const int URL_LOADER = 0;
 
+			private string[] FORECAST_COLUMNS = {
+				// In this case the id needs to be fully qualified with a table name, since
+				// the content provider joins the location & weather tables in the background
+				// (both have an _id column)
+				// On the one hand, that's annoying.  On the other, you can search the weather table
+				// using the location set by the user, which is only in the Location table.
+				// So the convenience is worth it.
+				WeatherContractOpen.WeatherEntryOpen.TABLE_NAME + "." + WeatherContractOpen.WeatherEntryOpen._ID,
+				WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE,
+				WeatherContractOpen.WeatherEntryOpen.COLUMN_SHORT_DESC,
+				WeatherContractOpen.WeatherEntryOpen.COLUMN_MAX_TEMP,
+				WeatherContractOpen.WeatherEntryOpen.COLUMN_MIN_TEMP,
+
+			};
+
+			// These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
+			// must change.
+			public const int COL_WEATHER_ID = 0;
+			public const int COL_WEATHER_DATE = 1;
+			public const int COL_WEATHER_DESC = 2;
+			public const int COL_WEATHER_MAX_TEMP = 3;
+			public const int COL_WEATHER_MIN_TEMP = 4;
+
+
 			public override void OnCreateOptionsMenu (IMenu menu, MenuInflater inflater)
 			{
 				inflater.Inflate (Resource.Menu.detail_fragment, menu);
@@ -104,7 +129,7 @@ namespace WeatherApp
 
 			public void shareWeather (IMenuItem item)
 			{
-				var shareText = forecast + " #SunshineApp";
+				var shareText = forecastString + " #SunshineApp";
 				var shareIntent = new Intent (Intent.ActionSend)
 					.AddFlags (ActivityFlags.ClearWhenTaskReset)
 					.SetType ("text/plain")
@@ -127,13 +152,13 @@ namespace WeatherApp
 					return null;
 				}
 
-				return new CursorLoader (Activity, intent.Data, null, null, null, null);
+				return new CursorLoader (Activity, intent.Data, FORECAST_COLUMNS, null, null, null);
 			}
 
 
 			public void OnLoaderReset (Loader loader)
 			{
-				forecastString = "";
+				
 			}
 
 			public void OnLoadFinished (Loader loader, Java.Lang.Object data)
@@ -161,11 +186,11 @@ namespace WeatherApp
 				// get row indices for our cursor
 
 				String highAndLow = formatHighLows (
-					                    cursor.GetDouble (ForecastFragment.COL_WEATHER_MAX_TEMP),
-					                    cursor.GetDouble (ForecastFragment.COL_WEATHER_MIN_TEMP));
+					                    cursor.GetDouble (COL_WEATHER_MAX_TEMP),
+					                    cursor.GetDouble (COL_WEATHER_MIN_TEMP));
 
-				return Utility.formatDate (cursor.GetLong (ForecastFragment.COL_WEATHER_DATE)) +
-				" - " + cursor.GetString (ForecastFragment.COL_WEATHER_DESC) +
+				return Utility.formatDate (cursor.GetLong (COL_WEATHER_DATE)) +
+				" - " + cursor.GetString (COL_WEATHER_DESC) +
 				" - " + highAndLow;
 			}
 		}

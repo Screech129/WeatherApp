@@ -151,14 +151,12 @@ namespace WeatherApp
 
 		}
 
-		public override void OnStart ()
+		public void OnLocationChanged ()
 		{
-			base.OnStart ();
 			updateWeather ();
+			LoaderManager.RestartLoader (URL_LOADER, null, this);
 		}
-
-
-
+			
 	}
 }
 

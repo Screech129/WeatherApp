@@ -18,11 +18,20 @@ namespace WeatherApp
 	[Activity (Label = "WeatherApp", MainLauncher = true)]
 	public class MainActivity : Activity
 	{
+		string location = "";
+		private const string FORECASTFRAGMENT_TAG = "FFTAG";
+
 		protected override void OnCreate (Bundle bundle)
 		{
+			location = Utility.getPreferredLocation (this);
 			base.OnCreate (bundle);
 			SetContentView (Resource.Layout.Main);
-			Log.Debug ("Create", "Create");
+			ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences (this);
+			if (bundle == null) {
+				FragmentManager.BeginTransaction ()
+					.Add (Resource.Id.container, new ForecastFragment (), FORECASTFRAGMENT_TAG)
+					.Commit ();
+			}
 		}
 
 		public override bool OnCreateOptionsMenu (IMenu menu)
@@ -65,7 +74,7 @@ namespace WeatherApp
 				Log.Debug ("Main Activity", "Couldn't call " + zipCode + ", No Maps App");
 			}
 
-             
+            
 
 			//Alternative way of calling the activity but not a fully implicint intent
 			//			var geoLocation = Android.Net.Uri.Parse("http://maps.google.com/maps/place/"+zipCode);
@@ -90,7 +99,16 @@ namespace WeatherApp
 			//				}
 			//			}
 		}
-			
+
+		protected override void OnResume ()
+		{
+			if (Utility.getPreferredLocation (this) != location) {
+				ForecastFragment ff = FragmentManager.FindFragmentByTag<ForecastFragment> (FORECASTFRAGMENT_TAG);
+				ff.OnLocationChanged ();
+				location = Utility.getPreferredLocation (this);
+			}
+
+		}
 
 	}
 }
