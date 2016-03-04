@@ -6,6 +6,7 @@ using Java.Lang;
 
 namespace WeatherApp
 {
+	[ContentProvider (new string[]{ WeatherProvider.AUTHORITY })]
 	public class WeatherProvider:ContentProvider
 	{
 		public WeatherProvider ()
@@ -16,27 +17,25 @@ namespace WeatherApp
 		private UriMatcher sUriMatcher = buildUriMatcher ();
 		private WeatherDbOpenHelper openHelper;
 		private Context context = Android.App.Application.Context;
-		const int WEATHER = 100;
-		const int WEATHER_WITH_LOCATION = 101;
-		const int WEATHER_WITH_LOCATION_AND_DATE = 102;
-		const int LOCATION = 300;
+		public const int WEATHER = 100;
+		public const int WEATHER_WITH_LOCATION = 101;
+		public const int WEATHER_WITH_LOCATION_AND_DATE = 102;
+		public const int LOCATION = 300;
+		const string AUTHORITY = WeatherContractOpen.CONTENT_AUTHORITY;
 
-		private  SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder ();
-	
- 
-		//This is an inner join which looks like
-		//weather INNER JOIN location ON weather.location_id = location._id
-		private void setUpQuery (SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder)
-		{
-			sWeatherByLocationSettingQueryBuilder.Tables = (
+		SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder () {
+			//This is an inner join which looks like
+			//weather INNER JOIN location ON weather.location_id = location._id
+			Tables = (
 			    WeatherContractOpen.WeatherEntryOpen.TABLE_NAME + " INNER JOIN " +
 			    WeatherContractOpen.LocationEntryOpen.TABLE_NAME +
 			    " ON " + WeatherContractOpen.WeatherEntryOpen.TABLE_NAME +
 			    "." + WeatherContractOpen.WeatherEntryOpen.COLUMN_LOC_KEY +
 			    " = " + WeatherContractOpen.LocationEntryOpen.TABLE_NAME +
-			    "." + WeatherContractOpen.LocationEntryOpen._ID);
-		}
-			
+			    "." + WeatherContractOpen.LocationEntryOpen._ID)
+		};
+	
+ 
 		
 
 		//location.location_setting = ?
@@ -104,18 +103,21 @@ namespace WeatherApp
         and LOCATION integer constants defined above.  You can test this by uncommenting the
         testUriMatcher test within TestUriMatcher.
      */
-		static UriMatcher buildUriMatcher ()
+		public static UriMatcher buildUriMatcher ()
 		{
 			// 1) The code passed into the constructor represents the code to return for the root
 			// URI.  It's common to use NO_MATCH as the code for this case. Add the constructor below.
-
-
+			var matcher = new UriMatcher (UriMatcher.NoMatch);
 			// 2) Use the addURI function to match each of the types.  Use the constants from
 			// WeatherContract to help define the types to the UriMatcher.
+			matcher.AddURI (AUTHORITY, WeatherContractOpen.PATH_WEATHER, WEATHER);
+			matcher.AddURI (AUTHORITY, WeatherContractOpen.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
+			matcher.AddURI (AUTHORITY, WeatherContractOpen.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
 
+			matcher.AddURI (AUTHORITY, WeatherContractOpen.PATH_LOCATION, LOCATION);
 
 			// 3) Return the new matcher!
-			return null;
+			return matcher;
 		}
 
 		/*
@@ -149,6 +151,10 @@ namespace WeatherApp
 				return WeatherContractOpen.WeatherEntryOpen.CONTENT_TYPE;
 			case LOCATION:
 				return WeatherContractOpen.LocationEntryOpen.CONTENT_TYPE;
+			case WEATHER_WITH_LOCATION:
+				return WeatherContractOpen.WeatherEntryOpen.CONTENT_TYPE;
+			case WEATHER_WITH_LOCATION_AND_DATE:
+				return WeatherContractOpen.WeatherEntryOpen.CONTENT_ITEM_TYPE;
 			default:
 				throw new UnsupportedOperationException ("Unknown uri: " + uri);
 			}
@@ -176,13 +182,13 @@ namespace WeatherApp
 			// "weather"
 			case WEATHER:
 				{
-					retCursor = null;
+					retCursor = openHelper.ReadableDatabase.Query (WeatherContractOpen.WeatherEntryOpen.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
 					break;
 				}
 			// "location"
 			case LOCATION:
 				{
-					retCursor = null;
+					retCursor = openHelper.ReadableDatabase.Query (WeatherContractOpen.LocationEntryOpen.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
 					break;
 				}
 
@@ -213,6 +219,16 @@ namespace WeatherApp
 						throw new SQLException ("Failed to insert row into " + uri);
 					break;
 				}
+			case LOCATION:
+				{
+					normalizeDate (values);
+					long _id = db.Insert (WeatherContractOpen.LocationEntryOpen.TABLE_NAME, null, values);
+					if (_id > 0)
+						returnUri = WeatherContractOpen.LocationEntryOpen.buildLocationUri (_id);
+					else
+						throw new SQLException ("Failed to insert location " + uri);
+					break;
+				}
 			default:
 				throw new UnsupportedOperationException ("Unknown uri: " + uri);
 			}
@@ -223,17 +239,33 @@ namespace WeatherApp
 		public override int Delete (Android.Net.Uri uri, string selection, string[] selectionArgs)
 		{
 			// Student: Start by getting a writable database
-
+			var db = openHelper.WritableDatabase;
+			Android.Net.Uri returnUri;
+			var deletedRows = 0;
 			// Student: Use the uriMatcher to match the WEATHER and LOCATION URI's we are going to
 			// handle.  If it doesn't match these, throw an UnsupportedOperationException.
-
+			var match = sUriMatcher.Match (uri);
+			if (selection == null)
+				selection = "1";
+			switch (match) {
+			case WEATHER:
+				deletedRows = db.Delete (WeatherContractOpen.WeatherEntryOpen.TABLE_NAME, selection, selectionArgs);
+				break;
+			case LOCATION:
+				deletedRows = db.Delete (WeatherContractOpen.LocationEntryOpen.TABLE_NAME, selection, selectionArgs);
+				break;
+			default:
+				throw new UnsupportedOperationException ("Unknown uri: " + uri);
+			}
 			// Student: A null value deletes all rows.  In my implementation of this, I only notified
 			// the uri listeners (using the content resolver) if the rowsDeleted != 0 or the selection
 			// is null.
 			// Oh, and you should notify the listeners here.
 
 			// Student: return the actual rows deleted
-			return 0;
+			if (deletedRows > 0 || selection == null)
+				context.ContentResolver.NotifyChange (uri, null);
+			return deletedRows;
 		}
 
 		private void normalizeDate (ContentValues values)
@@ -246,12 +278,28 @@ namespace WeatherApp
 		}
 
 
-		public override int Update (
-			Android.Net.Uri uri, ContentValues values, string selection, string[] selectionArgs)
+		public override int Update (Android.Net.Uri uri, ContentValues values, string selection, string[] selectionArgs)
 		{
+			var db = openHelper.WritableDatabase;
+			Android.Net.Uri returnUri;
+			var updatedRows = 0;
+			var match = sUriMatcher.Match (uri);
 			// Student: This is a lot like the delete function.  We return the number of rows impacted
 			// by the update.
-			return 0;
+			switch (match) {
+			case WEATHER:
+				updatedRows = db.Update (WeatherContractOpen.WeatherEntryOpen.TABLE_NAME, values, selection, selectionArgs);
+				break;
+			case LOCATION:
+				updatedRows = db.Update (WeatherContractOpen.LocationEntryOpen.TABLE_NAME, values, selection, selectionArgs);
+				break;
+			default:
+				throw new UnsupportedOperationException ("Unknown uri: " + uri);
+			}
+
+			if (updatedRows > 0 || selection == null)
+				context.ContentResolver.NotifyChange (uri, null);
+			return updatedRows;
 		}
 
 

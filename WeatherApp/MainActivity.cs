@@ -90,36 +90,7 @@ namespace WeatherApp
 			//				}
 			//			}
 		}
-
-		protected override void OnPause ()
-		{
-			Log.Debug ("Pause", "Pause");
-			base.OnPause ();
-		}
-
-		protected override void OnResume ()
-		{
-			Log.Debug ("Resume", "resume");
-			base.OnResume ();
-		}
-
-		protected override void OnStop ()
-		{
-			Log.Debug ("Stop", "stop");
-			base.OnStop ();
-		}
-
-		protected override void OnStart ()
-		{
-			Log.Debug ("Start", "Start");
-			base.OnStart ();
-		}
-
-		protected override void OnDestroy ()
-		{
-			Log.Debug ("destroy", "Destroy");
-			base.OnDestroy ();
-		}
+			
 
 	}
 }

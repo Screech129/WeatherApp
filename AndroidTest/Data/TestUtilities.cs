@@ -67,7 +67,7 @@ namespace AndroidTest
 //			weatherValues.Put (WeatherContract.WeatherEntry.COLUMN_MIN_TEMP, 65);
 //			weatherValues.Put (WeatherContract.WeatherEntry.COLUMN_SHORT_DESC, "Asteroids");
 //			weatherValues.Put (WeatherContract.WeatherEntry.COLUMN_WIND_SPEED, 5.5);
-//			weatherValues.Put (WeatherContract.WeatherEntry.COLUMN_WEATHER_ID, 321);
+//			weatherValues.Put (WeatherContract.WeatherEntry.COLUMN_WEATHER_id, 321);
 
 			return weatherValues;
 		}

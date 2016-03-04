@@ -36,9 +36,8 @@ namespace WeatherApp
 		{
 			// normalize the start date to the beginning of the (UTC) day
 			DateTime time = new DateTime ();
-			time = DateTime.Parse (startDate.ToString ());
-			int julianDay = cal.GetDayOfYear (time);
-			return julianDay;
+			time = time.AddTicks (startDate);
+			return time.Ticks;
 		}
 
 		public   class LocationEntryOpen:BaseColumns
@@ -72,7 +71,7 @@ namespace WeatherApp
 			public static string CONTENT_TYPE =
 				ContentResolver.CursorDirBaseType + "/" + CONTENT_AUTHORITY + "/" + PATH_WEATHER;
 			public static  string CONTENT_ITEM_TYPE =
-				ContentResolver.CursorDirBaseType + "/" + CONTENT_AUTHORITY + "/" + PATH_WEATHER;
+				ContentResolver.CursorItemBaseType + "/" + CONTENT_AUTHORITY + "/" + PATH_WEATHER;
 
 
 			public static Android.Net.Uri buildWeatherUri (long id)
@@ -128,7 +127,7 @@ namespace WeatherApp
 			// Date, stored as long in milliseconds since the epoch
 			public  const string COLUMN_DATE = "date";
 			// Weather id as returned by API, to identify the icon to be used
-			public  const string COLUMN_WEATHER_ID = "weather_id";
+			public  const string COLUMN_WEATHER_id = "weather_id";
 
 			// Short description and long description of the weather, as provided by API.
 			// e.g "clear" vs "sky is clear".

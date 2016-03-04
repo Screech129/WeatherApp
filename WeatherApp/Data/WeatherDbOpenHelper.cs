@@ -8,7 +8,7 @@ namespace WeatherApp
 {
 	public class WeatherDbOpenHelper:SQLiteOpenHelper
 	{
-		public const int DATABASE_VERSION = 2;
+		public const int DATABASE_VERSION = 3;
 		public const string DATABASE_NAME = "weather.db";
 
 		public WeatherDbOpenHelper (Context context) :
@@ -31,7 +31,7 @@ namespace WeatherApp
 			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_LOC_KEY + " INTEGER NOT NULL, " +
 			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE + " INTEGER NOT NULL, " +
 			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_SHORT_DESC + " TEXT NOT NULL, " +
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_WEATHER_ID + " INTEGER NOT NULL," +
+			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_WEATHER_id + " INTEGER NOT NULL," +
 
 			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_MIN_TEMP + " REAL NOT NULL, " +
 			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_MAX_TEMP + " REAL NOT NULL, " +

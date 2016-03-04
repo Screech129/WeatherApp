@@ -228,6 +228,9 @@ namespace WeatherApp
 			// aapt resource value: 0x7f050011
 			public const int pref_temp_summary = 2131034129;
 			
+			// aapt resource value: 0x7f050013
+			public const int pref_units_metric = 2131034131;
+			
 			// aapt resource value: 0x7f050009
 			public const int title_activity_detail = 2131034121;
 			

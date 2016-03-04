@@ -1,12 +1,19 @@
 ﻿using System;
+using Android.Content;
+using WeatherApp;
+using NUnit.Framework;
+using Android.Database;
 
 namespace AndroidTest
 {
+	[TestFixture]
 	public class TestFetchWeatherTask
 	{
 		public TestFetchWeatherTask ()
 		{
 		}
+
+		Context context = Android.App.Application.Context;
 
 		const string ADD_LOCATION_SETTING = "Sunnydale, CA";
 		const string ADD_LOCATION_CITY = "Sunnydale";
@@ -19,74 +26,69 @@ namespace AndroidTest
         content provider.
      */
 		//    @TargetApi(11)
-		//    public void testAddLocation() {
-		//        // start from a clean state
-		//        getContext().getContentResolver().delete(WeatherContract.LocationEntry.CONTENT_URI,
-		//                WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
-		//                new String[]{ADD_LOCATION_SETTING});
-		//
-		//        FetchWeatherTask fwt = new FetchWeatherTask(getContext(), null);
-		//        long locationId = fwt.addLocation(ADD_LOCATION_SETTING, ADD_LOCATION_CITY,
-		//                ADD_LOCATION_LAT, ADD_LOCATION_LON);
-		//
-		//        // does addLocation return a valid record ID?
-		//        assertFalse("Error: addLocation returned an invalid ID on insert",
-		//                locationId == -1);
-		//
-		//        // test all this twice
-		//        for ( int i = 0; i < 2; i++ ) {
-		//
-		//            // does the ID point to our location?
-		//            Cursor locationCursor = getContext().getContentResolver().query(
-		//                    WeatherContract.LocationEntry.CONTENT_URI,
-		//                    new String[]{
-		//                            WeatherContract.LocationEntry._ID,
-		//                            WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING,
-		//                            WeatherContract.LocationEntry.COLUMN_CITY_NAME,
-		//                            WeatherContract.LocationEntry.COLUMN_COORD_LAT,
-		//                            WeatherContract.LocationEntry.COLUMN_COORD_LONG
-		//                    },
-		//                    WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
-		//                    new String[]{ADD_LOCATION_SETTING},
-		//                    null);
-		//
-		//            // these match the indices of the projection
-		//            if (locationCursor.moveToFirst()) {
-		//                assertEquals("Error: the queried value of locationId does not match the returned value" +
-		//                        "from addLocation", locationCursor.getLong(0), locationId);
-		//                assertEquals("Error: the queried value of location setting is incorrect",
-		//                        locationCursor.getString(1), ADD_LOCATION_SETTING);
-		//                assertEquals("Error: the queried value of location city is incorrect",
-		//                        locationCursor.getString(2), ADD_LOCATION_CITY);
-		//                assertEquals("Error: the queried value of latitude is incorrect",
-		//                        locationCursor.getDouble(3), ADD_LOCATION_LAT);
-		//                assertEquals("Error: the queried value of longitude is incorrect",
-		//                        locationCursor.getDouble(4), ADD_LOCATION_LON);
-		//            } else {
-		//                fail("Error: the id you used to query returned an empty cursor");
-		//            }
-		//
-		//            // there should be no more records
-		//            assertFalse("Error: there should be only one record returned from a location query",
-		//                    locationCursor.moveToNext());
-		//
-		//            // add the location again
-		//            long newLocationId = fwt.addLocation(ADD_LOCATION_SETTING, ADD_LOCATION_CITY,
-		//                    ADD_LOCATION_LAT, ADD_LOCATION_LON);
-		//
-		//            assertEquals("Error: inserting a location again should return the same ID",
-		//                    locationId, newLocationId);
-		//        }
-		//        // reset our state back to normal
-		//        getContext().getContentResolver().delete(WeatherContract.LocationEntry.CONTENT_URI,
-		//                WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
-		//                new String[]{ADD_LOCATION_SETTING});
-		//
-		//        // clean up the test so that other tests can use the content provider
-		//        getContext().getContentResolver().
-		//                acquireContentProviderClient(WeatherContract.LocationEntry.CONTENT_URI).
-		//                getLocalContentProvider().shutdown();
-		//    }
+		[Test]
+		public void testAddLocation ()
+		{
+			// start from a clean state
+			context.ContentResolver.Delete (WeatherContractOpen.LocationEntryOpen.CONTENT_URI,
+				WeatherContractOpen.LocationEntryOpen.COLUMN_LOCATION_SETTING + " = ?",
+				new String[]{ ADD_LOCATION_SETTING });
+		
+			FetchWeatherTask fwt = new FetchWeatherTask (context);
+			long locationId = fwt.AddLocation (ADD_LOCATION_SETTING, ADD_LOCATION_CITY,
+				                  ADD_LOCATION_LAT, ADD_LOCATION_LON);
+		
+			// does addLocation return a valid record ID?
+			Assert.IsFalse (locationId == -1, "Error: addLocation returned an invalid ID on insert");
+		
+			// test all this twice
+			for (int i = 0; i < 2; i++) {
+		
+				// does the ID point to our location?
+				ICursor locationCursor = context.ContentResolver.Query (
+					                         WeatherContractOpen.LocationEntryOpen.CONTENT_URI,
+					                         new String[] {
+						WeatherContractOpen.LocationEntryOpen._ID,
+						WeatherContractOpen.LocationEntryOpen.COLUMN_LOCATION_SETTING,
+						WeatherContractOpen.LocationEntryOpen.COLUMN_CITY_NAME,
+						WeatherContractOpen.LocationEntryOpen.COLUMN_COORD_LAT,
+						WeatherContractOpen.LocationEntryOpen.COLUMN_COORD_LONG
+					},
+					                         WeatherContractOpen.LocationEntryOpen.COLUMN_LOCATION_SETTING + " = ?",
+					                         new String[]{ ADD_LOCATION_SETTING },
+					                         null);
+		
+				// these match the indices of the projection
+				if (locationCursor.MoveToFirst ()) {
+					Assert.AreEqual (locationCursor.GetLong (0), locationId, "Error: the queried value of locationId does not match the returned value" +
+					"from addLocation");
+					Assert.AreEqual (locationCursor.GetString (1), ADD_LOCATION_SETTING, "Error: the queried value of location setting is incorrect");
+					Assert.AreEqual (locationCursor.GetString (2), ADD_LOCATION_CITY, "Error: the queried value of location city is incorrect");
+					Assert.AreEqual (locationCursor.GetDouble (3), ADD_LOCATION_LAT, "Error: the queried value of latitude is incorrect");
+					Assert.AreEqual (locationCursor.GetDouble (4), ADD_LOCATION_LON, "Error: the queried value of longitude is incorrect");
+				} else {
+					throw new Exception ("Error: the id you used to query returned an empty cursor");
+				}
+		
+				// there should be no more records
+				Assert.IsFalse (locationCursor.MoveToNext (), "Error: there should be only one record returned from a location query");
+		
+				// add the location again
+				long newLocationId = fwt.AddLocation (ADD_LOCATION_SETTING, ADD_LOCATION_CITY,
+					                     ADD_LOCATION_LAT, ADD_LOCATION_LON);
+		
+				Assert.AreEqual (locationId, newLocationId, "Error: inserting a location again should return the same ID");
+			}
+			// reset our state back to normal
+			context.ContentResolver.Delete (WeatherContractOpen.LocationEntryOpen.CONTENT_URI,
+				WeatherContractOpen.LocationEntryOpen.COLUMN_LOCATION_SETTING + " = ?",
+				new String[]{ ADD_LOCATION_SETTING });
+		
+			// clean up the test so that other tests can use the content provider
+			context.ContentResolver.
+		                AcquireContentProviderClient (WeatherContractOpen.LocationEntryOpen.CONTENT_URI).
+		                LocalContentProvider.Shutdown ();
+		}
 	}
 }
 
