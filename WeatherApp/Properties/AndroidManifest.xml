@@ -2,6 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="WeatherApp.WeatherApp">
 	<uses-sdk android:minSdkVersion="20" android:targetSdkVersion="23" />
 	<uses-permission android:name="android.permission.INTERNET" />
-	<application android:icon="@drawable/icon" android:label="WeatherApp">
+	<application android:icon="@mipmap/ic_launcher" android:label="WeatherApp" android:theme="@style/AppTheme">
 	</application>
 </manifest>

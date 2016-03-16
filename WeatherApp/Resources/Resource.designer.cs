@@ -33,11 +33,11 @@ namespace WeatherApp
 		public partial class Array
 		{
 			
-			// aapt resource value: 0x7f060000
-			public const int pref_temp_entries = 2131099648;
+			// aapt resource value: 0x7f080000
+			public const int pref_temp_entries = 2131230720;
 			
-			// aapt resource value: 0x7f060001
-			public const int pref_temp_values = 2131099649;
+			// aapt resource value: 0x7f080001
+			public const int pref_temp_values = 2131230721;
 			
 			static Array()
 			{
@@ -62,11 +62,90 @@ namespace WeatherApp
 			}
 		}
 		
+		public partial class Color
+		{
+			
+			// aapt resource value: 0x7f070000
+			public const int grey = 2131165184;
+			
+			// aapt resource value: 0x7f070002
+			public const int sunshine_blue = 2131165186;
+			
+			// aapt resource value: 0x7f070003
+			public const int sunshine_dark_blue = 2131165187;
+			
+			// aapt resource value: 0x7f070001
+			public const int sunshine_light_blue = 2131165185;
+			
+			static Color()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Color()
+			{
+			}
+		}
+		
 		public partial class Drawable
 		{
 			
 			// aapt resource value: 0x7f020000
-			public const int Icon = 2130837504;
+			public const int art_clear = 2130837504;
+			
+			// aapt resource value: 0x7f020001
+			public const int art_clouds = 2130837505;
+			
+			// aapt resource value: 0x7f020002
+			public const int art_fog = 2130837506;
+			
+			// aapt resource value: 0x7f020003
+			public const int art_light_clouds = 2130837507;
+			
+			// aapt resource value: 0x7f020004
+			public const int art_light_rain = 2130837508;
+			
+			// aapt resource value: 0x7f020005
+			public const int art_rain = 2130837509;
+			
+			// aapt resource value: 0x7f020006
+			public const int art_snow = 2130837510;
+			
+			// aapt resource value: 0x7f020007
+			public const int art_storm = 2130837511;
+			
+			// aapt resource value: 0x7f020008
+			public const int ic_clear = 2130837512;
+			
+			// aapt resource value: 0x7f020009
+			public const int ic_cloudy = 2130837513;
+			
+			// aapt resource value: 0x7f02000a
+			public const int ic_fog = 2130837514;
+			
+			// aapt resource value: 0x7f02000b
+			public const int ic_light_clouds = 2130837515;
+			
+			// aapt resource value: 0x7f02000c
+			public const int ic_light_rain = 2130837516;
+			
+			// aapt resource value: 0x7f02000d
+			public const int ic_logo = 2130837517;
+			
+			// aapt resource value: 0x7f02000e
+			public const int ic_rain = 2130837518;
+			
+			// aapt resource value: 0x7f02000f
+			public const int ic_snow = 2130837519;
+			
+			// aapt resource value: 0x7f020010
+			public const int ic_storm = 2130837520;
+			
+			// aapt resource value: 0x7f020011
+			public const int today_touch_selector = 2130837521;
+			
+			// aapt resource value: 0x7f020012
+			public const int touch_selector = 2130837522;
 			
 			static Drawable()
 			{
@@ -81,32 +160,71 @@ namespace WeatherApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f080008
-			public const int action_refresh = 2131230728;
+			// aapt resource value: 0x7f0b0015
+			public const int action_refresh = 2131427349;
 			
-			// aapt resource value: 0x7f080005
-			public const int action_settings = 2131230725;
+			// aapt resource value: 0x7f0b0012
+			public const int action_settings = 2131427346;
 			
-			// aapt resource value: 0x7f080007
-			public const int action_share = 2131230727;
+			// aapt resource value: 0x7f0b0014
+			public const int action_share = 2131427348;
 			
-			// aapt resource value: 0x7f080006
-			public const int action_viewLocation = 2131230726;
+			// aapt resource value: 0x7f0b0013
+			public const int action_viewLocation = 2131427347;
 			
-			// aapt resource value: 0x7f080000
-			public const int container = 2131230720;
+			// aapt resource value: 0x7f0b0002
+			public const int detail_date_textview = 2131427330;
 			
-			// aapt resource value: 0x7f080001
-			public const int detail_text = 2131230721;
+			// aapt resource value: 0x7f0b0001
+			public const int detail_day_textview = 2131427329;
 			
-			// aapt resource value: 0x7f080004
-			public const int fragment_forecast = 2131230724;
+			// aapt resource value: 0x7f0b0006
+			public const int detail_forecast_textview = 2131427334;
 			
-			// aapt resource value: 0x7f080003
-			public const int list_item_forecast_textview = 2131230723;
+			// aapt resource value: 0x7f0b0003
+			public const int detail_high_textview = 2131427331;
 			
-			// aapt resource value: 0x7f080002
-			public const int listview_forecast = 2131230722;
+			// aapt resource value: 0x7f0b0007
+			public const int detail_humidity_textview = 2131427335;
+			
+			// aapt resource value: 0x7f0b0005
+			public const int detail_icon = 2131427333;
+			
+			// aapt resource value: 0x7f0b0004
+			public const int detail_low_textview = 2131427332;
+			
+			// aapt resource value: 0x7f0b0008
+			public const int detail_pressure_textview = 2131427336;
+			
+			// aapt resource value: 0x7f0b0009
+			public const int detail_wind_textview = 2131427337;
+			
+			// aapt resource value: 0x7f0b0011
+			public const int fragment_forecast = 2131427345;
+			
+			// aapt resource value: 0x7f0b000c
+			public const int list_item_date_textview = 2131427340;
+			
+			// aapt resource value: 0x7f0b000d
+			public const int list_item_forecast_textview = 2131427341;
+			
+			// aapt resource value: 0x7f0b000f
+			public const int list_item_high_textview = 2131427343;
+			
+			// aapt resource value: 0x7f0b000b
+			public const int list_item_icon = 2131427339;
+			
+			// aapt resource value: 0x7f0b0010
+			public const int list_item_low_textview = 2131427344;
+			
+			// aapt resource value: 0x7f0b000e
+			public const int listitem_temp_linear = 2131427342;
+			
+			// aapt resource value: 0x7f0b000a
+			public const int listview_forecast = 2131427338;
+			
+			// aapt resource value: 0x7f0b0000
+			public const int weather_detail_container = 2131427328;
 			
 			static Id()
 			{
@@ -121,20 +239,26 @@ namespace WeatherApp
 		public partial class Layout
 		{
 			
-			// aapt resource value: 0x7f030000
-			public const int activity_detail = 2130903040;
+			// aapt resource value: 0x7f040000
+			public const int activity_detail = 2130968576;
 			
-			// aapt resource value: 0x7f030001
-			public const int fragment_detail = 2130903041;
+			// aapt resource value: 0x7f040001
+			public const int fragment_detail = 2130968577;
 			
-			// aapt resource value: 0x7f030002
-			public const int fragment_main = 2130903042;
+			// aapt resource value: 0x7f040002
+			public const int fragment_detail_wide = 2130968578;
 			
-			// aapt resource value: 0x7f030003
-			public const int list_item_forecast = 2130903043;
+			// aapt resource value: 0x7f040003
+			public const int fragment_main = 2130968579;
 			
-			// aapt resource value: 0x7f030004
-			public const int Main = 2130903044;
+			// aapt resource value: 0x7f040004
+			public const int list_item_forecast = 2130968580;
+			
+			// aapt resource value: 0x7f040005
+			public const int list_item_forecast_today = 2130968581;
+			
+			// aapt resource value: 0x7f040006
+			public const int Main = 2130968582;
 			
 			static Layout()
 			{
@@ -149,17 +273,17 @@ namespace WeatherApp
 		public partial class Menu
 		{
 			
-			// aapt resource value: 0x7f070000
-			public const int detail = 2131165184;
+			// aapt resource value: 0x7f0a0000
+			public const int detail = 2131361792;
 			
-			// aapt resource value: 0x7f070001
-			public const int detail_fragment = 2131165185;
+			// aapt resource value: 0x7f0a0001
+			public const int detail_fragment = 2131361793;
 			
-			// aapt resource value: 0x7f070002
-			public const int forecastfragment = 2131165186;
+			// aapt resource value: 0x7f0a0002
+			public const int forecastfragment = 2131361794;
 			
-			// aapt resource value: 0x7f070003
-			public const int main = 2131165187;
+			// aapt resource value: 0x7f0a0003
+			public const int main = 2131361795;
 			
 			static Menu()
 			{
@@ -171,68 +295,108 @@ namespace WeatherApp
 			}
 		}
 		
+		public partial class Mipmap
+		{
+			
+			// aapt resource value: 0x7f030000
+			public const int ic_launcher = 2130903040;
+			
+			static Mipmap()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Mipmap()
+			{
+			}
+		}
+		
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f050001
-			public const int ApplicationName = 2131034113;
+			// aapt resource value: 0x7f060001
+			public const int ApplicationName = 2131099649;
 			
-			// aapt resource value: 0x7f050000
-			public const int Hello = 2131034112;
+			// aapt resource value: 0x7f060000
+			public const int Hello = 2131099648;
 			
-			// aapt resource value: 0x7f050004
-			public const int action_refresh = 2131034116;
+			// aapt resource value: 0x7f060004
+			public const int action_refresh = 2131099652;
 			
-			// aapt resource value: 0x7f050005
-			public const int action_settings = 2131034117;
+			// aapt resource value: 0x7f060005
+			public const int action_settings = 2131099653;
 			
-			// aapt resource value: 0x7f050007
-			public const int action_share = 2131034119;
+			// aapt resource value: 0x7f060007
+			public const int action_share = 2131099655;
 			
-			// aapt resource value: 0x7f050006
-			public const int action_viewLocation = 2131034118;
+			// aapt resource value: 0x7f060006
+			public const int action_viewLocation = 2131099654;
 			
-			// aapt resource value: 0x7f050003
-			public const int app_name = 2131034115;
+			// aapt resource value: 0x7f060003
+			public const int app_name = 2131099651;
 			
-			// aapt resource value: 0x7f050002
-			public const int hello = 2131034114;
+			// aapt resource value: 0x7f060016
+			public const int format_full_friendly_date = 2131099670;
 			
-			// aapt resource value: 0x7f050008
-			public const int hello_world = 2131034120;
+			// aapt resource value: 0x7f06001b
+			public const int format_humidity = 2131099675;
 			
-			// aapt resource value: 0x7f05000c
-			public const int pref_location_default = 2131034124;
+			// aapt resource value: 0x7f06001a
+			public const int format_pressure = 2131099674;
 			
-			// aapt resource value: 0x7f05000b
-			public const int pref_location_key = 2131034123;
+			// aapt resource value: 0x7f060017
+			public const int format_temperature = 2131099671;
 			
-			// aapt resource value: 0x7f05000a
-			public const int pref_location_label = 2131034122;
+			// aapt resource value: 0x7f060019
+			public const int format_wind_kmh = 2131099673;
 			
-			// aapt resource value: 0x7f05000d
-			public const int pref_location_summary = 2131034125;
+			// aapt resource value: 0x7f060018
+			public const int format_wind_mph = 2131099672;
 			
-			// aapt resource value: 0x7f050012
-			public const int pref_tempDialog_label = 2131034130;
+			// aapt resource value: 0x7f060002
+			public const int hello = 2131099650;
 			
-			// aapt resource value: 0x7f050010
-			public const int pref_temp_default = 2131034128;
+			// aapt resource value: 0x7f060008
+			public const int hello_world = 2131099656;
 			
-			// aapt resource value: 0x7f05000f
-			public const int pref_temp_key = 2131034127;
+			// aapt resource value: 0x7f06000c
+			public const int pref_location_default = 2131099660;
 			
-			// aapt resource value: 0x7f05000e
-			public const int pref_temp_label = 2131034126;
+			// aapt resource value: 0x7f06000b
+			public const int pref_location_key = 2131099659;
 			
-			// aapt resource value: 0x7f050011
-			public const int pref_temp_summary = 2131034129;
+			// aapt resource value: 0x7f06000a
+			public const int pref_location_label = 2131099658;
 			
-			// aapt resource value: 0x7f050013
-			public const int pref_units_metric = 2131034131;
+			// aapt resource value: 0x7f06000d
+			public const int pref_location_summary = 2131099661;
 			
-			// aapt resource value: 0x7f050009
-			public const int title_activity_detail = 2131034121;
+			// aapt resource value: 0x7f060012
+			public const int pref_tempDialog_label = 2131099666;
+			
+			// aapt resource value: 0x7f060010
+			public const int pref_temp_default = 2131099664;
+			
+			// aapt resource value: 0x7f06000f
+			public const int pref_temp_key = 2131099663;
+			
+			// aapt resource value: 0x7f06000e
+			public const int pref_temp_label = 2131099662;
+			
+			// aapt resource value: 0x7f060011
+			public const int pref_temp_summary = 2131099665;
+			
+			// aapt resource value: 0x7f060013
+			public const int pref_units_metric = 2131099667;
+			
+			// aapt resource value: 0x7f060009
+			public const int title_activity_detail = 2131099657;
+			
+			// aapt resource value: 0x7f060014
+			public const int today = 2131099668;
+			
+			// aapt resource value: 0x7f060015
+			public const int tomorrow = 2131099669;
 			
 			static String()
 			{
@@ -244,11 +408,39 @@ namespace WeatherApp
 			}
 		}
 		
+		public partial class Style
+		{
+			
+			// aapt resource value: 0x7f090003
+			public const int ActionBar_Solid_Sunshine_NoTitle = 2131296259;
+			
+			// aapt resource value: 0x7f090000
+			public const int AppTheme = 2131296256;
+			
+			// aapt resource value: 0x7f090004
+			public const int ForecastListStyle = 2131296260;
+			
+			// aapt resource value: 0x7f090001
+			public const int ForecastTheme = 2131296257;
+			
+			// aapt resource value: 0x7f090002
+			public const int SettingsTheme = 2131296258;
+			
+			static Style()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Style()
+			{
+			}
+		}
+		
 		public partial class Xml
 		{
 			
-			// aapt resource value: 0x7f040000
-			public const int pref_general = 2130968576;
+			// aapt resource value: 0x7f050000
+			public const int pref_general = 2131034112;
 			
 			static Xml()
 			{

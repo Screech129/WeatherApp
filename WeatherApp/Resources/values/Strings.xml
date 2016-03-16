@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
 	<string name="hello">Hello World, Click Me!</string>
 	<string name="app_name">WeatherApp</string>
 	<string name="action_refresh" translatable="false">Refresh</string>
@@ -26,4 +26,26 @@
 		<item>imperial</item>
 		<item>metric</item>
 	</string-array>
+	<!-- Date label when displaying today's weather forecast [CHAR LIMIT=20] -->
+	<string name="today">Today</string>
+	<!-- Date label when displaying tomorrow's weather forecast [CHAR LIMIT=20] -->
+	<string name="tomorrow">Tomorrow</string>
+	<!-- Date format for displaying day of week and date (i.e. Mon Jun 1) [CHAR LIMIT=20] -->
+	<string name="format_full_friendly_date">
+		<xliff:g id="day">{0}</xliff:g>, <xliff:g id="date">{1}</xliff:g></string>
+	<!-- Strings for formatting weather-related data -->
+	<!-- Temperature format [CHAR LIMIT=5] -->
+	<string name="format_temperature">
+		<xliff:g id="temp">{0:0}</xliff:g>\u00B0</string>
+	<!-- Windspeed formats -->
+	<!-- Wind in mph [CHAR LIMIT=25] -->
+	<string name="format_wind_mph">
+    Wind: <xliff:g id="speed">{0:0}</xliff:g> mph <xliff:g id="direction">{1}</xliff:g></string>
+	<!-- Wind in kph [CHAR LIMIT=25] -->
+	<string name="format_wind_kmh">
+    Wind: <xliff:g id="speed">{0:0}</xliff:g> km/h <xliff:g id="direction">{1}</xliff:g></string>
+	<!-- Pressure format CHAR LIMIT=25] -->
+	<string name="format_pressure">Pressure: <xliff:g id="pressure">{0}</xliff:g> hPa</string>
+	<!-- Humidity format CHAR LIMIT=25]-->
+	<string name="format_humidity">Humidity: <xliff:g id="humidity">{0}</xliff:g> %</string>
 </resources>
