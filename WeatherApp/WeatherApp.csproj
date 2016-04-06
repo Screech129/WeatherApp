@@ -76,6 +76,7 @@
     <Compile Include="Helpers\FetchWeatherTask.cs" />
     <Compile Include="Helpers\ForecastAdapter.cs" />
     <Compile Include="Helpers\Utility.cs" />
+    <Compile Include="Service\SunshineService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -200,5 +201,6 @@
     <Folder Include="Resources\drawable-v21\" />
     <Folder Include="Resources\values-lan\" />
     <Folder Include="Resources\values-v21\" />
+    <Folder Include="Service\" />
   </ItemGroup>
 </Project>
