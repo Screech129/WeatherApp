@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -67,7 +67,6 @@
     <Compile Include="Data\TestUtilities.cs" />
     <Compile Include="Utils\PollingCheck.cs" />
     <Compile Include="Data\TestDbOpen.cs" />
-    <Compile Include="Data\TestUtilitiesOpen.cs" />
     <Compile Include="Data\TestProvider.cs" />
     <Compile Include="Data\TestUriMatcher.cs" />
     <Compile Include="Data\TestWeatherContract.cs" />
@@ -87,10 +86,7 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <AndroidAsset Include="Assets\AndroidManifest.xml" />
   </ItemGroup>

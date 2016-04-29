@@ -10,47 +10,23 @@ using System.Threading.Tasks;
 
 namespace WeatherApp
 {
+    [Service]
 	public class SunshineService: IntentService
 	{
 		Context _context;
-
+        public const string  LOCATION_QUERY_EXTRA = "lqe";
 		public SunshineService ()
 		{
 			_context = this;
 		}
 
 
-		protected override void OnHandleIntent (Android.Content.Intent intent)
+		protected override void OnHandleIntent (Intent intent)
 		{
-			StreamReader reader = null;
-			string zipCode = intent.GetStringExtra ("lqe");
-			try {
-
-				var httpClient = new HttpClient ();
-				// Construct the URL for the OpenWeatherMap query
-				// Possible parameters are available at OWM's forecast API page, at
-				// http://openweathermap.org/API#forecast
-				Task<string> getJSON = httpClient.GetStringAsync ("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + zipCode + ",us&mode=json&units=metric&cnt=7&APPID=83fde89b086ca4abec16cb2a8c245bb8");
-				string JSON = getJSON.Result;
-
-				getWeatherDataFromJson (JSON, zipCode);
-			} catch (IOException e) {
-				Log.WriteLine (LogPriority.Error, "PlaceholderFragment", "Error ", e);
-				// If the code didn't successfully get the weather data, there's no point in attempting
-				// to parse it.
-			} finally {
-				if (reader != null) {
-					try {
-						reader.Close ();
-					} catch (IOException e) {
-						Log.WriteLine (LogPriority.Error, "PlaceholderFragment", "Error closing stream", e);
-					}
-				}
-
-			}
+			
 		}
 
-		private void getWeatherDataFromJson (String forecastJsonStr, String locationSetting)
+		public void getWeatherDataFromJson (String forecastJsonStr, String locationSetting)
 		{
 
 			// These are the names of the JSON objects that need to be extracted.
@@ -184,8 +160,9 @@ namespace WeatherApp
 			var insertedCount = 0;
 			if (weatherValues.Count > 0) {
 				var cvArray = new ContentValues[weatherValues.Count];
-
+               
 				cvArray = (ContentValues[])weatherValues.ToArray (typeof(ContentValues));
+
 				insertedCount = _context.ContentResolver.BulkInsert (WeatherContractOpen.WeatherEntryOpen.CONTENT_URI, cvArray);
 			}
 
@@ -205,6 +182,18 @@ namespace WeatherApp
 			return locValues;
 		}
 
+        
 	}
+
+    [BroadcastReceiver]
+    public class AlarmReciever : BroadcastReceiver
+    {
+        public override void OnReceive (Context context, Intent intent)
+        {
+            Intent sendIntent = new Intent(context, typeof(SunshineService));
+            sendIntent.PutExtra(SunshineService.LOCATION_QUERY_EXTRA, intent.GetStringExtra(SunshineService.LOCATION_QUERY_EXTRA));
+            context.StartService(sendIntent);
+        }
+    }
 }
 

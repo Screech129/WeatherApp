@@ -25,12 +25,6 @@ namespace WeatherApp
 			_context = context;
 		}
 
-		public async Task FetchWeatherTaskFromZip (string zipCode)
-		{
-
-
-		}
-
 
 	}
 }

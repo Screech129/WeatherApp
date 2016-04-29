@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="WeatherApp.WeatherApp" android:installLocation="auto">
+  <uses-sdk android:minSdkVersion="20" android:targetSdkVersion="23" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+  <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+  <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <application android:label="WeatherApp" android:theme="@style/AppTheme" android:name="mono.android.app.Application" android:allowBackup="true" android:debuggable="true">
+    <provider android:authorities="WeatherApp" android:exported="true" android:syncable="true" android:name="md5f849fa507b1ac109002e74298da22331.WeatherProvider" />
+    <activity android:label="DetailActivity" android:name="md5f849fa507b1ac109002e74298da22331.DetailActivity" />
+    <activity android:label="WeatherApp" android:name="md5f849fa507b1ac109002e74298da22331.MainActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <activity android:label="SettingsActivity" android:theme="@style/SettingsTheme" android:name="md5f849fa507b1ac109002e74298da22331.SettingsActivity" />
+    <service android:name="md5f849fa507b1ac109002e74298da22331.SunshineService" />
+    <receiver android:name="md5f849fa507b1ac109002e74298da22331.AlarmReciever" />
+    <service android:name="md51a25d89683eef00cd111332b16d590bb.SunshineAuthenticatorService">
+      <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator" />
+      <intent-filter>
+        <action android:name="android.accounts.AccountAuthenticator" />
+      </intent-filter>
+    </service>
+    <service android:exported="true" android:name="md51a25d89683eef00cd111332b16d590bb.SunshineSyncService">
+      <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/syncadapter" />
+      <intent-filter>
+        <action android:name="android.content.SyncAdapter" />
+      </intent-filter>
+    </service>
+    <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="2147483647" android:authorities="WeatherApp.WeatherApp.mono.MonoRuntimeProvider.__mono_init__" />
+    <!--suppress ExportedReceiver-->
+    <receiver android:name="mono.android.Seppuku">
+      <intent-filter>
+        <action android:name="mono.android.intent.action.SEPPUKU" />
+        <category android:name="mono.android.intent.category.SEPPUKU.WeatherApp.WeatherApp" />
+      </intent-filter>
+    </receiver>
+  </application>
+</manifest>

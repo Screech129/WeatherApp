@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="WeatherApp.WeatherApp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="WeatherApp.WeatherApp" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="20" android:targetSdkVersion="23" />
 	<uses-permission android:name="android.permission.INTERNET" />
-	<application android:icon="@mipmap/ic_launcher" android:label="WeatherApp" android:theme="@style/AppTheme">
-	</application>
+	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+	<application android:label="WeatherApp" android:theme="@style/AppTheme"></application>
 </manifest>

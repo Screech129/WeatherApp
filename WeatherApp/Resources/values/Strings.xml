@@ -48,4 +48,9 @@
 	<string name="format_pressure">Pressure: <xliff:g id="pressure">{0}</xliff:g> hPa</string>
 	<!-- Humidity format CHAR LIMIT=25]-->
 	<string name="format_humidity">Humidity: <xliff:g id="humidity">{0}</xliff:g> %</string>
+
+  <!-- Account type (for sync-adapter authenticator) -->
+  <!-- SyncAdapter related -->
+  <string name="sync_account_type">WeatherAppAuthenticator</string>
+  <string name="content_authority">WeatherApp</string>
 </resources>

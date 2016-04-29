@@ -1,0 +1,1 @@
+C:\Users\david.silver\Source\Repos\WeatherApp\AndroidTest\obj\Debug\AndroidTest.csprojResolveAssemblyReference.cache

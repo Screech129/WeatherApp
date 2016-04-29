@@ -335,6 +335,9 @@ namespace WeatherApp
 			// aapt resource value: 0x7f060003
 			public const int app_name = 2131099651;
 			
+			// aapt resource value: 0x7f06001d
+			public const int content_authority = 2131099677;
+			
 			// aapt resource value: 0x7f060016
 			public const int format_full_friendly_date = 2131099670;
 			
@@ -389,6 +392,9 @@ namespace WeatherApp
 			// aapt resource value: 0x7f060013
 			public const int pref_units_metric = 2131099667;
 			
+			// aapt resource value: 0x7f06001c
+			public const int sync_account_type = 2131099676;
+			
 			// aapt resource value: 0x7f060009
 			public const int title_activity_detail = 2131099657;
 			
@@ -440,7 +446,13 @@ namespace WeatherApp
 		{
 			
 			// aapt resource value: 0x7f050000
-			public const int pref_general = 2131034112;
+			public const int authenticator = 2131034112;
+			
+			// aapt resource value: 0x7f050001
+			public const int pref_general = 2131034113;
+			
+			// aapt resource value: 0x7f050002
+			public const int syncadapter = 2131034114;
 			
 			static Xml()
 			{
