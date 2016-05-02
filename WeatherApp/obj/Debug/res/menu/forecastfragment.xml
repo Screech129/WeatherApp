@@ -1,1 +1,3 @@
-<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"><item android:id="@+id/action_refresh" android:title="@string/action_refresh" /></menu>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"><item android:id="@+id/action_viewLocation" android:title="@string/action_viewLocation" android:orderInCategory="100" /><!--<item
+   android:id = "@+id/action_refresh"
+   android:title="@string/action_refresh"/>--></menu>

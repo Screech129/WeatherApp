@@ -160,9 +160,6 @@ namespace WeatherApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f0b0015
-			public const int action_refresh = 2131427349;
-			
 			// aapt resource value: 0x7f0b0012
 			public const int action_settings = 2131427346;
 			
@@ -344,6 +341,9 @@ namespace WeatherApp
 			// aapt resource value: 0x7f06001b
 			public const int format_humidity = 2131099675;
 			
+			// aapt resource value: 0x7f06001e
+			public const int format_notification = 2131099678;
+			
 			// aapt resource value: 0x7f06001a
 			public const int format_pressure = 2131099674;
 			
@@ -361,6 +361,24 @@ namespace WeatherApp
 			
 			// aapt resource value: 0x7f060008
 			public const int hello_world = 2131099656;
+			
+			// aapt resource value: 0x7f060024
+			public const int pref_enable_notifications_default = 2131099684;
+			
+			// aapt resource value: 0x7f060023
+			public const int pref_enable_notifications_false = 2131099683;
+			
+			// aapt resource value: 0x7f060020
+			public const int pref_enable_notifications_key = 2131099680;
+			
+			// aapt resource value: 0x7f060021
+			public const int pref_enable_notifications_label = 2131099681;
+			
+			// aapt resource value: 0x7f060022
+			public const int pref_enable_notifications_true = 2131099682;
+			
+			// aapt resource value: 0x7f06001f
+			public const int pref_last_notification = 2131099679;
 			
 			// aapt resource value: 0x7f06000c
 			public const int pref_location_default = 2131099660;

@@ -15,14 +15,35 @@ using System.IO;
 using System.Threading.Tasks;
 using Org.Json;
 using System.Collections;
+using Android.Preferences;
+using Android.Database;
+
 
 namespace WeatherApp.Sync
 {
 
     public class SunshineSyncAdapter : AbstractThreadedSyncAdapter
     {
-        public const string LOCATION_QUERY_EXTRA = "lqe";
         private Context _context = Application.Context;
+        public const string LOCATION_QUERY_EXTRA = "lqe";
+        // Interval at which to sync with the weather, in milliseconds.
+        // 60 seconds (1 minute)  180 = 3 hours
+        public const int SYNC_INTERVAL = 60 * 180;
+        public const int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+        private const long Day_In_Milis = 1000 * 60 * 60 * 24;
+        private const int Weather_Notification_ID = 3004;
+        private static string[] Notify_Weather_Projection = new string[]
+        {
+            WeatherContractOpen.WeatherEntryOpen.COLUMN_WEATHER_id,
+            WeatherContractOpen.WeatherEntryOpen.COLUMN_MAX_TEMP,
+            WeatherContractOpen.WeatherEntryOpen.COLUMN_MIN_TEMP,
+            WeatherContractOpen.WeatherEntryOpen.COLUMN_SHORT_DESC
+        };
+
+        private const int Index_Weather_ID = 0;
+        private const int Index_Max_Temp = 1;
+        private const int Index_Min_Temp = 2;
+        private const int Index_Short_Desc = 3;
 
         public SunshineSyncAdapter (Context context, bool autoInitialize) :
             base(context, autoInitialize)
@@ -36,6 +57,7 @@ namespace WeatherApp.Sync
 
             StreamReader reader = null;
             string zipCode = Utility.getPreferredLocation(_context);
+             Log.Debug("SunshineSyncAdapter", "Time: " + DateTime.Now + "Zip: " + zipCode);
             try
             {
 
@@ -45,8 +67,9 @@ namespace WeatherApp.Sync
                 // http://openweathermap.org/API#forecast
                 Task<string> getJSON = httpClient.GetStringAsync("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + zipCode + ",us&mode=json&units=metric&cnt=7&APPID=83fde89b086ca4abec16cb2a8c245bb8");
                 string JSON = getJSON.Result;
-
-                getWeatherDataFromJson(JSON, zipCode);
+                GetWeatherDataFromJson(JSON, zipCode);
+                DeleteOldWeather();
+                NotifyWeather();
             }
             catch (IOException e)
             {
@@ -71,6 +94,14 @@ namespace WeatherApp.Sync
             }
         }
 
+        private void DeleteOldWeather ()
+        {
+            var yesterday = DateTime.Today.AddDays(-1).Ticks;
+            var formattedDate = WeatherContractOpen.normalizeDate(yesterday);
+            var deletedCount = _context.ContentResolver.Delete(WeatherContractOpen.WeatherEntryOpen.CONTENT_URI, WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE +  "<= ?", new String[] { formattedDate.ToString() });
+            Log.Debug("Fetch Weather Task", "FetchweatherTask Complete " + deletedCount);
+        }
+
         /**
     * Helper method to have the sync adapter sync immediately
     * @param context The context used to access the account service
@@ -80,7 +111,7 @@ namespace WeatherApp.Sync
             Bundle bundle = new Bundle();
             bundle.PutBoolean(ContentResolver.SyncExtrasExpedited, true);
             bundle.PutBoolean(ContentResolver.SyncExtrasManual, true);
-            ContentResolver.RequestSync(getSyncAccount(context),
+            ContentResolver.RequestSync(GetSyncAccount(context),
                     context.GetString(Resource.String.content_authority), bundle);
 
         }
@@ -93,7 +124,7 @@ namespace WeatherApp.Sync
          * @param context The context used to access the account service
          * @return a fake account.
          */
-        public static Account getSyncAccount (Context context)
+        public static Account GetSyncAccount (Context context)
         {
             // Get an instance of the Android account manager
             AccountManager accountManager =
@@ -121,12 +152,12 @@ namespace WeatherApp.Sync
                  * then call ContentResolver.SetIsSyncable(account, AUTHORITY, 1)
                  * here.
                  */
-
+                OnAccountCreated(newAccount,context);
             }
             return newAccount;
         }
 
-        public void getWeatherDataFromJson (String forecastJsonStr, String locationSetting)
+        public void GetWeatherDataFromJson (string forecastJsonStr, string locationSetting)
         {
 
             // These are the names of the JSON objects that need to be extracted.
@@ -159,7 +190,7 @@ namespace WeatherApp.Sync
                 JSONArray weatherArray = forecastJson.GetJSONArray(OWM_LIST);
 
                 JSONObject cityJson = forecastJson.GetJSONObject(OWM_CITY);
-                String cityName = cityJson.GetString(OWM_CITY_NAME);
+                string cityName = cityJson.GetString(OWM_CITY_NAME);
 
                 JSONObject cityCoord = cityJson.GetJSONObject(OWM_COORD);
                 double cityLatitude = cityCoord.GetDouble(OWM_LATITUDE);
@@ -247,7 +278,7 @@ namespace WeatherApp.Sync
             var location = _context.ContentResolver.Query(WeatherContractOpen.LocationEntryOpen.CONTENT_URI, null, WeatherContractOpen.LocationEntryOpen.COLUMN_LOCATION_SETTING + " = ?", new string[] { locationSetting }, null);
             if (!location.MoveToFirst())
             {
-                var locationValues = createLocationValues(locationSetting, cityName, lat, lon);
+                var locationValues = CreateLocationValues(locationSetting, cityName, lat, lon);
                 var insertUri = _context.ContentResolver.Insert(WeatherContractOpen.LocationEntryOpen.CONTENT_URI, locationValues);
                 returnedId = insertUri.LastPathSegment;
             }
@@ -277,7 +308,7 @@ namespace WeatherApp.Sync
             Log.Debug("Fetch Weather Task", "FetchweatherTask Complete " + insertedCount + " records Inserted");
         }
 
-        public static ContentValues createLocationValues (string locationSetting, string cityName, double lat, double lon)
+        public static ContentValues CreateLocationValues (string locationSetting, string cityName, double lat, double lon)
         {
 
             // Create a new map of values, where column names are the keys
@@ -290,6 +321,116 @@ namespace WeatherApp.Sync
             return locValues;
         }
 
+        /**
+    * Helper method to schedule the sync adapter periodic execution
+    */
+        public static void ConfigurePeriodicSync (Context context, int syncInterval, int flexTime)
+        {
+            Account account = GetSyncAccount(context);
+            string authority = context.GetString(Resource.String.content_authority);
+            if (Build.VERSION.SdkInt >= Build.VERSION_CODES.Kitkat)
+            {
+                // we can enable inexact timers in our periodic sync
+                SyncRequest request = new SyncRequest.Builder().
+                        SyncPeriodic(syncInterval, flexTime).
+                        SetSyncAdapter(account, authority).
+                        SetExtras(new Bundle()).Build();
+                ContentResolver.RequestSync(request);
+            }
+            else
+            {
+                ContentResolver.AddPeriodicSync(account,
+                        authority, new Bundle(), syncInterval);
+            }
+        }
+
+
+        private static void OnAccountCreated (Account newAccount, Context context)
+        {
+            /*
+             * Since we've created an account
+             */
+            ConfigurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+
+            /*
+             * Without calling setSyncAutomatically, our periodic sync will not be enabled.
+             */
+            ContentResolver.SetSyncAutomatically(newAccount, context.GetString(Resource.String.content_authority), true);
+
+            /*
+             * Finally, let's do a sync to get things started
+             */
+            SyncImmediately(context);
+        }
+
+        public static void InitializeSyncAdapter (Context context)
+        {
+            GetSyncAccount(context);
+        }
+
+        private void NotifyWeather ()
+        {
+            var currTimeMilli = DateTime.Now.Ticks;
+            //checking the last update and notify if it' the first of the day
+            ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(_context);
+            string lastNotificationKey = _context.GetString(Resource.String.pref_last_notification);
+            long lastSync = prefs.GetLong(lastNotificationKey, 0);
+            var notificationEnableKey = _context.GetString(Resource.String.pref_enable_notifications_key);
+            var notificationEnabled = prefs.GetBoolean(notificationEnableKey, true);
+            if (currTimeMilli - lastSync >= Day_In_Milis && notificationEnabled)
+            {
+                // Last sync was more than 1 day ago, let's send a notification with the weather.
+                string locationQuery = Utility.getPreferredLocation(_context);
+
+                Android.Net.Uri weatherUri = WeatherContractOpen.WeatherEntryOpen.buildWeatherLocationWithDate(locationQuery, currTimeMilli);
+
+                // we'll query our contentProvider, as always
+                ICursor cursor = _context.ContentResolver.Query(weatherUri, Notify_Weather_Projection, null, null, null);
+
+                if (cursor.MoveToFirst())
+                {
+                    int weatherId = cursor.GetInt(Index_Weather_ID);
+                    double high = cursor.GetDouble(Index_Max_Temp);
+                    double low = cursor.GetDouble(Index_Min_Temp);
+                    string desc = cursor.GetString(Index_Short_Desc);
+
+                    int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
+                    string title = _context.GetString(Resource.String.app_name);
+                    bool isMetric = Utility.isMetric(_context);
+
+                    // Define the text of the forecast.
+                    string contentText = string.Format(_context.GetString(Resource.String.format_notification),
+                            desc,
+                            Utility.formatTemperature(_context, high,isMetric),
+                            Utility.formatTemperature(_context, low,isMetric));
+
+                    //build your notification here.
+                    Notification.Builder builder = new Notification.Builder(_context)
+                   .SetSmallIcon(iconId)
+                   .SetContentTitle("Today's Weather")
+                   .SetContentText(contentText);
+
+                    Intent notificationIntent = new Intent(_context, typeof(MainActivity));
+
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.Create(_context);
+                    stackBuilder.AddParentStack(Java.Lang.Class.FromType (typeof(MainActivity)));
+                    stackBuilder.AddNextIntent(notificationIntent);
+
+                    PendingIntent notificationPendIntent = stackBuilder.GetPendingIntent(0, PendingIntentFlags.UpdateCurrent);
+
+                    builder.SetContentIntent(notificationPendIntent);
+
+                    NotificationManager notificationManager = (NotificationManager)_context.GetSystemService(Context.NotificationService);
+                    notificationManager.Notify(Weather_Notification_ID, builder.Build());
+
+                    //refreshing last sync
+                    ISharedPreferencesEditor editor = prefs.Edit();
+                    editor.PutLong(lastNotificationKey, currTimeMilli);
+                    editor.Commit();
+                }
+            }
+
+        }
 
     }
 }

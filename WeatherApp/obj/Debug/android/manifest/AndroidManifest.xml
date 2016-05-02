@@ -16,8 +16,6 @@
       </intent-filter>
     </activity>
     <activity android:label="SettingsActivity" android:theme="@style/SettingsTheme" android:name="md5f849fa507b1ac109002e74298da22331.SettingsActivity" />
-    <service android:name="md5f849fa507b1ac109002e74298da22331.SunshineService" />
-    <receiver android:name="md5f849fa507b1ac109002e74298da22331.AlarmReciever" />
     <service android:name="md51a25d89683eef00cd111332b16d590bb.SunshineAuthenticatorService">
       <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator" />
       <intent-filter>

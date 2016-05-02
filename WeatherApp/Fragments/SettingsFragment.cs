@@ -12,6 +12,7 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Android.App;
+using WeatherApp.Sync;
 
 namespace WeatherApp
 {
@@ -50,15 +51,28 @@ namespace WeatherApp
 		public void OnSharedPreferenceChanged (ISharedPreferences sharedPreferences, string key)
 		{
 			Preference pref = FindPreference (key);
-			if (pref.GetType () == typeof(ListPreference)) {
+            var prefEditor = sharedPreferences.Edit();
+            if (pref == null)
+            {
+                return;
+            }
+            if (pref.GetType () == typeof(ListPreference)) {
 				var listPref = (ListPreference)pref;
 				pref.Summary = listPref.Entry;
-			} else {
-				pref.Summary = sharedPreferences.GetString (key, "");
 			}
-			var prefEditor = sharedPreferences.Edit ();
-			prefEditor.PutString (key, sharedPreferences.GetString (key, ""));
+            else if (pref.GetType() == typeof(CheckBoxPreference))
+            {
+                pref.Summary = sharedPreferences.GetBoolean(key,true).ToString();
+                prefEditor.PutBoolean(key, sharedPreferences.GetBoolean(key, true));
+
+            }
+            else {
+				pref.Summary = sharedPreferences.GetString (key, "");
+                prefEditor.PutString(key, sharedPreferences.GetString(key, ""));
+            }
+			
 			prefEditor.Commit ();
+            SunshineSyncAdapter.SyncImmediately(Activity);
 		}
 
 

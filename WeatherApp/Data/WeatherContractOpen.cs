@@ -98,7 +98,7 @@ namespace WeatherApp
 			public static Android.Net.Uri buildWeatherLocationWithDate (String locationSetting, long date)
 			{
 				return CONTENT_URI.BuildUpon ().AppendPath (locationSetting)
-					.AppendPath (normalizeDate (date).ToString ()).Build ();
+					.AppendQueryParameter(COLUMN_DATE,normalizeDate (date).ToString ()).Build ();
 			}
 
 			public static String getLocationSettingFromUri (Android.Net.Uri uri)

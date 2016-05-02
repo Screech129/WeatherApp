@@ -153,6 +153,57 @@ namespace WeatherApp
 			return String.Format (context.GetString (windFormat), windSpeed, direction);
 		}
 
-	}
+        public static int getIconResourceForWeatherCondition (int weatherId)
+        {
+            // Based on weather code data found at:
+            // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
+            if (weatherId >= 200 && weatherId <= 232)
+            {
+                return Resource.Drawable.ic_storm;
+            }
+            else if (weatherId >= 300 && weatherId <= 321)
+            {
+                return Resource.Drawable.ic_light_rain;
+            }
+            else if (weatherId >= 500 && weatherId <= 504)
+            {
+                return Resource.Drawable.ic_rain;
+            }
+            else if (weatherId == 511)
+            {
+                return Resource.Drawable.ic_snow;
+            }
+            else if (weatherId >= 520 && weatherId <= 531)
+            {
+                return Resource.Drawable.ic_rain;
+            }
+            else if (weatherId >= 600 && weatherId <= 622)
+            {
+                return Resource.Drawable.ic_snow;
+            }
+            else if (weatherId >= 701 && weatherId <= 761)
+            {
+                return Resource.Drawable.ic_fog;
+            }
+            else if (weatherId == 761 || weatherId == 781)
+            {
+                return Resource.Drawable.ic_storm;
+            }
+            else if (weatherId == 800)
+            {
+                return Resource.Drawable.ic_clear;
+            }
+            else if (weatherId == 801)
+            {
+                return Resource.Drawable.ic_light_clouds;
+            }
+            else if (weatherId >= 802 && weatherId <= 804)
+            {
+                return Resource.Drawable.ic_cloudy;
+            }
+            return -1;
+        }
+
+    }
 }
 

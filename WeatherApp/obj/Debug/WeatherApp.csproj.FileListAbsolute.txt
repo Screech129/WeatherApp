@@ -1,4 +1,3 @@
-C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.csprojResolveAssemblyReference.cache
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\WeatherApp.dll.config
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\WeatherApp.dll
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\WeatherApp.pdb
@@ -10,6 +9,7 @@ C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\SQLite.Net.Pl
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\SQLiteNetExtensions.dll
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\SQLiteNetExtensions.dll.mdb
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\Newtonsoft.Json.xml
+C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.csprojResolveAssemblyReference.cache
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.dll
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.pdb
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\android\bin\WeatherApp.WeatherApp.apk

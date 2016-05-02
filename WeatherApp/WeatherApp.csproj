@@ -78,10 +78,8 @@
     <Compile Include="Fragments\DetailFragment.cs" />
     <Compile Include="Fragments\ForecastFragment.cs" />
     <Compile Include="Fragments\SettingsFragment.cs" />
-    <Compile Include="Helpers\FetchWeatherTask.cs" />
     <Compile Include="Helpers\ForecastAdapter.cs" />
     <Compile Include="Helpers\Utility.cs" />
-    <Compile Include="Service\SunshineService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

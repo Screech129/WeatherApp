@@ -156,17 +156,21 @@ namespace WeatherApp
         public override bool OnOptionsItemSelected (IMenuItem item)
         {
             int id = item.ItemId;
-            if (id == Resource.Id.action_refresh)
+            if (id == Resource.Id.action_viewLocation)
             {
-                updateWeather();
+                openPreferredLocationInMap();
                 return true;
             }
+            //if (id == Resource.Id.action_refresh)
+            //{
+            //    updateWeather();
+            //    return true;
+            //}
             return base.OnOptionsItemSelected(item);
         }
 
         public void updateWeather ()
-        {
-            
+        {          
             SunshineSyncAdapter.SyncImmediately(Activity);
         }
 
@@ -176,6 +180,52 @@ namespace WeatherApp
             LoaderManager.RestartLoader(URL_LOADER, null, this);
         }
 
+        private void openPreferredLocationInMap ()
+        {
+            ICursor c = forecastAdapter.Cursor;
+            if (null != c)
+            {
+                c.MoveToPosition(0);
+                String posLat = c.GetString(COL_COORD_LAT);
+                String posLong = c.GetString(COL_COORD_LONG);
+                Android.Net.Uri geoLocation = Android.Net.Uri.Parse("geo:" + posLat + "," + posLong);
+                
+                var mapIntent = new Intent(Intent.ActionView, geoLocation);
+                if (mapIntent.ResolveActivity(Activity.PackageManager) != null)
+                {
+                    StartActivity(mapIntent);
+                }
+                else
+                {
+                    Toast.MakeText(Activity, "No Map App found", ToastLength.Long).Show();
+                    Log.Debug("Main Activity", "Couldn't call " + geoLocation.ToString() + ", No Maps App");
+                }
+
+            }
+
+            //Alternative way of calling the activity but not a fully implicint intent
+            //			var geoLocation = Android.Net.Uri.Parse("http://maps.google.com/maps/place/"+zipCode);
+            //
+            //			var mapIntent = new Intent(Intent.ActionView,geoLocation);
+            //			mapIntent.SetClassName ("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+            //			try
+            //			{
+            //				StartActivity (mapIntent);
+            //
+            //			}
+            //			catch(ActivityNotFoundException ex)
+            //			{
+            //				try
+            //				{
+            //					Intent unrestrictedIntent = new Intent(Intent.ActionView, geoLocation);
+            //					StartActivity(unrestrictedIntent);
+            //				}
+            //				catch(ActivityNotFoundException innerEx)
+            //				{
+            //					Toast.MakeText(this, "Please install a maps application", ToastLength.Long).Show();
+            //				}
+            //			}
+        }
 
     }
 

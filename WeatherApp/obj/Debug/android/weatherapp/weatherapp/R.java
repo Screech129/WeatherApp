@@ -42,7 +42,6 @@ public final class R {
         public static final int touch_selector=0x7f020012;
     }
     public static final class id {
-        public static final int action_refresh=0x7f0b0015;
         public static final int action_settings=0x7f0b0012;
         public static final int action_share=0x7f0b0014;
         public static final int action_viewLocation=0x7f0b0013;
@@ -98,6 +97,9 @@ public final class R {
         /**  Humidity format CHAR LIMIT=25]
          */
         public static final int format_humidity=0x7f06001b;
+        /**  Notification Format 
+         */
+        public static final int format_notification=0x7f06001e;
         /**  Pressure format CHAR LIMIT=25] 
          */
         public static final int format_pressure=0x7f06001a;
@@ -114,6 +116,16 @@ public final class R {
         public static final int format_wind_mph=0x7f060018;
         public static final int hello=0x7f060002;
         public static final int hello_world=0x7f060008;
+        public static final int pref_enable_notifications_default=0x7f060024;
+        public static final int pref_enable_notifications_false=0x7f060023;
+        /**  Strings related to Notification Enabled preference 
+         */
+        public static final int pref_enable_notifications_key=0x7f060020;
+        public static final int pref_enable_notifications_label=0x7f060021;
+        public static final int pref_enable_notifications_true=0x7f060022;
+        /**  Strings related to Notification preference 
+         */
+        public static final int pref_last_notification=0x7f06001f;
         public static final int pref_location_default=0x7f06000c;
         public static final int pref_location_key=0x7f06000b;
         public static final int pref_location_label=0x7f06000a;
