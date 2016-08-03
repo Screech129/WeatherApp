@@ -1,0 +1,1 @@
+<resources><declare-styleable name="LocationEditTextPreference"><attr name="MinLength" format="integer" /></declare-styleable></resources>

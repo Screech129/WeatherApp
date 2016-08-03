@@ -15,8 +15,16 @@ using System.IO;
 using System.Threading.Tasks;
 using Org.Json;
 using System.Collections;
+using Android.Content.Res;
 using Android.Preferences;
 using Android.Database;
+using Android.Graphics;
+using Android.Views.Animations;
+using Com.Bumptech.Glide;
+using Java.Lang;
+using Java.Util.Concurrent;
+using Exception = System.Exception;
+using String = System.String;
 
 
 namespace WeatherApp.Sync
@@ -44,7 +52,7 @@ namespace WeatherApp.Sync
         private const int Index_Max_Temp = 1;
         private const int Index_Min_Temp = 2;
         private const int Index_Short_Desc = 3;
-
+        
         public SunshineSyncAdapter (Context context, bool autoInitialize) :
             base(context, autoInitialize)
         {
@@ -65,33 +73,27 @@ namespace WeatherApp.Sync
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are available at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                Task<string> getJSON = httpClient.GetStringAsync("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + zipCode + ",us&mode=json&units=metric&cnt=7&APPID=83fde89b086ca4abec16cb2a8c245bb8");
+                //http://api.openweathermap.org/data/2.5/forecast/daily?q=
+                Task<string> getJSON =
+                    httpClient.GetStringAsync("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + zipCode +
+                                              ",us&mode=json&units=metric&cnt=7&APPID=83fde89b086ca4abec16cb2a8c245bb8");
                 string JSON = getJSON.Result;
                 GetWeatherDataFromJson(JSON, zipCode);
                 DeleteOldWeather();
                 NotifyWeather();
             }
+
             catch (IOException e)
             {
                 Log.WriteLine(LogPriority.Error, "PlaceholderFragment", "Error ", e);
-                // If the code didn't successfully get the weather data, there's no point in attempting
-                // to parse it.
+                SetLocationStatus(_context, (int) Helpers.LocationStatus.LocationStatusServerDown);
             }
-            finally
+            catch (Exception ex)
             {
-                if (reader != null)
-                {
-                    try
-                    {
-                        reader.Close();
-                    }
-                    catch (IOException e)
-                    {
-                        Log.WriteLine(LogPriority.Error, "PlaceholderFragment", "Error closing stream", e);
-                    }
-                }
-
+                Log.Error("Stream Error", ex.ToString());
+                SetLocationStatus(_context,(int)Helpers.LocationStatus.LocationStatusServerDown);
             }
+           
         }
 
         private void DeleteOldWeather ()
@@ -184,11 +186,20 @@ namespace WeatherApp.Sync
             const string OWM_DESCRIPTION = "main";
             const string OWM_WEATHER_id = "id";
 
+            const string OWM_MESSAGE_CODE = "cod";
+
             try
             {
                 JSONObject forecastJson = new JSONObject(forecastJsonStr);
-                JSONArray weatherArray = forecastJson.GetJSONArray(OWM_LIST);
 
+                var returnCode = forecastJson.GetInt(OWM_MESSAGE_CODE);
+                if (returnCode == 404)
+                {
+                    SetLocationStatus(_context, (int)Helpers.LocationStatus.LocationStatusInvalid);
+                    throw new Exception("Invalid location.");
+                }
+
+                JSONArray weatherArray = forecastJson.GetJSONArray(OWM_LIST);
                 JSONObject cityJson = forecastJson.GetJSONObject(OWM_CITY);
                 string cityName = cityJson.GetString(OWM_CITY_NAME);
 
@@ -202,6 +213,7 @@ namespace WeatherApp.Sync
 
                 DateTime dayTime = DateTime.UtcNow;
 
+               
 
                 for (int i = 0; i < weatherArray.Length(); i++)
                 {
@@ -245,6 +257,7 @@ namespace WeatherApp.Sync
                     high = temperatureObject.GetDouble(OWM_MAX);
                     low = temperatureObject.GetDouble(OWM_MIN);
 
+
                     ContentValues weatherValues = new ContentValues();
 
                     weatherValues.Put(WeatherContractOpen.WeatherEntryOpen.COLUMN_LOC_KEY, locationId);
@@ -262,6 +275,11 @@ namespace WeatherApp.Sync
                 }
                 BulkInsertWeather(jsonResultValues, locationSetting);
 
+            }
+            catch (JSONException je)
+            {
+                Log.Error("JSON Exception", je.ToString());
+                SetLocationStatus(_context,(int)Helpers.LocationStatus.LocationStatusServerInvalid);
             }
             catch (Exception ex)
             {
@@ -306,6 +324,7 @@ namespace WeatherApp.Sync
             }
 
             Log.Debug("Fetch Weather Task", "FetchweatherTask Complete " + insertedCount + " records Inserted");
+            SetLocationStatus(_context,(int)Helpers.LocationStatus.LocationStatusOk);
         }
 
         public static ContentValues CreateLocationValues (string locationSetting, string cityName, double lat, double lon)
@@ -389,12 +408,37 @@ namespace WeatherApp.Sync
 
                 if (cursor.MoveToFirst())
                 {
+                    int largeIconWidth = Build.VERSION.SdkInt >= BuildVersionCodes.Honeycomb
+                        ? Android.Resource.Dimension.NotificationLargeIconWidth
+                        : Resource.Dimension.notification_large_icon_default;
+                    int largeIconHeight = Build.VERSION.SdkInt >= BuildVersionCodes.Honeycomb
+                        ? Android.Resource.Dimension.NotificationLargeIconHeight
+                        : Resource.Dimension.notification_large_icon_default;
+
                     int weatherId = cursor.GetInt(Index_Weather_ID);
                     double high = cursor.GetDouble(Index_Max_Temp);
                     double low = cursor.GetDouble(Index_Min_Temp);
                     string desc = cursor.GetString(Index_Short_Desc);
-
+                    Resources resources = Context.Resources;
+                    int artResourceId = Utility.GetArtResourceForWeatherCondition(weatherId);
+                    var artUrl = Utility.GetArtUrlForWeatherCondition(Context, weatherId);
                     int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
+                    Bitmap largeIcon;
+                    try
+                    {
+                        largeIcon = (Bitmap)Glide.With(Context)
+                        .Load(artUrl)
+                        .BitmapTransform()
+                        .Error(artResourceId)
+                        .Into(largeIconWidth, largeIconHeight).Get();
+                    }
+                    catch (Exception ex) when (ex is InterruptedException || ex is ExecutionException)
+                    {
+                        Log.Error("Glide Error", "Error retrieving large icon from " + artUrl, ex);
+                        largeIcon = BitmapFactory.DecodeResource(resources, artResourceId);
+                    }
+                   
+
                     string title = _context.GetString(Resource.String.app_name);
                     bool isMetric = Utility.isMetric(_context);
 
@@ -407,6 +451,7 @@ namespace WeatherApp.Sync
                     //build your notification here.
                     Notification.Builder builder = new Notification.Builder(_context)
                    .SetSmallIcon(iconId)
+                   .SetLargeIcon(largeIcon)
                    .SetContentTitle("Today's Weather")
                    .SetContentText(contentText);
 
@@ -430,6 +475,15 @@ namespace WeatherApp.Sync
                 }
             }
 
+        }
+
+        private static void SetLocationStatus(Context context, int locationStatus)
+        {
+            var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
+            var prefsEditor = prefs.Edit();
+
+            prefsEditor.PutInt(context.GetString(Resource.String.pref_location_status),locationStatus);
+            prefsEditor.Commit();
         }
 
     }

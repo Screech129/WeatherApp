@@ -6,7 +6,8 @@ public class WeatherDbOpenHelper
 	implements
 		mono.android.IGCUserPeer
 {
-	static final String __md_methods;
+/** @hide */
+	public static final String __md_methods;
 	static {
 		__md_methods = 
 			"n_onCreate:(Landroid/database/sqlite/SQLiteDatabase;)V:GetOnCreate_Landroid_database_sqlite_SQLiteDatabase_Handler\n" +
@@ -47,7 +48,7 @@ public class WeatherDbOpenHelper
 
 	private native void n_onUpgrade (android.database.sqlite.SQLiteDatabase p0, int p1, int p2);
 
-	java.util.ArrayList refList;
+	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)
 	{
 		if (refList == null)

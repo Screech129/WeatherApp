@@ -7,7 +7,8 @@ public class DetailFragment
 		mono.android.IGCUserPeer,
 		android.app.LoaderManager.LoaderCallbacks
 {
-	static final String __md_methods;
+/** @hide */
+	public static final String __md_methods;
 	static {
 		__md_methods = 
 			"n_onCreateOptionsMenu:(Landroid/view/Menu;Landroid/view/MenuInflater;)V:GetOnCreateOptionsMenu_Landroid_view_Menu_Landroid_view_MenuInflater_Handler\n" +
@@ -85,7 +86,7 @@ public class DetailFragment
 
 	private native void n_onLoadFinished (android.content.Loader p0, java.lang.Object p1);
 
-	java.util.ArrayList refList;
+	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)
 	{
 		if (refList == null)

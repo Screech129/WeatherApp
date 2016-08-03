@@ -48,7 +48,7 @@ namespace WeatherApp
 			public const String CONTENT_TYPE =
 				ContentResolver.CursorDirBaseType + "/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
 			public const String CONTENT_ITEM_TYPE =
-				ContentResolver.CursorDirBaseType + "/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
+				ContentResolver.CursorItemBaseType + "/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
 
 			public static Android.Net.Uri buildLocationUri (long id)
 			{

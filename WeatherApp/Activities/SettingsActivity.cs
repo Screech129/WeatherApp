@@ -11,6 +11,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Android.Support.V7.App;
 
 namespace WeatherApp
 {
@@ -22,9 +23,10 @@ namespace WeatherApp
 		{
 			base.OnCreate (savedInstanceState);
 			SetContentView (Resource.Layout.activity_detail);
-			ActionBar.SetDisplayHomeAsUpEnabled (true);
-			ActionBar.SetDisplayShowHomeEnabled (true);
-			ActionBar.Title = "Settings";
+
+			//ActionBar.SetDisplayHomeAsUpEnabled (true);
+			//ActionBar.SetDisplayShowHomeEnabled (true);
+			//ActionBar.Title = "Settings";
 			// For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
 			// updated when the preference changes.
 			FragmentTransaction fragTx = this.FragmentManager.BeginTransaction ();

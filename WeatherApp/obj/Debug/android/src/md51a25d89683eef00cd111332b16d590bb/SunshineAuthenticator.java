@@ -6,7 +6,8 @@ public class SunshineAuthenticator
 	implements
 		mono.android.IGCUserPeer
 {
-	static final String __md_methods;
+/** @hide */
+	public static final String __md_methods;
 	static {
 		__md_methods = 
 			"n_editProperties:(Landroid/accounts/AccountAuthenticatorResponse;Ljava/lang/String;)Landroid/os/Bundle;:GetEditProperties_Landroid_accounts_AccountAuthenticatorResponse_Ljava_lang_String_Handler\n" +
@@ -84,7 +85,7 @@ public class SunshineAuthenticator
 
 	private native android.os.Bundle n_hasFeatures (android.accounts.AccountAuthenticatorResponse p0, android.accounts.Account p1, java.lang.String[] p2);
 
-	java.util.ArrayList refList;
+	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)
 	{
 		if (refList == null)

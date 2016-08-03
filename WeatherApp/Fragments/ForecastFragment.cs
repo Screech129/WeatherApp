@@ -22,7 +22,7 @@ using WeatherApp.Sync;
 
 namespace WeatherApp
 {
-    public class ForecastFragment : Fragment, LoaderManager.ILoaderCallbacks
+    public class ForecastFragment : Fragment, LoaderManager.ILoaderCallbacks, ISharedPreferencesOnSharedPreferenceChangeListener
     {
 
         ForecastAdapter forecastAdapter;
@@ -96,6 +96,7 @@ namespace WeatherApp
             var view = inflater.Inflate(Resource.Layout.fragment_main, container, false);
             listView = view.FindViewById<ListView>(Resource.Id.listview_forecast);
             listView.Adapter = forecastAdapter;
+            listView.EmptyView = view.FindViewById(Resource.Id.listview_forecast_empty);
             listView.ItemClick += (sender, e) =>
             {
                 position = e.Position;
@@ -145,7 +146,42 @@ namespace WeatherApp
         public void OnLoadFinished (Loader loader, Java.Lang.Object data)
         {
             forecastAdapter.SwapCursor((ICursor)data);
-            listView.SmoothScrollToPosition(position);
+
+            if (position != AdapterView.InvalidPosition)
+                listView.SmoothScrollToPosition(position);
+        }
+
+        private void UpdateEmptyView ()
+        {
+            if (forecastAdapter.Count == 0)
+            {
+                var locStatus = Utility.GetLocationStatus(Activity);
+
+                var tv = (TextView)View.FindViewById(Resource.Id.listview_forecast_empty);
+
+
+                switch (locStatus)
+                {
+                    case (int)Helpers.LocationStatus.LocationStatusServerDown:
+                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_down);
+                        break;
+                    case (int)Helpers.LocationStatus.LocationStatusServerInvalid:
+                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_error);
+                        break;
+                    case (int)Helpers.LocationStatus.LocationStatusUnkown:
+                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_unknown);
+                        break;
+                    case (int)Helpers.LocationStatus.LocationStatusInvalid:
+                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_invalid_location);
+                        break;
+                    default:
+                        if (!Utility.CheckNetworkStatus(Activity))
+                        {
+                            tv.Text = "Weather information not available. No network connection.";
+                        }
+                        break;
+                }
+            }
         }
 
         public override void OnCreateOptionsMenu (IMenu menu, MenuInflater inflater)
@@ -170,7 +206,7 @@ namespace WeatherApp
         }
 
         public void updateWeather ()
-        {          
+        {
             SunshineSyncAdapter.SyncImmediately(Activity);
         }
 
@@ -189,7 +225,7 @@ namespace WeatherApp
                 String posLat = c.GetString(COL_COORD_LAT);
                 String posLong = c.GetString(COL_COORD_LONG);
                 Android.Net.Uri geoLocation = Android.Net.Uri.Parse("geo:" + posLat + "," + posLong);
-                
+
                 var mapIntent = new Intent(Intent.ActionView, geoLocation);
                 if (mapIntent.ResolveActivity(Activity.PackageManager) != null)
                 {
@@ -227,6 +263,27 @@ namespace WeatherApp
             //			}
         }
 
+        public override void OnResume ()
+        {
+            base.OnResume();
+            PreferenceManager.GetDefaultSharedPreferences(Activity)
+            .RegisterOnSharedPreferenceChangeListener(this);
+        }
+
+        public override void OnPause ()
+        {
+            base.OnPause();
+            PreferenceManager.GetDefaultSharedPreferences(Activity)
+            .UnregisterOnSharedPreferenceChangeListener(this);
+        }
+
+        public void OnSharedPreferenceChanged (ISharedPreferences sharedPreferences, string key)
+        {
+            if (key.Equals(GetString(Resource.String.pref_location_status)))
+            {
+                UpdateEmptyView();
+            }
+        }
     }
 
 

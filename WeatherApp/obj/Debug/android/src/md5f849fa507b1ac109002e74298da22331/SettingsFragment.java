@@ -7,7 +7,8 @@ public class SettingsFragment
 		mono.android.IGCUserPeer,
 		android.content.SharedPreferences.OnSharedPreferenceChangeListener
 {
-	static final String __md_methods;
+/** @hide */
+	public static final String __md_methods;
 	static {
 		__md_methods = 
 			"n_onCreate:(Landroid/os/Bundle;)V:GetOnCreate_Landroid_os_Bundle_Handler\n" +
@@ -58,7 +59,7 @@ public class SettingsFragment
 
 	private native void n_onSharedPreferenceChanged (android.content.SharedPreferences p0, java.lang.String p1);
 
-	java.util.ArrayList refList;
+	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)
 	{
 		if (refList == null)

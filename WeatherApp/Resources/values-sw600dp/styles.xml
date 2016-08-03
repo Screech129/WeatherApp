@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <resources>
 	<!-- Base application theme. -->
-	<style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
-		<item name="android:colorPrimary">@color/sunshine_blue</item>
-		<item name="android:colorPrimaryDark">@color/sunshine_dark_blue</item>
+	<style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryDark">@color/primary_dark</item>
 	</style>
 	<!-- Main activity theme. -->
 	<style name="ForecastTheme" parent="AppTheme">

@@ -6,6 +6,9 @@ using Android.Content;
 using Android.Widget;
 using Android.Util;
 using Android.Database;
+using Com.Bumptech.Glide;
+using Android.Support.V4;
+using Android.Support.V4.View;
 
 namespace WeatherApp
 {
@@ -116,7 +119,7 @@ namespace WeatherApp
 					.AddFlags (ActivityFlags.ClearWhenTaskReset)
 					.SetType ("text/plain")
 					.PutExtra (Intent.ExtraText, shareText);
-			var shareActionProvider = (ShareActionProvider)item.ActionProvider;
+			var shareActionProvider = (Android.Support.V7.Widget.ShareActionProvider)MenuItemCompat.GetActionProvider(item);
 			if (shareActionProvider != null) {
 
 				shareActionProvider.SetShareIntent (shareIntent);
@@ -179,7 +182,10 @@ namespace WeatherApp
 				lowTempView.Text = Utility.formatTemperature (Activity, low, isMetric);
 
 				var weatherId = cursor.GetInt (COL_WEATHER_CONDITION_ID);
-				iconView.SetImageResource (getArtResourceForWeatherCondition (weatherId));
+			    Glide.With(this)
+                    .Load(Utility.GetArtUrlForWeatherCondition(Activity, weatherId))
+                    .Error(Utility.GetArtResourceForWeatherCondition(weatherId))
+			        .Into(iconView);
 
 				var forecastText = cursor.GetString (COL_WEATHER_DESC);
 				descriptionView.Text = forecastText;
@@ -222,78 +228,6 @@ namespace WeatherApp
 			" - " + highAndLow;
 		}
 
-
-		/**
- * Helper method to provide the icon resource id according to the weather condition id returned
- * by the OpenWeatherMap call.
- * @param weatherId from OpenWeatherMap API response
- * @return resource id for the corresponding icon. -1 if no relation is found.
- */
-		public static int getIconResourceForWeatherCondition (int weatherId)
-		{
-			// Based on weather code data found at:
-			// http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
-			if (weatherId >= 200 && weatherId <= 232) {
-				return Resource.Drawable.ic_storm;
-			} else if (weatherId >= 300 && weatherId <= 321) {
-				return Resource.Drawable.ic_light_rain;
-			} else if (weatherId >= 500 && weatherId <= 504) {
-				return Resource.Drawable.ic_rain;
-			} else if (weatherId == 511) {
-				return Resource.Drawable.ic_snow;
-			} else if (weatherId >= 520 && weatherId <= 531) {
-				return Resource.Drawable.ic_rain;
-			} else if (weatherId >= 600 && weatherId <= 622) {
-				return Resource.Drawable.ic_snow;
-			} else if (weatherId >= 701 && weatherId <= 761) {
-				return Resource.Drawable.ic_fog;
-			} else if (weatherId == 761 || weatherId == 781) {
-				return Resource.Drawable.ic_storm;
-			} else if (weatherId == 800) {
-				return Resource.Drawable.ic_clear;
-			} else if (weatherId == 801) {
-				return Resource.Drawable.ic_light_clouds;
-			} else if (weatherId >= 802 && weatherId <= 804) {
-				return Resource.Drawable.ic_cloudy;
-			}
-			return -1;
-		}
-
-		/**
- * Helper method to provide the art resource id according to the weather condition id returned
- * by the OpenWeatherMap call.
- * @param weatherId from OpenWeatherMap API response
- * @return resource id for the corresponding image. -1 if no relation is found.
- */
-		public static int getArtResourceForWeatherCondition (int weatherId)
-		{
-			// Based on weather code data found at:
-			// http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
-			if (weatherId >= 200 && weatherId <= 232) {
-				return Resource.Drawable.art_storm;
-			} else if (weatherId >= 300 && weatherId <= 321) {
-				return Resource.Drawable.art_light_rain;
-			} else if (weatherId >= 500 && weatherId <= 504) {
-				return Resource.Drawable.art_rain;
-			} else if (weatherId == 511) {
-				return Resource.Drawable.art_snow;
-			} else if (weatherId >= 520 && weatherId <= 531) {
-				return Resource.Drawable.art_rain;
-			} else if (weatherId >= 600 && weatherId <= 622) {
-				return Resource.Drawable.art_rain;
-			} else if (weatherId >= 701 && weatherId <= 761) {
-				return Resource.Drawable.art_fog;
-			} else if (weatherId == 761 || weatherId == 781) {
-				return Resource.Drawable.art_storm;
-			} else if (weatherId == 800) {
-				return Resource.Drawable.art_clear;
-			} else if (weatherId == 801) {
-				return Resource.Drawable.art_light_clouds;
-			} else if (weatherId >= 802 && weatherId <= 804) {
-				return Resource.Drawable.art_clouds;
-			}
-			return -1;
-		}
 
 	}
 

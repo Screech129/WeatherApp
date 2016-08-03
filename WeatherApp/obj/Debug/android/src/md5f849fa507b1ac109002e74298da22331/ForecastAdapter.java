@@ -6,7 +6,8 @@ public class ForecastAdapter
 	implements
 		mono.android.IGCUserPeer
 {
-	static final String __md_methods;
+/** @hide */
+	public static final String __md_methods;
 	static {
 		__md_methods = 
 			"n_getItemViewType:(I)I:GetGetItemViewType_IHandler\n" +
@@ -73,7 +74,7 @@ public class ForecastAdapter
 
 	private native void n_bindView (android.view.View p0, android.content.Context p1, android.database.Cursor p2);
 
-	java.util.ArrayList refList;
+	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)
 	{
 		if (refList == null)

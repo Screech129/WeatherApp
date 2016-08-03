@@ -9,14 +9,15 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using Android.Widget;
+using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Database;
+using Android.Support.V7.App;
 
 namespace WeatherApp
 {
 	[Activity (Label = "DetailActivity")]			
-	public class DetailActivity : Activity
+	public class DetailActivity : ActionBarActivity
 	{
 		
 
@@ -25,11 +26,12 @@ namespace WeatherApp
 			base.OnCreate (savedInstanceState);
 			RequestWindowFeature (WindowFeatures.ActionBar);
 			SetContentView (Resource.Layout.activity_detail);
-			ActionBar.SetDisplayHomeAsUpEnabled (true);
-			ActionBar.SetDisplayShowHomeEnabled (true);
-			ActionBar.SetIcon (Resource.Mipmap.ic_launcher);
-			ActionBar.Title = "Details";
-			if (savedInstanceState == null) {
+            var toolbar = (Toolbar)FindViewById(Resource.Id.toolbarDetail);
+            SetSupportActionBar(toolbar);
+            SupportActionBar.SetDisplayShowTitleEnabled(false);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+
+            if (savedInstanceState == null) {
 				Bundle arguments = new Bundle ();
 				arguments.PutParcelable (DetailFragment.DETAIL_URI, Intent.Data);
 
