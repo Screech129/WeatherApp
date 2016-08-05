@@ -841,32 +841,32 @@ namespace WeatherApp
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f090056
-			public const int abc_background_cache_hint_selector_material_dark = 2131296342;
-			
 			// aapt resource value: 0x7f090057
-			public const int abc_background_cache_hint_selector_material_light = 2131296343;
+			public const int abc_background_cache_hint_selector_material_dark = 2131296343;
 			
 			// aapt resource value: 0x7f090058
-			public const int abc_color_highlight_material = 2131296344;
+			public const int abc_background_cache_hint_selector_material_light = 2131296344;
+			
+			// aapt resource value: 0x7f090059
+			public const int abc_color_highlight_material = 2131296345;
 			
 			// aapt resource value: 0x7f090011
 			public const int abc_input_method_navigation_guard = 2131296273;
 			
-			// aapt resource value: 0x7f090059
-			public const int abc_primary_text_disable_only_material_dark = 2131296345;
-			
 			// aapt resource value: 0x7f09005a
-			public const int abc_primary_text_disable_only_material_light = 2131296346;
+			public const int abc_primary_text_disable_only_material_dark = 2131296346;
 			
 			// aapt resource value: 0x7f09005b
-			public const int abc_primary_text_material_dark = 2131296347;
+			public const int abc_primary_text_disable_only_material_light = 2131296347;
 			
 			// aapt resource value: 0x7f09005c
-			public const int abc_primary_text_material_light = 2131296348;
+			public const int abc_primary_text_material_dark = 2131296348;
 			
 			// aapt resource value: 0x7f09005d
-			public const int abc_search_url_text = 2131296349;
+			public const int abc_primary_text_material_light = 2131296349;
+			
+			// aapt resource value: 0x7f09005e
+			public const int abc_search_url_text = 2131296350;
 			
 			// aapt resource value: 0x7f090012
 			public const int abc_search_url_text_normal = 2131296274;
@@ -877,11 +877,11 @@ namespace WeatherApp
 			// aapt resource value: 0x7f090014
 			public const int abc_search_url_text_selected = 2131296276;
 			
-			// aapt resource value: 0x7f09005e
-			public const int abc_secondary_text_material_dark = 2131296350;
-			
 			// aapt resource value: 0x7f09005f
-			public const int abc_secondary_text_material_light = 2131296351;
+			public const int abc_secondary_text_material_dark = 2131296351;
+			
+			// aapt resource value: 0x7f090060
+			public const int abc_secondary_text_material_light = 2131296352;
 			
 			// aapt resource value: 0x7f090051
 			public const int accent = 2131296337;
@@ -934,8 +934,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f090008
 			public const int common_action_bar_splitter = 2131296264;
 			
-			// aapt resource value: 0x7f090060
-			public const int common_google_signin_btn_text_dark = 2131296352;
+			// aapt resource value: 0x7f090061
+			public const int common_google_signin_btn_text_dark = 2131296353;
 			
 			// aapt resource value: 0x7f090009
 			public const int common_google_signin_btn_text_dark_default = 2131296265;
@@ -949,8 +949,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f09000a
 			public const int common_google_signin_btn_text_dark_pressed = 2131296266;
 			
-			// aapt resource value: 0x7f090061
-			public const int common_google_signin_btn_text_light = 2131296353;
+			// aapt resource value: 0x7f090062
+			public const int common_google_signin_btn_text_light = 2131296354;
 			
 			// aapt resource value: 0x7f09000d
 			public const int common_google_signin_btn_text_light_default = 2131296269;
@@ -964,8 +964,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f09000e
 			public const int common_google_signin_btn_text_light_pressed = 2131296270;
 			
-			// aapt resource value: 0x7f090062
-			public const int common_plus_signin_btn_text_dark = 2131296354;
+			// aapt resource value: 0x7f090063
+			public const int common_plus_signin_btn_text_dark = 2131296355;
 			
 			// aapt resource value: 0x7f090000
 			public const int common_plus_signin_btn_text_dark_default = 2131296256;
@@ -979,8 +979,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f090001
 			public const int common_plus_signin_btn_text_dark_pressed = 2131296257;
 			
-			// aapt resource value: 0x7f090063
-			public const int common_plus_signin_btn_text_light = 2131296355;
+			// aapt resource value: 0x7f090064
+			public const int common_plus_signin_btn_text_light = 2131296356;
 			
 			// aapt resource value: 0x7f090004
 			public const int common_plus_signin_btn_text_light_default = 2131296260;
@@ -1011,6 +1011,9 @@ namespace WeatherApp
 			
 			// aapt resource value: 0x7f090026
 			public const int dim_foreground_material_light = 2131296294;
+			
+			// aapt resource value: 0x7f090056
+			public const int forecast_low_text = 2131296342;
 			
 			// aapt resource value: 0x7f090027
 			public const int foreground_material_dark = 2131296295;
@@ -1135,11 +1138,11 @@ namespace WeatherApp
 			// aapt resource value: 0x7f090048
 			public const int switch_thumb_disabled_material_light = 2131296328;
 			
-			// aapt resource value: 0x7f090064
-			public const int switch_thumb_material_dark = 2131296356;
-			
 			// aapt resource value: 0x7f090065
-			public const int switch_thumb_material_light = 2131296357;
+			public const int switch_thumb_material_dark = 2131296357;
+			
+			// aapt resource value: 0x7f090066
+			public const int switch_thumb_material_light = 2131296358;
 			
 			// aapt resource value: 0x7f090049
 			public const int switch_thumb_normal_material_dark = 2131296329;
@@ -1367,6 +1370,9 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0a004d
 			public const int activity_vertical_margin = 2131361869;
 			
+			// aapt resource value: 0x7f0a0052
+			public const int appbar_elevation = 2131361874;
+			
 			// aapt resource value: 0x7f0a0000
 			public const int default_gap = 2131361792;
 			
@@ -1382,6 +1388,15 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0a004f
 			public const int forecast_detail_horizontal_padding = 2131361871;
 			
+			// aapt resource value: 0x7f0a0056
+			public const int forecast_temperature_space = 2131361878;
+			
+			// aapt resource value: 0x7f0a0054
+			public const int forecast_text_size = 2131361876;
+			
+			// aapt resource value: 0x7f0a0055
+			public const int forecast_text_width = 2131361877;
+			
 			// aapt resource value: 0x7f0a0046
 			public const int highlight_alpha_material_colored = 2131361862;
 			
@@ -1390,6 +1405,9 @@ namespace WeatherApp
 			
 			// aapt resource value: 0x7f0a0048
 			public const int highlight_alpha_material_light = 2131361864;
+			
+			// aapt resource value: 0x7f0a0053
+			public const int list_icon = 2131361875;
 			
 			// aapt resource value: 0x7f0a004e
 			public const int notification_large_icon_default = 2131361870;
@@ -1843,8 +1861,8 @@ namespace WeatherApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f0d0083
-			public const int action0 = 2131558531;
+			// aapt resource value: 0x7f0d0081
+			public const int action0 = 2131558529;
 			
 			// aapt resource value: 0x7f0d005a
 			public const int action_bar = 2131558490;
@@ -1870,8 +1888,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d005b
 			public const int action_context_bar = 2131558491;
 			
-			// aapt resource value: 0x7f0d0087
-			public const int action_divider = 2131558535;
+			// aapt resource value: 0x7f0d0085
+			public const int action_divider = 2131558533;
 			
 			// aapt resource value: 0x7f0d0002
 			public const int action_menu_divider = 2131558402;
@@ -1888,14 +1906,14 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d003c
 			public const int action_mode_close_button = 2131558460;
 			
+			// aapt resource value: 0x7f0d008e
+			public const int action_settings = 2131558542;
+			
 			// aapt resource value: 0x7f0d0090
-			public const int action_settings = 2131558544;
+			public const int action_share = 2131558544;
 			
-			// aapt resource value: 0x7f0d0092
-			public const int action_share = 2131558546;
-			
-			// aapt resource value: 0x7f0d0091
-			public const int action_viewLocation = 2131558545;
+			// aapt resource value: 0x7f0d008f
+			public const int action_viewLocation = 2131558543;
 			
 			// aapt resource value: 0x7f0d003d
 			public const int activity_chooser_view_content = 2131558461;
@@ -1930,8 +1948,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d0044
 			public const int buttonPanel = 2131558468;
 			
-			// aapt resource value: 0x7f0d0084
-			public const int cancel_action = 2131558532;
+			// aapt resource value: 0x7f0d0082
+			public const int cancel_action = 2131558530;
 			
 			// aapt resource value: 0x7f0d0017
 			public const int center = 2131558423;
@@ -1945,8 +1963,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d0052
 			public const int checkbox = 2131558482;
 			
-			// aapt resource value: 0x7f0d008a
-			public const int chronometer = 2131558538;
+			// aapt resource value: 0x7f0d0088
+			public const int chronometer = 2131558536;
 			
 			// aapt resource value: 0x7f0d001a
 			public const int clip_horizontal = 2131558426;
@@ -1981,8 +1999,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d006b
 			public const int detail_date_textview = 2131558507;
 			
-			// aapt resource value: 0x7f0d0079
-			public const int detail_day_textview = 2131558521;
+			// aapt resource value: 0x7f0d0078
+			public const int detail_day_textview = 2131558520;
 			
 			// aapt resource value: 0x7f0d006e
 			public const int detail_forecast_textview = 2131558510;
@@ -2023,8 +2041,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d001c
 			public const int end = 2131558428;
 			
-			// aapt resource value: 0x7f0d008f
-			public const int end_padder = 2131558543;
+			// aapt resource value: 0x7f0d008d
+			public const int end_padder = 2131558541;
 			
 			// aapt resource value: 0x7f0d003e
 			public const int expand_activities_button = 2131558462;
@@ -2041,8 +2059,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d001f
 			public const int fill_vertical = 2131558431;
 			
-			// aapt resource value: 0x7f0d0082
-			public const int fragment_forecast = 2131558530;
+			// aapt resource value: 0x7f0d0080
+			public const int fragment_forecast = 2131558528;
 			
 			// aapt resource value: 0x7f0d0004
 			public const int home = 2131558404;
@@ -2065,11 +2083,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d003f
 			public const int image = 2131558463;
 			
-			// aapt resource value: 0x7f0d0078
-			public const int imageSwitcher = 2131558520;
-			
-			// aapt resource value: 0x7f0d008e
-			public const int info = 2131558542;
+			// aapt resource value: 0x7f0d008c
+			public const int info = 2131558540;
 			
 			// aapt resource value: 0x7f0d0020
 			public const int left = 2131558432;
@@ -2077,11 +2092,11 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d0011
 			public const int light = 2131558417;
 			
-			// aapt resource value: 0x7f0d0088
-			public const int line1 = 2131558536;
+			// aapt resource value: 0x7f0d0086
+			public const int line1 = 2131558534;
 			
-			// aapt resource value: 0x7f0d008c
-			public const int line3 = 2131558540;
+			// aapt resource value: 0x7f0d008a
+			public const int line3 = 2131558538;
 			
 			// aapt resource value: 0x7f0d0024
 			public const int listMode = 2131558436;
@@ -2089,32 +2104,29 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d0041
 			public const int list_item = 2131558465;
 			
+			// aapt resource value: 0x7f0d007c
+			public const int list_item_date_textview = 2131558524;
+			
 			// aapt resource value: 0x7f0d007d
-			public const int list_item_date_textview = 2131558525;
+			public const int list_item_forecast_textview = 2131558525;
 			
 			// aapt resource value: 0x7f0d007e
-			public const int list_item_forecast_textview = 2131558526;
-			
-			// aapt resource value: 0x7f0d0080
-			public const int list_item_high_textview = 2131558528;
-			
-			// aapt resource value: 0x7f0d007c
-			public const int list_item_icon = 2131558524;
-			
-			// aapt resource value: 0x7f0d0081
-			public const int list_item_low_textview = 2131558529;
-			
-			// aapt resource value: 0x7f0d007f
-			public const int listitem_temp_linear = 2131558527;
-			
-			// aapt resource value: 0x7f0d007a
-			public const int listview_forecast = 2131558522;
+			public const int list_item_high_textview = 2131558526;
 			
 			// aapt resource value: 0x7f0d007b
-			public const int listview_forecast_empty = 2131558523;
+			public const int list_item_icon = 2131558523;
 			
-			// aapt resource value: 0x7f0d0086
-			public const int media_actions = 2131558534;
+			// aapt resource value: 0x7f0d007f
+			public const int list_item_low_textview = 2131558527;
+			
+			// aapt resource value: 0x7f0d0079
+			public const int listview_forecast = 2131558521;
+			
+			// aapt resource value: 0x7f0d007a
+			public const int listview_forecast_empty = 2131558522;
+			
+			// aapt resource value: 0x7f0d0084
+			public const int media_actions = 2131558532;
 			
 			// aapt resource value: 0x7f0d0034
 			public const int middle = 2131558452;
@@ -2224,8 +2236,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d0022
 			public const int start = 2131558434;
 			
-			// aapt resource value: 0x7f0d0085
-			public const int status_bar_latest_event_content = 2131558533;
+			// aapt resource value: 0x7f0d0083
+			public const int status_bar_latest_event_content = 2131558531;
 			
 			// aapt resource value: 0x7f0d0065
 			public const int submit_area = 2131558501;
@@ -2233,17 +2245,17 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0d0026
 			public const int tabMode = 2131558438;
 			
-			// aapt resource value: 0x7f0d008d
-			public const int text = 2131558541;
-			
 			// aapt resource value: 0x7f0d008b
-			public const int text2 = 2131558539;
+			public const int text = 2131558539;
+			
+			// aapt resource value: 0x7f0d0089
+			public const int text2 = 2131558537;
 			
 			// aapt resource value: 0x7f0d004d
 			public const int textSpacerNoButtons = 2131558477;
 			
-			// aapt resource value: 0x7f0d0089
-			public const int time = 2131558537;
+			// aapt resource value: 0x7f0d0087
+			public const int time = 2131558535;
 			
 			// aapt resource value: 0x7f0d0043
 			public const int title = 2131558467;

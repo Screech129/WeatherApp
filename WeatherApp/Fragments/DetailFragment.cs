@@ -99,7 +99,7 @@ namespace WeatherApp
 			View rootView = inflater.Inflate (Resource.Layout.fragment_detail, container, false);
 			iconView = rootView.FindViewById<ImageView> (Resource.Id.detail_icon);
 			dateView = rootView.FindViewById<TextView> (Resource.Id.detail_date_textview);
-			friendlyDateView = rootView.FindViewById<TextView> (Resource.Id.detail_day_textview);
+			friendlyDateView = rootView.FindViewById<TextView> (Resource.Id.detail_date_textview);
 			descriptionView = rootView.FindViewById<TextView> (Resource.Id.detail_forecast_textview);
 			highTempView = rootView.FindViewById<TextView> (Resource.Id.detail_high_textview);
 			lowTempView = rootView.FindViewById<TextView> (Resource.Id.detail_low_textview);
