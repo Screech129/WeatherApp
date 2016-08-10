@@ -1,22 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<!-- Base application theme. -->
-	<style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-		<item name="colorPrimary">@color/primary</item>
-		<item name="colorPrimaryDark">@color/primary_dark</item>
-	</style>
-	<!-- Main activity theme. -->
-	<style name="ForecastTheme" parent="AppTheme">
-		<item name="android:actionBarStyle">@style/ActionBar.Solid.Sunshine.NoTitle</item>
-	</style>
-	<!-- Settings activity theme. -->
-	<style name="SettingsTheme" parent="AppTheme">
-	</style>
-	<!-- main activity action bar styles -->
-	<style name="ActionBar.Solid.Sunshine.NoTitle" parent="@style/android:Widget.Holo.Light.ActionBar.Solid.Inverse">
-		<item name="android:displayOptions">useLogo|showHome</item>
-		<item name="android:logo">@drawable/ic_logo</item>
-	</style>
 	<style name="ForecastListStyle">
 		<item name="android:choiceMode">singleChoice</item>
 	</style>

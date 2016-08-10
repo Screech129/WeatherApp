@@ -19,11 +19,11 @@ C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\Xamarin.Googl
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\Xamarin.GooglePlayServices.Measurement.dll
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\SQLiteNetExtensions.dll.mdb
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\Newtonsoft.Json.xml
-C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.csprojResolveAssemblyReference.cache
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.dll
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.pdb
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\android\bin\WeatherApp.WeatherApp.apk
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\detail_today_grid.xml
+C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout-sw600dp-port\main.xml
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\main.xml
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\values\strings.xml
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\list_item_forecast.xml
@@ -152,5 +152,7 @@ C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\android\asset
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\android\assets\System.ServiceModel.Internals.dll.mdb
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\android\assets\System.Xml.dll.mdb
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\android\assets\WeatherApp.dll.mdb
+C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.csprojResolveAssemblyReference.cache
+C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\drawable\touch_selector_white.xml
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.dll.mdb
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\WeatherApp.dll.mdb

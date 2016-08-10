@@ -17,20 +17,15 @@ using Android.Support.V7.App;
 namespace WeatherApp
 {
 	[Activity (Label = "DetailActivity")]			
-	public class DetailActivity : ActionBarActivity
+	public class DetailActivity : AppCompatActivity
 	{
 		
 
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
-			RequestWindowFeature (WindowFeatures.ActionBar);
 			SetContentView (Resource.Layout.activity_detail);
-            var toolbar = (Toolbar)FindViewById(Resource.Id.toolbarDetail);
-            SetSupportActionBar(toolbar);
-            SupportActionBar.SetDisplayShowTitleEnabled(false);
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-
+           
             if (savedInstanceState == null) {
 				Bundle arguments = new Bundle ();
 				arguments.PutParcelable (DetailFragment.DETAIL_URI, Intent.Data);
@@ -38,42 +33,12 @@ namespace WeatherApp
 				DetailFragment fragment = new DetailFragment ();
 				fragment.Arguments = arguments;
 
-				FragmentTransaction fragTx = this.FragmentManager.BeginTransaction ();
-
-				fragTx.Add (Resource.Id.weather_detail_container, fragment)
+				SupportFragmentManager.BeginTransaction().Add(Resource.Id.weather_detail_container, fragment)
 					.Commit ();
-			   
-
-
 			}
 		}
 
-		public override bool OnCreateOptionsMenu (IMenu menu)
-		{
-			MenuInflater.Inflate (Resource.Menu.detail, menu);
-			return base.OnCreateOptionsMenu (menu);
-
-		}
-
-		public override bool OnOptionsItemSelected (IMenuItem item)
-		{
-			int id = item.ItemId;
-			if (id == Android.Resource.Id.Home) {
-				Finish ();
-			}
-			if (id == Resource.Id.action_settings) {
-				var settingsIntent = new Intent (this, typeof(SettingsActivity));
-				StartActivity (settingsIntent);
-				return true;
-			}
-			if (id == Resource.Id.action_share) {
-				new DetailFragment ().shareWeather (item);
-				return true;
-			}
-			return base.OnOptionsItemSelected (item);
-
-		}
-
+		
 	}
 }
 

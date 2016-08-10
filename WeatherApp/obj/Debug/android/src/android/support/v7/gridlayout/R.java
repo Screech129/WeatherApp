@@ -1604,20 +1604,20 @@ containing a value of this type.
         public static int abc_config_showMenuShortcutsWhenKeyboardPresent=0x7f0b0007;
     }
     public static final class color {
-        public static int abc_background_cache_hint_selector_material_dark=0x7f090056;
-        public static int abc_background_cache_hint_selector_material_light=0x7f090057;
-        public static int abc_color_highlight_material=0x7f090058;
+        public static int abc_background_cache_hint_selector_material_dark=0x7f090057;
+        public static int abc_background_cache_hint_selector_material_light=0x7f090058;
+        public static int abc_color_highlight_material=0x7f090059;
         public static int abc_input_method_navigation_guard=0x7f090011;
-        public static int abc_primary_text_disable_only_material_dark=0x7f090059;
-        public static int abc_primary_text_disable_only_material_light=0x7f09005a;
-        public static int abc_primary_text_material_dark=0x7f09005b;
-        public static int abc_primary_text_material_light=0x7f09005c;
-        public static int abc_search_url_text=0x7f09005d;
+        public static int abc_primary_text_disable_only_material_dark=0x7f09005a;
+        public static int abc_primary_text_disable_only_material_light=0x7f09005b;
+        public static int abc_primary_text_material_dark=0x7f09005c;
+        public static int abc_primary_text_material_light=0x7f09005d;
+        public static int abc_search_url_text=0x7f09005e;
         public static int abc_search_url_text_normal=0x7f090012;
         public static int abc_search_url_text_pressed=0x7f090013;
         public static int abc_search_url_text_selected=0x7f090014;
-        public static int abc_secondary_text_material_dark=0x7f09005e;
-        public static int abc_secondary_text_material_light=0x7f09005f;
+        public static int abc_secondary_text_material_dark=0x7f09005f;
+        public static int abc_secondary_text_material_light=0x7f090060;
         /**  100 
          */
         public static int accent=0x7f090051;
@@ -1637,26 +1637,26 @@ containing a value of this type.
         public static int button_material_dark=0x7f090021;
         public static int button_material_light=0x7f090022;
         public static int common_action_bar_splitter=0x7f090008;
-        public static int common_google_signin_btn_text_dark=0x7f090060;
+        public static int common_google_signin_btn_text_dark=0x7f090061;
         /**  Google Sign-in Button Colors 
          */
         public static int common_google_signin_btn_text_dark_default=0x7f090009;
         public static int common_google_signin_btn_text_dark_disabled=0x7f09000b;
         public static int common_google_signin_btn_text_dark_focused=0x7f09000c;
         public static int common_google_signin_btn_text_dark_pressed=0x7f09000a;
-        public static int common_google_signin_btn_text_light=0x7f090061;
+        public static int common_google_signin_btn_text_light=0x7f090062;
         public static int common_google_signin_btn_text_light_default=0x7f09000d;
         public static int common_google_signin_btn_text_light_disabled=0x7f09000f;
         public static int common_google_signin_btn_text_light_focused=0x7f090010;
         public static int common_google_signin_btn_text_light_pressed=0x7f09000e;
-        public static int common_plus_signin_btn_text_dark=0x7f090062;
+        public static int common_plus_signin_btn_text_dark=0x7f090063;
         /**  Google Plus Sign-in Button Colors 
          */
         public static int common_plus_signin_btn_text_dark_default=0x7f090000;
         public static int common_plus_signin_btn_text_dark_disabled=0x7f090002;
         public static int common_plus_signin_btn_text_dark_focused=0x7f090003;
         public static int common_plus_signin_btn_text_dark_pressed=0x7f090001;
-        public static int common_plus_signin_btn_text_light=0x7f090063;
+        public static int common_plus_signin_btn_text_light=0x7f090064;
         public static int common_plus_signin_btn_text_light_default=0x7f090004;
         public static int common_plus_signin_btn_text_light_disabled=0x7f090006;
         public static int common_plus_signin_btn_text_light_focused=0x7f090007;
@@ -1669,6 +1669,7 @@ containing a value of this type.
         public static int dim_foreground_disabled_material_light=0x7f090024;
         public static int dim_foreground_material_dark=0x7f090025;
         public static int dim_foreground_material_light=0x7f090026;
+        public static int forecast_low_text=0x7f090056;
         public static int foreground_material_dark=0x7f090027;
         public static int foreground_material_light=0x7f090028;
         public static int grey=0x7f09004b;
@@ -1716,8 +1717,8 @@ containing a value of this type.
         public static int secondary_text_disabled_material_light=0x7f090046;
         public static int switch_thumb_disabled_material_dark=0x7f090047;
         public static int switch_thumb_disabled_material_light=0x7f090048;
-        public static int switch_thumb_material_dark=0x7f090064;
-        public static int switch_thumb_material_light=0x7f090065;
+        public static int switch_thumb_material_dark=0x7f090065;
+        public static int switch_thumb_material_light=0x7f090066;
         public static int switch_thumb_normal_material_dark=0x7f090049;
         public static int switch_thumb_normal_material_light=0x7f09004a;
     }
@@ -1793,16 +1794,29 @@ containing a value of this type.
          */
         public static int activity_horizontal_margin=0x7f0a004c;
         public static int activity_vertical_margin=0x7f0a004d;
+        public static int appbar_elevation=0x7f0a0052;
         public static int default_gap=0x7f0a0000;
         /**  Extra Padding 
+ Extra Padding 
          */
         public static int detail_view_extra_padding=0x7f0a0051;
         public static int disabled_alpha_material_dark=0x7f0a0044;
         public static int disabled_alpha_material_light=0x7f0a0045;
         public static int forecast_detail_horizontal_padding=0x7f0a004f;
+        public static int forecast_temperature_space=0x7f0a0056;
+        /**  Text Sizes - We are using DP here rather than SP because these are already large
+         font sizes, and going larger will cause lots of view problems.  This is only for
+         the large forecast numbers in the forecast list 
+         */
+        public static int forecast_text_size=0x7f0a0054;
+        /**  This is an odd width, but we're trying to match the font closely to keep things working
+         on devices that don't yet have Roboto 
+         */
+        public static int forecast_text_width=0x7f0a0055;
         public static int highlight_alpha_material_colored=0x7f0a0046;
         public static int highlight_alpha_material_dark=0x7f0a0047;
         public static int highlight_alpha_material_light=0x7f0a0048;
+        public static int list_icon=0x7f0a0053;
         public static int notification_large_icon_default=0x7f0a004e;
         public static int notification_large_icon_height=0x7f0a0049;
         public static int notification_large_icon_width=0x7f0a004a;
@@ -1976,6 +1990,7 @@ containing a value of this type.
         public static int alignBounds=0x7f0d0014;
         public static int alignMargins=0x7f0d0015;
         public static int always=0x7f0d0035;
+        public static int appbar=0x7f0d0081;
         public static int auto=0x7f0d000f;
         public static int beginning=0x7f0d0033;
         public static int bottom=0x7f0d0016;
@@ -1997,7 +2012,7 @@ containing a value of this type.
         public static int default_activity_button=0x7f0d0040;
         public static int detail_additional_pane=0x7f0d0071;
         public static int detail_date_textview=0x7f0d006b;
-        public static int detail_day_textview=0x7f0d0079;
+        public static int detail_day_textview=0x7f0d0078;
         public static int detail_forecast_textview=0x7f0d006e;
         public static int detail_high_textview=0x7f0d006d;
         public static int detail_humidity_label_textview=0x7f0d0072;
@@ -2017,7 +2032,7 @@ containing a value of this type.
         public static int fill=0x7f0d001d;
         public static int fill_horizontal=0x7f0d001e;
         public static int fill_vertical=0x7f0d001f;
-        public static int fragment_forecast=0x7f0d0082;
+        public static int fragment_forecast=0x7f0d0080;
         public static int home=0x7f0d0004;
         public static int homeAsUp=0x7f0d0028;
         public static int horizontal=0x7f0d0012;
@@ -2025,22 +2040,21 @@ containing a value of this type.
         public static int icon_only=0x7f0d000c;
         public static int ifRoom=0x7f0d0037;
         public static int image=0x7f0d003f;
-        public static int imageSwitcher=0x7f0d0078;
         public static int info=0x7f0d008e;
+        public static int layout_center=0x7f0d0082;
         public static int left=0x7f0d0020;
         public static int light=0x7f0d0011;
         public static int line1=0x7f0d0088;
         public static int line3=0x7f0d008c;
         public static int listMode=0x7f0d0024;
         public static int list_item=0x7f0d0041;
-        public static int list_item_date_textview=0x7f0d007d;
-        public static int list_item_forecast_textview=0x7f0d007e;
-        public static int list_item_high_textview=0x7f0d0080;
-        public static int list_item_icon=0x7f0d007c;
-        public static int list_item_low_textview=0x7f0d0081;
-        public static int listitem_temp_linear=0x7f0d007f;
-        public static int listview_forecast=0x7f0d007a;
-        public static int listview_forecast_empty=0x7f0d007b;
+        public static int list_item_date_textview=0x7f0d007c;
+        public static int list_item_forecast_textview=0x7f0d007d;
+        public static int list_item_high_textview=0x7f0d007e;
+        public static int list_item_icon=0x7f0d007b;
+        public static int list_item_low_textview=0x7f0d007f;
+        public static int listview_forecast=0x7f0d0079;
+        public static int listview_forecast_empty=0x7f0d007a;
         public static int media_actions=0x7f0d0086;
         public static int middle=0x7f0d0034;
         public static int multiply=0x7f0d002e;

@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Database;
 using Android.Views;
 using Com.Bumptech.Glide;
+using Android.Util;
 
 namespace WeatherApp
 {
@@ -19,7 +20,6 @@ namespace WeatherApp
         private const int VIEW_TYPE_FUTURE_DAY = 1;
         private const int VIEW_TYPE_COUNT = 2;
         private bool _useTodayLayout;
-
         public void setUseTodayLayout (bool useTodayLayout)
         {
             _useTodayLayout = useTodayLayout;
@@ -37,34 +37,6 @@ namespace WeatherApp
                 return 2;
             }
         }
-
-        /**
-     * Prepare the weather high/lows for presentation.
-     */
-        private String formatHighLows (double high, double low)
-        {
-            bool isMetric = Utility.isMetric(context);
-            String highLowStr = Utility.formatTemperature(context, high, isMetric) + "/" + Utility.formatTemperature(context, low, isMetric);
-            return highLowStr;
-        }
-
-        /*
-        This is ported from FetchWeatherTask --- but now we go straight from the cursor to the
-        string.
-     */
-        private String convertCursorRowToUXFormat (ICursor cursor)
-        {
-            // get row indices for our cursor
-
-            String highAndLow = formatHighLows(
-                                    cursor.GetDouble(ForecastFragment.COL_WEATHER_MAX_TEMP),
-                                    cursor.GetDouble(ForecastFragment.COL_WEATHER_MIN_TEMP));
-
-            return Utility.formatDate(cursor.GetLong(ForecastFragment.COL_WEATHER_DATE)) +
-            " - " + cursor.GetString(ForecastFragment.COL_WEATHER_DESC) +
-            " - " + highAndLow;
-        }
-
         /*
         Remember that these views are reused as needed.
      */
@@ -73,10 +45,19 @@ namespace WeatherApp
             // Choose the layout type
             int viewType = GetItemViewType(cursor.Position);
             int layoutId = viewType == 0 ? Resource.Layout.list_item_forecast_today : Resource.Layout.list_item_forecast;
-            // TODO: Determine layoutId from viewType
+
             View view = LayoutInflater.From(context).Inflate(layoutId, parent, false);
-            var viewHolder = new MainViewHolder(view);
-            view.Tag = viewHolder;
+            MainViewHolder viewHolder = view.Tag as MainViewHolder;
+            if (viewHolder == null)
+            {
+                viewHolder = new MainViewHolder();
+                viewHolder.iconView = (ImageView)view.FindViewById(Resource.Id.list_item_icon);
+                viewHolder.dateView = (TextView)view.FindViewById(Resource.Id.list_item_date_textview);
+                viewHolder.descriptionView = (TextView)view.FindViewById(Resource.Id.list_item_forecast_textview);
+                viewHolder.highTempView = (TextView)view.FindViewById(Resource.Id.list_item_high_textview);
+                viewHolder.lowTempView = (TextView)view.FindViewById(Resource.Id.list_item_low_textview);
+                view.Tag = viewHolder;
+            }
             return view;
         }
         /*
@@ -85,45 +66,47 @@ namespace WeatherApp
         public override void BindView (View view, Context context, ICursor cursor)
         {
 
+            var viewHolder = (MainViewHolder)view.Tag;
 
-            // Read weather icon ID from cursor
             int weatherId = cursor.GetInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
             int fallbackIconId;
-            // Use placeholder image for now
-            if (GetItemViewType(cursor.Position) == 0)
+
+            int viewType = GetItemViewType(Cursor.Position);
+
+            if (viewType == 0)
             {
 
                 fallbackIconId = getArtResourceForWeatherCondition(weatherId);
             }
             else
             {
-               fallbackIconId  = getIconResourceForWeatherCondition(weatherId);
+                fallbackIconId = getIconResourceForWeatherCondition(weatherId);
 
             }
 
             Glide.With(context)
                     .Load(Utility.GetArtUrlForWeatherCondition(context, weatherId))
                     .Error(fallbackIconId)
-                    .Into(MainViewHolder.iconView);
+                    .Into(viewHolder.iconView);
 
             // TODO Read date from cursor
             long date = cursor.GetLong(ForecastFragment.COL_WEATHER_DATE);
-            MainViewHolder.dateView.Text = Utility.getFriendlyDayString(context, date);
+            viewHolder.dateView.Text = Utility.GetFriendlyDayString(context, date);
 
 
             // TODO Read weather forecast from cursor
             string forecast = cursor.GetString(ForecastFragment.COL_WEATHER_DESC);
-            MainViewHolder.descriptionView.Text = forecast;
+            viewHolder.descriptionView.Text = forecast;
             // Read user preference for metric or imperial temperature units
-            bool isMetric = Utility.isMetric(context);
+            bool isMetric = Utility.IsMetric(context);
 
             // Read high temperature from cursor
             double high = cursor.GetDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
-            MainViewHolder.highTempView.Text = Utility.formatTemperature(context, high, isMetric);
+            viewHolder.highTempView.Text = Utility.FormatTemperature(context, high, isMetric);
 
             // TODO Read low temperature from cursor
             double low = cursor.GetDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
-            MainViewHolder.lowTempView.Text = Utility.formatTemperature(context, low, isMetric);
+            viewHolder.lowTempView.Text = Utility.FormatTemperature(context, low, isMetric);
         }
 
         /**

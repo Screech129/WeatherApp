@@ -3,5 +3,6 @@
   <PropertyGroup>
     <SelectedDevice>VSApp</SelectedDevice>
     <AndroidDesignerPreferredDevice>Nexus 4</AndroidDesignerPreferredDevice>
+    <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
 </Project>

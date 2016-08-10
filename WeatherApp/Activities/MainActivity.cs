@@ -20,7 +20,7 @@ using Android.Support.V7.App;
 namespace WeatherApp
 {
     [Activity(Label = "WeatherApp", MainLauncher = true)]
-    public class MainActivity : ActionBarActivity, WeatherApp.ForecastFragment.Callback
+    public class MainActivity : AppCompatActivity, ForecastFragment.Callback
     {
         string location = "";
         private const string DETAILFRAGMENT_TAG = "DFTAG";
@@ -30,10 +30,11 @@ namespace WeatherApp
 
         protected override void OnCreate (Bundle bundle)
         {
-            location = Utility.getPreferredLocation(this);
             base.OnCreate(bundle);
+            location = Utility.GetPreferredLocation(this);
+
             SetContentView(Resource.Layout.Main);
-            var toolbar = (Toolbar) FindViewById(Resource.Id.toolbar);
+            var toolbar = (Toolbar)FindViewById(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
             SupportActionBar.SetDisplayShowTitleEnabled(false);
 
@@ -42,7 +43,7 @@ namespace WeatherApp
                 twoPane = true;
                 if (bundle == null)
                 {
-                    FragmentManager.BeginTransaction()
+                    SupportFragmentManager.BeginTransaction()
                         .Replace(Resource.Id.weather_detail_container,
                         new DetailFragment(), DETAILFRAGMENT_TAG)
                         .Commit();
@@ -52,6 +53,7 @@ namespace WeatherApp
             else
             {
                 twoPane = false;
+                SupportActionBar.Elevation = 0f;
             }
 
             ForecastFragment forecastFragment = FragmentManager.FindFragmentById<ForecastFragment>(Resource.Id.fragment_forecast);
@@ -71,33 +73,10 @@ namespace WeatherApp
             }
         }
 
-        public void OnItemSelected (Android.Net.Uri dateUri)
-        {
-
-            if (twoPane)
-            {
-                Bundle args = new Bundle();
-                args.PutParcelable(DetailFragment.DETAIL_URI, dateUri);
-
-                DetailFragment fragment = new DetailFragment();
-                fragment.Arguments = args;
-
-                FragmentManager.BeginTransaction()
-                         .Replace(Resource.Id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
-                         .Commit();
-            }
-            else
-            {
-                Intent intent = new Intent(this, typeof(DetailActivity))
-                             .SetData(dateUri);
-                StartActivity(intent);
-            }
-        }
-
         public override bool OnCreateOptionsMenu (IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.main, menu);
-            return base.OnCreateOptionsMenu(menu);
+            return true;
 
         }
 
@@ -109,18 +88,13 @@ namespace WeatherApp
                 StartActivity(new Intent(this, typeof(SettingsActivity)));
                 return true;
             }
-
-
             return base.OnOptionsItemSelected(item);
-
         }
-
-
 
         protected override void OnResume ()
         {
             base.OnResume();
-            if (Utility.getPreferredLocation(this) != location)
+            if (Utility.GetPreferredLocation(this) != location)
             {
                 ForecastFragment ff = FragmentManager.FindFragmentById<ForecastFragment>(Resource.Id.fragment_forecast);
                 if (ff != null)
@@ -128,15 +102,39 @@ namespace WeatherApp
                     ff.OnLocationChanged();
                 }
 
-                DetailFragment df = FragmentManager.FindFragmentByTag<DetailFragment>(DETAILFRAGMENT_TAG);
+                DetailFragment df = (DetailFragment)SupportFragmentManager.FindFragmentByTag(DETAILFRAGMENT_TAG);
                 if (df != null)
                 {
                     df.OnLocationChanged(location);
                 }
-                location = Utility.getPreferredLocation(this);
+                location = Utility.GetPreferredLocation(this);
             }
 
         }
+
+        public void OnItemSelected (Android.Net.Uri dateUri)
+        {
+
+            if (twoPane)
+            {
+                Bundle args = new Bundle();
+                args.PutParcelable(DetailFragment.DETAIL_URI, dateUri);
+
+                DetailFragment fragment = new DetailFragment();
+                fragment.Arguments = args;
+
+                SupportFragmentManager.BeginTransaction()
+                         .Replace(Resource.Id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
+                         .Commit();
+            }
+            else
+            {
+                Intent intent = new Intent(this, typeof(DetailActivity))
+                             .SetData(dateUri);
+                StartActivity(intent);
+            }
+        }
+
 
         private bool CheckPlayServices ()
         {

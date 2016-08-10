@@ -72,116 +72,23 @@ namespace WeatherApp
 
         }
 
-        public void setUseTodayLayout (bool useTodayLayout)
-        {
-            _useTodayLayout = useTodayLayout;
-            if (forecastAdapter != null)
-            {
-                forecastAdapter.setUseTodayLayout(_useTodayLayout);
-            }
-        }
-
         public override void OnCreate (Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetHasOptionsMenu(true);
-            updateWeather();
+        }
+        public override void OnResume ()
+        {
+            PreferenceManager.GetDefaultSharedPreferences(Activity)
+            .RegisterOnSharedPreferenceChangeListener(this);
+            base.OnResume();
         }
 
-        public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        public override void OnPause ()
         {
-            forecastAdapter = new ForecastAdapter(Activity, null, 0);
-            forecastAdapter.setUseTodayLayout(_useTodayLayout);
-            LoaderManager.InitLoader(URL_LOADER, null, this);
-            var view = inflater.Inflate(Resource.Layout.fragment_main, container, false);
-            listView = view.FindViewById<ListView>(Resource.Id.listview_forecast);
-            listView.Adapter = forecastAdapter;
-            listView.EmptyView = view.FindViewById(Resource.Id.listview_forecast_empty);
-            listView.ItemClick += (sender, e) =>
-            {
-                position = e.Position;
-                ICursor cursor = (ICursor)listView.Adapter.GetItem(e.Position);
-                if (cursor != null)
-                {
-                    string locationSetting = Utility.getPreferredLocation(Activity);
-                    ((Callback)Activity).OnItemSelected(WeatherContractOpen.WeatherEntryOpen.buildWeatherLocationWithDate(locationSetting, cursor.GetLong(COL_WEATHER_DATE)));
-
-                }
-
-            };
-
-            if (savedInstanceState != null && savedInstanceState.ContainsKey("position"))
-            {
-                position = savedInstanceState.GetInt("position");
-            }
-
-            return view;
-        }
-
-        public override void OnSaveInstanceState (Bundle outState)
-        {
-            if (position != ListView.InvalidPosition)
-            {
-                outState.PutInt("position", position);
-            }
-            base.OnSaveInstanceState(outState);
-        }
-
-        public Loader OnCreateLoader (int id, Bundle args)
-        {
-            string locationSetting = Utility.getPreferredLocation(Activity);
-
-            string sortOrder = WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE + " ASC";
-            Android.Net.Uri weatherForLocationUri = WeatherContractOpen.WeatherEntryOpen.buildWeatherLocationWithStartDate(
-                                                        locationSetting, DateTime.Now.Ticks);
-
-            return new CursorLoader(Activity, weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder);
-        }
-
-        public void OnLoaderReset (Loader loader)
-        {
-            forecastAdapter.SwapCursor(null);
-        }
-
-        public void OnLoadFinished (Loader loader, Java.Lang.Object data)
-        {
-            forecastAdapter.SwapCursor((ICursor)data);
-
-            if (position != AdapterView.InvalidPosition)
-                listView.SmoothScrollToPosition(position);
-        }
-
-        private void UpdateEmptyView ()
-        {
-            if (forecastAdapter.Count == 0)
-            {
-                var locStatus = Utility.GetLocationStatus(Activity);
-
-                var tv = (TextView)View.FindViewById(Resource.Id.listview_forecast_empty);
-
-
-                switch (locStatus)
-                {
-                    case (int)Helpers.LocationStatus.LocationStatusServerDown:
-                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_down);
-                        break;
-                    case (int)Helpers.LocationStatus.LocationStatusServerInvalid:
-                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_error);
-                        break;
-                    case (int)Helpers.LocationStatus.LocationStatusUnkown:
-                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_unknown);
-                        break;
-                    case (int)Helpers.LocationStatus.LocationStatusInvalid:
-                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_invalid_location);
-                        break;
-                    default:
-                        if (!Utility.CheckNetworkStatus(Activity))
-                        {
-                            tv.Text = "Weather information not available. No network connection.";
-                        }
-                        break;
-                }
-            }
+            PreferenceManager.GetDefaultSharedPreferences(Activity)
+            .UnregisterOnSharedPreferenceChangeListener(this);
+            base.OnPause();
         }
 
         public override void OnCreateOptionsMenu (IMenu menu, MenuInflater inflater)
@@ -194,7 +101,7 @@ namespace WeatherApp
             int id = item.ItemId;
             if (id == Resource.Id.action_viewLocation)
             {
-                openPreferredLocationInMap();
+                OpenPreferredLocationInMap();
                 return true;
             }
             //if (id == Resource.Id.action_refresh)
@@ -205,18 +112,49 @@ namespace WeatherApp
             return base.OnOptionsItemSelected(item);
         }
 
-        public void updateWeather ()
+        public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            SunshineSyncAdapter.SyncImmediately(Activity);
+            forecastAdapter = new ForecastAdapter(Activity, null, 0);
+            var view = inflater.Inflate(Resource.Layout.fragment_main, container, false);
+
+            listView = view.FindViewById<ListView>(Resource.Id.listview_forecast);
+            listView.EmptyView = view.FindViewById(Resource.Id.listview_forecast_empty);
+            listView.Adapter = forecastAdapter;
+           
+            listView.ItemClick += (sender, e) =>
+            {
+                position = e.Position;
+                ICursor cursor = (ICursor)listView.Adapter.GetItem(e.Position);
+                if (cursor != null)
+                {
+                    string locationSetting = Utility.GetPreferredLocation(Activity);
+                    ((Callback)Activity).OnItemSelected(WeatherContractOpen.WeatherEntryOpen.buildWeatherLocationWithDate(locationSetting, cursor.GetLong(COL_WEATHER_DATE)));
+
+                }
+
+            };
+
+            if (savedInstanceState != null && savedInstanceState.ContainsKey("position"))
+            {
+                position = savedInstanceState.GetInt("position");
+            }
+
+            forecastAdapter.setUseTodayLayout(_useTodayLayout);
+            return view;
+        }
+
+        public override void OnActivityCreated (Bundle savedInstanceState)
+        {
+            LoaderManager.InitLoader(URL_LOADER, null, this);
+            base.OnActivityCreated(savedInstanceState);
         }
 
         public void OnLocationChanged ()
         {
-            updateWeather();
             LoaderManager.RestartLoader(URL_LOADER, null, this);
         }
 
-        private void openPreferredLocationInMap ()
+        private void OpenPreferredLocationInMap ()
         {
             ICursor c = forecastAdapter.Cursor;
             if (null != c)
@@ -263,23 +201,89 @@ namespace WeatherApp
             //			}
         }
 
-        public override void OnResume ()
+        public override void OnSaveInstanceState (Bundle outState)
         {
-            base.OnResume();
-            PreferenceManager.GetDefaultSharedPreferences(Activity)
-            .RegisterOnSharedPreferenceChangeListener(this);
+            if (position != ListView.InvalidPosition)
+            {
+                outState.PutInt("position", position);
+            }
+            base.OnSaveInstanceState(outState);
         }
 
-        public override void OnPause ()
+        public Loader OnCreateLoader (int id, Bundle args)
         {
-            base.OnPause();
-            PreferenceManager.GetDefaultSharedPreferences(Activity)
-            .UnregisterOnSharedPreferenceChangeListener(this);
+            string locationSetting = Utility.GetPreferredLocation(Activity);
+
+            string sortOrder = WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE + " ASC";
+            Android.Net.Uri weatherForLocationUri = WeatherContractOpen.WeatherEntryOpen.buildWeatherLocationWithStartDate(
+                                                        locationSetting, DateTime.Now.Date.Ticks);
+
+            return new CursorLoader(Activity, weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder);
+        }
+
+        public void OnLoadFinished (Loader loader, Java.Lang.Object data)
+        {
+            var cursor = (ICursor)data;
+            forecastAdapter.SwapCursor(cursor);
+            if (position != AdapterView.InvalidPosition)
+                listView.SmoothScrollToPosition(position);
+
+            UpdateEmptyView();
+        }
+        public void OnLoaderReset (Loader loader)
+        {
+            forecastAdapter.SwapCursor(null);
+        }
+
+        public void setUseTodayLayout (bool useTodayLayout)
+        {
+            _useTodayLayout = useTodayLayout;
+            if (forecastAdapter != null)
+            {
+                forecastAdapter.setUseTodayLayout(_useTodayLayout);
+            }
+        }
+
+        private void UpdateEmptyView ()
+        {
+            if (forecastAdapter.Count == 0)
+            {
+
+                var tv = (TextView)View.FindViewById(Resource.Id.listview_forecast_empty);
+
+                if (tv != null)
+                {
+                    var locStatus = Utility.GetLocationStatus(Activity);
+
+                    switch (locStatus)
+                    {
+                        case (int)Helpers.LocationStatus.LocationStatusServerDown:
+                            tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_down);
+                            break;
+                        case (int)Helpers.LocationStatus.LocationStatusServerInvalid:
+                            tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_error);
+                            break;
+                        case (int)Helpers.LocationStatus.LocationStatusUnkown:
+                            tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_unknown);
+                            break;
+                        case (int)Helpers.LocationStatus.LocationStatusInvalid:
+                            tv.Text = Activity.GetString(Resource.String.empty_forecast_list_invalid_location);
+                            break;
+                        default:
+                            if (!Utility.CheckNetworkStatus(Activity))
+                            {
+                                tv.Text = "Weather information not available. No network connection.";
+                            }
+                            break;
+                    }
+                }
+
+            }
         }
 
         public void OnSharedPreferenceChanged (ISharedPreferences sharedPreferences, string key)
         {
-            if (key.Equals(GetString(Resource.String.pref_location_status)))
+            if (key.Equals(GetString(Resource.String.pref_location_status_key)))
             {
                 UpdateEmptyView();
             }
