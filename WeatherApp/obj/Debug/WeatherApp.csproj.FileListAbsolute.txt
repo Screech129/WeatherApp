@@ -116,7 +116,6 @@ C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\drawable-
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\values\styles.xml
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\fragment_detail_wide.xml
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\values-sw600dp\refs.xml
-C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\values-lan\refs.xml
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\drawable\today_touch_selector.xml
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\list_item_forecast_today.xml
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\drawable-v21\today_touch_selector.xml
@@ -154,5 +153,11 @@ C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\android\asset
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\android\assets\WeatherApp.dll.mdb
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.csprojResolveAssemblyReference.cache
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\drawable\touch_selector_white.xml
+C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\detail_extras_grid.xml
+C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\values-sw600dp-port\dimens.xml
+C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\values-sw720dp-port\dimens.xml
+C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\values\refs.xml
+C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\values-land\refs.xml
+C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\values-sw720dp\dimens.xml
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\obj\Debug\WeatherApp.dll.mdb
 C:\Users\david.silver\Source\Repos\WeatherApp\WeatherApp\bin\Debug\WeatherApp.dll.mdb

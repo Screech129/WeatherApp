@@ -137,6 +137,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout-sw600dp-port\Main.axml" />
+    <AndroidResource Include="Resources\layout\detail_extras_grid.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />
@@ -249,7 +252,7 @@
     </AndroidResource>
     <AndroidResource Include="Resources\layout\fragment_detail_wide.axml" />
     <AndroidResource Include="Resources\values-sw600dp\refs.xml" />
-    <AndroidResource Include="Resources\values-lan\refs.xml" />
+    <AndroidResource Include="Resources\values-land\refs.xml" />
     <AndroidResource Include="Resources\drawable\today_touch_selector.xml" />
     <AndroidResource Include="Resources\layout\list_item_forecast_today.axml" />
     <AndroidResource Include="Resources\drawable-v21\today_touch_selector.xml" />
@@ -277,7 +280,7 @@
   <ItemGroup>
     <XamarinComponentReference Include="GlideComponent">
       <Visible>False</Visible>
-      <Version>3.6.1</Version>
+      <Version>3.7.0</Version>
     </XamarinComponentReference>
     <XamarinComponentReference Include="googleplayservices-gcm">
       <Visible>False</Visible>
@@ -291,6 +294,25 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\touch_selector_white.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-sw600dp-port\dimens.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-sw720dp-port\dimens.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\refs.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\values-sw600dp-land\refs.xml" />
+    <AndroidResource Include="Resources\values-sw720dp\dimens.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="..\packages\Xamarin.Android.Support.Vector.Drawable.23.4.0.1\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\packages\Xamarin.Android.Support.Vector.Drawable.23.4.0.1\build\Xamarin.Android.Support.Vector.Drawable.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

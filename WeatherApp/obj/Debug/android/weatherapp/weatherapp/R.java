@@ -1795,32 +1795,43 @@ containing a value of this type.
          */
         public static final int activity_horizontal_margin=0x7f0a004c;
         public static final int activity_vertical_margin=0x7f0a004d;
-        public static final int appbar_elevation=0x7f0a0052;
-        public static final int default_gap=0x7f0a0000;
-        /**  Extra Padding 
- Extra Padding 
+        /**  Needed if we aren't including the Material Design Library 
          */
-        public static final int detail_view_extra_padding=0x7f0a0051;
+        public static final int appbar_elevation=0x7f0a0056;
+        public static final int default_gap=0x7f0a0000;
+        public static final int detail_container_bottom_margin=0x7f0a005b;
+        /**  Extra Padding 
+ Extra Padding - This one actually smaller on tablets 
+         */
+        public static final int detail_view_extra_padding=0x7f0a0055;
+        public static final int detail_view_padding=0x7f0a0059;
+        public static final int detail_view_padding_vertical=0x7f0a005c;
         /**  The amount we want the details view to overlap the app bar 
          */
         public static final int details_app_bar_overlap=0x7f0a0057;
         public static final int disabled_alpha_material_dark=0x7f0a0044;
         public static final int disabled_alpha_material_light=0x7f0a0045;
         public static final int forecast_detail_horizontal_padding=0x7f0a004f;
-        public static final int forecast_temperature_space=0x7f0a0056;
+        public static final int forecast_detail_padding_wide=0x7f0a005a;
+        public static final int forecast_temperature_space=0x7f0a0054;
         /**  Text Sizes - We are using DP here rather than SP because these are already large
          font sizes, and going larger will cause lots of view problems.  This is only for
          the large forecast numbers in the forecast list 
          */
-        public static final int forecast_text_size=0x7f0a0054;
+        public static final int forecast_text_size=0x7f0a0052;
         /**  This is an odd width, but we're trying to match the font closely to keep things working
          on devices that don't yet have Roboto 
          */
-        public static final int forecast_text_width=0x7f0a0055;
+        public static final int forecast_text_width=0x7f0a0053;
         public static final int highlight_alpha_material_colored=0x7f0a0046;
         public static final int highlight_alpha_material_dark=0x7f0a0047;
         public static final int highlight_alpha_material_light=0x7f0a0048;
-        public static final int list_icon=0x7f0a0053;
+        public static final int list_icon=0x7f0a0051;
+        /**  Help to make us tablet beautiful 
+ Extra List Item Margin (tablet-only) 
+ Extra List Item Margin (tablet-only) 
+         */
+        public static final int list_item_extra_padding=0x7f0a0058;
         public static final int notification_large_icon_default=0x7f0a004e;
         public static final int notification_large_icon_height=0x7f0a0049;
         public static final int notification_large_icon_width=0x7f0a004a;
@@ -2015,18 +2026,18 @@ containing a value of this type.
         public static final int dark=0x7f0d0010;
         public static final int decor_content_parent=0x7f0d0058;
         public static final int default_activity_button=0x7f0d0040;
-        public static final int detail_additional_pane=0x7f0d0070;
-        public static final int detail_date_textview=0x7f0d006a;
-        public static final int detail_forecast_textview=0x7f0d006d;
-        public static final int detail_high_textview=0x7f0d006c;
-        public static final int detail_humidity_label_textview=0x7f0d0071;
-        public static final int detail_humidity_textview=0x7f0d0072;
-        public static final int detail_icon=0x7f0d006b;
-        public static final int detail_low_textview=0x7f0d006e;
-        public static final int detail_pressure_label_textview=0x7f0d0073;
-        public static final int detail_pressure_textview=0x7f0d0074;
-        public static final int detail_wind_label_textview=0x7f0d0075;
-        public static final int detail_wind_textview=0x7f0d0076;
+        public static final int detail_additional_pane=0x7f0d006a;
+        public static final int detail_date_textview=0x7f0d0071;
+        public static final int detail_forecast_textview=0x7f0d0074;
+        public static final int detail_high_textview=0x7f0d0073;
+        public static final int detail_humidity_label_textview=0x7f0d006b;
+        public static final int detail_humidity_textview=0x7f0d006c;
+        public static final int detail_icon=0x7f0d0072;
+        public static final int detail_low_textview=0x7f0d0075;
+        public static final int detail_pressure_label_textview=0x7f0d006d;
+        public static final int detail_pressure_textview=0x7f0d006e;
+        public static final int detail_wind_label_textview=0x7f0d006f;
+        public static final int detail_wind_textview=0x7f0d0070;
         public static final int disableHome=0x7f0d0027;
         public static final int edit_query=0x7f0d005c;
         public static final int end=0x7f0d001c;
@@ -2106,7 +2117,7 @@ containing a value of this type.
         public static final int time=0x7f0d0088;
         public static final int title=0x7f0d0043;
         public static final int title_template=0x7f0d0048;
-        public static final int toolbar=0x7f0d006f;
+        public static final int toolbar=0x7f0d0076;
         public static final int top=0x7f0d0023;
         public static final int topPanel=0x7f0d0047;
         public static final int up=0x7f0d0008;
@@ -2152,25 +2163,27 @@ containing a value of this type.
         public static final int abc_search_view=0x7f040017;
         public static final int abc_select_dialog_material=0x7f040018;
         public static final int activity_detail=0x7f040019;
-        public static final int detail_today_grid=0x7f04001a;
-        public static final int fragment_detail=0x7f04001b;
-        public static final int fragment_detail_wide=0x7f04001c;
-        public static final int fragment_main=0x7f04001d;
-        public static final int list_item_forecast=0x7f04001e;
-        public static final int list_item_forecast_today=0x7f04001f;
-        public static final int main=0x7f040020;
-        public static final int notification_media_action=0x7f040021;
-        public static final int notification_media_cancel_action=0x7f040022;
-        public static final int notification_template_big_media=0x7f040023;
-        public static final int notification_template_big_media_narrow=0x7f040024;
-        public static final int notification_template_lines=0x7f040025;
-        public static final int notification_template_media=0x7f040026;
-        public static final int notification_template_part_chronometer=0x7f040027;
-        public static final int notification_template_part_time=0x7f040028;
-        public static final int select_dialog_item_material=0x7f040029;
-        public static final int select_dialog_multichoice_material=0x7f04002a;
-        public static final int select_dialog_singlechoice_material=0x7f04002b;
-        public static final int support_simple_spinner_dropdown_item=0x7f04002c;
+        public static final int detail_extras_grid=0x7f04001a;
+        public static final int detail_today_grid=0x7f04001b;
+        public static final int fragment_detail=0x7f04001c;
+        public static final int fragment_detail_start=0x7f04002e;
+        public static final int fragment_detail_wide=0x7f04001d;
+        public static final int fragment_main=0x7f04001e;
+        public static final int list_item_forecast=0x7f04001f;
+        public static final int list_item_forecast_today=0x7f040020;
+        public static final int main=0x7f040021;
+        public static final int notification_media_action=0x7f040022;
+        public static final int notification_media_cancel_action=0x7f040023;
+        public static final int notification_template_big_media=0x7f040024;
+        public static final int notification_template_big_media_narrow=0x7f040025;
+        public static final int notification_template_lines=0x7f040026;
+        public static final int notification_template_media=0x7f040027;
+        public static final int notification_template_part_chronometer=0x7f040028;
+        public static final int notification_template_part_time=0x7f040029;
+        public static final int select_dialog_item_material=0x7f04002a;
+        public static final int select_dialog_multichoice_material=0x7f04002b;
+        public static final int select_dialog_singlechoice_material=0x7f04002c;
+        public static final int support_simple_spinner_dropdown_item=0x7f04002d;
     }
     public static final class menu {
         public static final int detail=0x7f0f0000;

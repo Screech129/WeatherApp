@@ -22,14 +22,12 @@ public class MonoPackageManager {
 	public static void LoadApplication (Context context, ApplicationInfo runtimePackage, String[] apks)
 	{
 		synchronized (lock) {
-			if (context instanceof android.app.Application) {
-				Context = context;
-			}
 			if (!initialized) {
 				android.content.IntentFilter timezoneChangedFilter  = new android.content.IntentFilter (
 						android.content.Intent.ACTION_TIMEZONE_CHANGED
 				);
 				context.registerReceiver (new mono.android.app.NotifyTimeZoneChanges (), timezoneChangedFilter);
+				setContext (context);
 				
 				System.loadLibrary("monodroid");
 				Locale locale       = Locale.getDefault ();
@@ -64,7 +62,9 @@ public class MonoPackageManager {
 
 	public static void setContext (Context context)
 	{
-		// Ignore; vestigial
+		if (Context == null) {
+			Context = context;
+		}
 	}
 
 	static String getNativeLibraryPath (Context context)
@@ -113,8 +113,6 @@ class MonoPackageManager_Resources {
 		"Xamarin.GooglePlayServices.Basement.dll",
 		"Xamarin.GooglePlayServices.Gcm.dll",
 		"Xamarin.GooglePlayServices.Measurement.dll",
-		"Java.Interop.dll",
-		"System.ServiceModel.Internals.dll",
 		"System.Runtime.dll",
 		"System.Collections.dll",
 		"System.Reflection.dll",
