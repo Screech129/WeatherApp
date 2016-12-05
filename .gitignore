@@ -3,3 +3,6 @@
 ################################################################################
 
 /.vs/WeatherApp/v14
+/AndroidTest/obj/Debug
+/packages
+/WeatherApp
