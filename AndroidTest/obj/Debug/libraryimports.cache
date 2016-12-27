@@ -2,5 +2,7 @@
 <Paths>
   <ManifestDocuments />
   <NativeLibraries />
-  <Jars />
+  <Jars>
+    <Jar>obj\Debug\__library_projects__\GlideAssembly\library_project_imports\glide-3.6.1.jar</Jar>
+  </Jars>
 </Paths>

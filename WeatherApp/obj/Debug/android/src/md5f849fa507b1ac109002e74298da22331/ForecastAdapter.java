@@ -2,7 +2,7 @@ package md5f849fa507b1ac109002e74298da22331;
 
 
 public class ForecastAdapter
-	extends android.widget.CursorAdapter
+	extends android.support.v7.widget.RecyclerView.Adapter
 	implements
 		mono.android.IGCUserPeer
 {
@@ -10,37 +10,44 @@ public class ForecastAdapter
 	public static final String __md_methods;
 	static {
 		__md_methods = 
+			"n_onCreateViewHolder:(Landroid/view/ViewGroup;I)Landroid/support/v7/widget/RecyclerView$ViewHolder;:GetOnCreateViewHolder_Landroid_view_ViewGroup_IHandler\n" +
+			"n_onBindViewHolder:(Landroid/support/v7/widget/RecyclerView$ViewHolder;I)V:GetOnBindViewHolder_Landroid_support_v7_widget_RecyclerView_ViewHolder_IHandler\n" +
 			"n_getItemViewType:(I)I:GetGetItemViewType_IHandler\n" +
-			"n_getViewTypeCount:()I:GetGetViewTypeCountHandler\n" +
-			"n_newView:(Landroid/content/Context;Landroid/database/Cursor;Landroid/view/ViewGroup;)Landroid/view/View;:GetNewView_Landroid_content_Context_Landroid_database_Cursor_Landroid_view_ViewGroup_Handler\n" +
-			"n_bindView:(Landroid/view/View;Landroid/content/Context;Landroid/database/Cursor;)V:GetBindView_Landroid_view_View_Landroid_content_Context_Landroid_database_Cursor_Handler\n" +
+			"n_getItemCount:()I:GetGetItemCountHandler\n" +
 			"";
 		mono.android.Runtime.register ("WeatherApp.ForecastAdapter, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", ForecastAdapter.class, __md_methods);
 	}
 
 
-	public ForecastAdapter (android.content.Context p0, android.database.Cursor p1) throws java.lang.Throwable
+	public ForecastAdapter () throws java.lang.Throwable
 	{
-		super (p0, p1);
+		super ();
 		if (getClass () == ForecastAdapter.class)
-			mono.android.TypeManager.Activate ("WeatherApp.ForecastAdapter, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "Android.Content.Context, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065:Android.Database.ICursor, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065", this, new java.lang.Object[] { p0, p1 });
+			mono.android.TypeManager.Activate ("WeatherApp.ForecastAdapter, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "", this, new java.lang.Object[] {  });
+	}
+
+	public ForecastAdapter (android.content.Context p0) throws java.lang.Throwable
+	{
+		super ();
+		if (getClass () == ForecastAdapter.class)
+			mono.android.TypeManager.Activate ("WeatherApp.ForecastAdapter, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "Android.Content.Context, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065", this, new java.lang.Object[] { p0 });
 	}
 
 
-	public ForecastAdapter (android.content.Context p0, android.database.Cursor p1, boolean p2) throws java.lang.Throwable
+	public android.support.v7.widget.RecyclerView.ViewHolder onCreateViewHolder (android.view.ViewGroup p0, int p1)
 	{
-		super (p0, p1, p2);
-		if (getClass () == ForecastAdapter.class)
-			mono.android.TypeManager.Activate ("WeatherApp.ForecastAdapter, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "Android.Content.Context, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065:Android.Database.ICursor, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065:System.Boolean, mscorlib, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e", this, new java.lang.Object[] { p0, p1, p2 });
+		return n_onCreateViewHolder (p0, p1);
 	}
 
+	private native android.support.v7.widget.RecyclerView.ViewHolder n_onCreateViewHolder (android.view.ViewGroup p0, int p1);
 
-	public ForecastAdapter (android.content.Context p0, android.database.Cursor p1, int p2) throws java.lang.Throwable
+
+	public void onBindViewHolder (android.support.v7.widget.RecyclerView.ViewHolder p0, int p1)
 	{
-		super (p0, p1, p2);
-		if (getClass () == ForecastAdapter.class)
-			mono.android.TypeManager.Activate ("WeatherApp.ForecastAdapter, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "Android.Content.Context, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065:Android.Database.ICursor, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065:Android.Widget.CursorAdapterFlags, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065", this, new java.lang.Object[] { p0, p1, p2 });
+		n_onBindViewHolder (p0, p1);
 	}
+
+	private native void n_onBindViewHolder (android.support.v7.widget.RecyclerView.ViewHolder p0, int p1);
 
 
 	public int getItemViewType (int p0)
@@ -51,28 +58,12 @@ public class ForecastAdapter
 	private native int n_getItemViewType (int p0);
 
 
-	public int getViewTypeCount ()
+	public int getItemCount ()
 	{
-		return n_getViewTypeCount ();
+		return n_getItemCount ();
 	}
 
-	private native int n_getViewTypeCount ();
-
-
-	public android.view.View newView (android.content.Context p0, android.database.Cursor p1, android.view.ViewGroup p2)
-	{
-		return n_newView (p0, p1, p2);
-	}
-
-	private native android.view.View n_newView (android.content.Context p0, android.database.Cursor p1, android.view.ViewGroup p2);
-
-
-	public void bindView (android.view.View p0, android.content.Context p1, android.database.Cursor p2)
-	{
-		n_bindView (p0, p1, p2);
-	}
-
-	private native void n_bindView (android.view.View p0, android.content.Context p1, android.database.Cursor p2);
+	private native int n_getItemCount ();
 
 	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)

@@ -13,7 +13,8 @@ using Android.Gms.Gcm;
 using Org.Json;
 using Android.Util;
 using Android.Graphics;
-using Android.Support.V4.App;
+
+
 
 namespace WeatherApp.Services
 {
@@ -73,15 +74,15 @@ namespace WeatherApp.Services
             // object along in our notification builder. Generally, you want to use the app icon as the
             // small icon, so that users understand what app is triggering this notification.
             Bitmap largeIcon = BitmapFactory.DecodeResource(this.Resources, Resource.Drawable.art_storm);
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+            var builder = new Android.Support.V4.App.NotificationCompat.Builder(this)
                             .SetSmallIcon(Resource.Drawable.art_clear)
                             .SetLargeIcon(largeIcon)
                             .SetContentTitle("Weather Alert!")
-                            .SetStyle(new NotificationCompat.BigTextStyle().BigText(message))
+                            .SetStyle(new Android.Support.V4.App.NotificationCompat.BigTextStyle().BigText(message))
                             .SetContentText(message)
-                            .SetPriority(NotificationCompat.PriorityHigh);
-            mBuilder.SetContentIntent(contentIntent);
-            mNotificationManager.Notify(NOTIFICATION_ID, mBuilder.Build());
+                            .SetPriority(Android.Support.V4.App.NotificationCompat.PriorityHigh);
+            builder.SetContentIntent(contentIntent);
+            mNotificationManager.Notify(NOTIFICATION_ID, builder.Build());
         }
     }
 }

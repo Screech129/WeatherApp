@@ -19,17 +19,21 @@ using System.Net.Http;
 using Org.Json;
 using Android.Database;
 using WeatherApp.Sync;
-
+using Android.Support.V7.Widget;
 namespace WeatherApp
 {
     public class ForecastFragment : Fragment, LoaderManager.ILoaderCallbacks, ISharedPreferencesOnSharedPreferenceChangeListener
     {
 
         ForecastAdapter forecastAdapter;
-        private const String LOG_TAG = "ForecastAdapter";
+        private const string LOG_TAG = "ForecastAdapter";
+        private RecyclerView recyclerView;
+        private int position = RecyclerView.NoPosition;
+        private bool _useTodayLayout;
+        private static string SELECTED_KEY = "selected_position";
         private const int URL_LOADER = 0;
-        private int position;
-        private ListView listView;
+
+
         private string[] FORECAST_COLUMNS = {
 			// In this case the id needs to be fully qualified with a table name, since
 			// the content provider joins the location & weather tables in the background
@@ -60,7 +64,6 @@ namespace WeatherApp
         public const int COL_COORD_LAT = 7;
         public const int COL_COORD_LONG = 8;
 
-        private bool _useTodayLayout;
 
         public interface Callback
         {
@@ -114,33 +117,43 @@ namespace WeatherApp
 
         public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            forecastAdapter = new ForecastAdapter(Activity, null, 0);
-            var view = inflater.Inflate(Resource.Layout.fragment_main, container, false);
+            forecastAdapter = new ForecastAdapter(Activity);
 
-            listView = view.FindViewById<ListView>(Resource.Id.listview_forecast);
-            listView.EmptyView = view.FindViewById(Resource.Id.listview_forecast_empty);
-            listView.Adapter = forecastAdapter;
-           
-            listView.ItemClick += (sender, e) =>
+            var rootView = inflater.Inflate(Resource.Layout.fragment_main, container, false);
+
+            recyclerView = (RecyclerView)rootView.FindViewById(Resource.Id.recyclerview_forecast);
+
+            recyclerView.SetLayoutManager(new LinearLayoutManager(Activity));
+            //var emptyView = rootView.FindViewById(Resource.Id.recyclerview_forecast_empty);
+            recyclerView.SetAdapter(forecastAdapter);
+
+            //        recyclerView.Click(new AdapterView.OnItemClickListener() {
+
+            //                    public void onItemClick (AdapterView<?> adapterView, View view, int position, long l)
+            //    {
+            //        // CursorAdapter returns a cursor at the correct position for getItem(), or null
+            //        // if it cannot seek to that position.
+            //        Cursor cursor = (Cursor)adapterView.getItemAtPosition(position);
+            //        if (cursor != null)
+            //        {
+            //            String locationSetting = Utility.getPreferredLocation(getActivity());
+            //            ((Callback)getActivity())
+            //                    .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+            //                            locationSetting, cursor.getLong(COL_WEATHER_DATE)
+            //                    ));
+            //        }
+            //        mPosition = position;
+            //    }
+            //});
+
+            if(savedInstanceState != null && savedInstanceState.ContainsKey(SELECTED_KEY))
             {
-                position = e.Position;
-                ICursor cursor = (ICursor)listView.Adapter.GetItem(e.Position);
-                if (cursor != null)
-                {
-                    string locationSetting = Utility.GetPreferredLocation(Activity);
-                    ((Callback)Activity).OnItemSelected(WeatherContractOpen.WeatherEntryOpen.buildWeatherLocationWithDate(locationSetting, cursor.GetLong(COL_WEATHER_DATE)));
-
-                }
-
-            };
-
-            if (savedInstanceState != null && savedInstanceState.ContainsKey("position"))
-            {
-                position = savedInstanceState.GetInt("position");
+                position = savedInstanceState.GetInt(SELECTED_KEY);
             }
 
-            forecastAdapter.setUseTodayLayout(_useTodayLayout);
-            return view;
+            forecastAdapter.SetUseTodayLayout(_useTodayLayout);
+
+            return rootView;
         }
 
         public override void OnActivityCreated (Bundle savedInstanceState)
@@ -156,7 +169,7 @@ namespace WeatherApp
 
         private void OpenPreferredLocationInMap ()
         {
-            ICursor c = forecastAdapter.Cursor;
+            ICursor c = forecastAdapter.GetCursor();
             if (null != c)
             {
                 c.MoveToPosition(0);
@@ -203,9 +216,9 @@ namespace WeatherApp
 
         public override void OnSaveInstanceState (Bundle outState)
         {
-            if (position != ListView.InvalidPosition)
+            if (position != RecyclerView.NoPosition)
             {
-                outState.PutInt("position", position);
+                outState.PutInt(SELECTED_KEY, position);
             }
             base.OnSaveInstanceState(outState);
         }
@@ -225,8 +238,8 @@ namespace WeatherApp
         {
             var cursor = (ICursor)data;
             forecastAdapter.SwapCursor(cursor);
-            if (position != AdapterView.InvalidPosition)
-                listView.SmoothScrollToPosition(position);
+            if (position != RecyclerView.NoPosition)
+                recyclerView.SmoothScrollToPosition(position);
 
             UpdateEmptyView();
         }
@@ -238,18 +251,15 @@ namespace WeatherApp
         public void setUseTodayLayout (bool useTodayLayout)
         {
             _useTodayLayout = useTodayLayout;
-            if (forecastAdapter != null)
-            {
-                forecastAdapter.setUseTodayLayout(_useTodayLayout);
-            }
+            forecastAdapter?.SetUseTodayLayout(_useTodayLayout);
         }
 
         private void UpdateEmptyView ()
         {
-            if (forecastAdapter.Count == 0)
+            if (forecastAdapter.ItemCount == 0)
             {
 
-                var tv = (TextView)View.FindViewById(Resource.Id.listview_forecast_empty);
+                var tv = (TextView)View.FindViewById(Resource.Id.recyclerview_forecast_empty);
 
                 if (tv != null)
                 {

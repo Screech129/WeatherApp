@@ -22,12 +22,14 @@ public class MonoPackageManager {
 	public static void LoadApplication (Context context, ApplicationInfo runtimePackage, String[] apks)
 	{
 		synchronized (lock) {
+			if (context instanceof android.app.Application) {
+				Context = context;
+			}
 			if (!initialized) {
 				android.content.IntentFilter timezoneChangedFilter  = new android.content.IntentFilter (
 						android.content.Intent.ACTION_TIMEZONE_CHANGED
 				);
 				context.registerReceiver (new mono.android.app.NotifyTimeZoneChanges (), timezoneChangedFilter);
-				setContext (context);
 				
 				System.loadLibrary("monodroid");
 				Locale locale       = Locale.getDefault ();
@@ -62,9 +64,7 @@ public class MonoPackageManager {
 
 	public static void setContext (Context context)
 	{
-		if (Context == null) {
-			Context = context;
-		}
+		// Ignore; vestigial
 	}
 
 	static String getNativeLibraryPath (Context context)
@@ -105,31 +105,45 @@ class MonoPackageManager_Resources {
 		"SQLite.Net.Platform.XamarinAndroid.dll",
 		"SQLiteNetExtensions.dll",
 		"Xamarin.Android.Support.Animated.Vector.Drawable.dll",
+		"Xamarin.Android.Support.Compat.dll",
+		"Xamarin.Android.Support.Core.UI.dll",
+		"Xamarin.Android.Support.Core.Utils.dll",
+		"Xamarin.Android.Support.Fragment.dll",
+		"Xamarin.Android.Support.Media.Compat.dll",
 		"Xamarin.Android.Support.v4.dll",
 		"Xamarin.Android.Support.v7.AppCompat.dll",
 		"Xamarin.Android.Support.v7.GridLayout.dll",
+		"Xamarin.Android.Support.v7.RecyclerView.dll",
 		"Xamarin.Android.Support.Vector.Drawable.dll",
 		"Xamarin.GooglePlayServices.Base.dll",
 		"Xamarin.GooglePlayServices.Basement.dll",
 		"Xamarin.GooglePlayServices.Gcm.dll",
 		"Xamarin.GooglePlayServices.Measurement.dll",
 		"System.Runtime.dll",
+		"System.IO.dll",
+		"System.Threading.Tasks.dll",
+		"System.Xml.XDocument.dll",
 		"System.Collections.dll",
-		"System.Reflection.dll",
-		"System.Diagnostics.Debug.dll",
-		"System.Runtime.Extensions.dll",
-		"System.Linq.Expressions.dll",
-		"System.Linq.dll",
-		"System.Reflection.Extensions.dll",
 		"System.Globalization.dll",
-		"System.Threading.dll",
-		"System.Text.Encoding.dll",
+		"System.Runtime.Serialization.Primitives.dll",
+		"System.Reflection.dll",
+		"System.Linq.Expressions.dll",
+		"System.Dynamic.Runtime.dll",
+		"System.Linq.dll",
+		"System.Diagnostics.Debug.dll",
 		"System.ObjectModel.dll",
+		"System.Text.RegularExpressions.dll",
+		"System.Xml.ReaderWriter.dll",
+		"System.Text.Encoding.dll",
+		"System.Runtime.Extensions.dll",
+		"System.Threading.dll",
+		"System.Reflection.Extensions.dll",
+		"System.Text.Encoding.Extensions.dll",
 		"System.Resources.ResourceManager.dll",
 		"System.Collections.Concurrent.dll",
 		"System.Runtime.InteropServices.dll",
 	};
 	public static final String[] Dependencies = new String[]{
 	};
-	public static final String ApiPackageName = "Mono.Android.Platform.ApiLevel_22";
+	public static final String ApiPackageName = "Mono.Android.Platform.ApiLevel_24";
 }

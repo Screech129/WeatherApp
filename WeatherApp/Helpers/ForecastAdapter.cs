@@ -5,22 +5,131 @@ using Android.Database;
 using Android.Views;
 using Com.Bumptech.Glide;
 using Android.Util;
-
+using Android.Support.V7.Widget;
 namespace WeatherApp
 {
-    public class ForecastAdapter : CursorAdapter
-    {
-        public ForecastAdapter (Context context, ICursor c, CursorAdapterFlags flags) :
-            base(context, c, flags)
-        {
-        }
+    public class ForecastAdapter : RecyclerView.Adapter
 
-        Context context = Android.App.Application.Context;
+    {
         private const int VIEW_TYPE_TODAY = 0;
         private const int VIEW_TYPE_FUTURE_DAY = 1;
         private const int VIEW_TYPE_COUNT = 2;
         private bool _useTodayLayout;
-        public void setUseTodayLayout (bool useTodayLayout)
+        private Context context;
+        private ICursor cursor;
+
+      
+
+        public class ForecastAdapterViewHolder : RecyclerView.ViewHolder
+        {
+            public ImageView iconView;
+            public TextView dateView;
+            public TextView descriptionView;
+            public TextView highTempView;
+            public TextView lowTempView;
+            public ForecastAdapterViewHolder (View view) : base(view)
+            {
+
+                iconView = (ImageView)view.FindViewById(Resource.Id.list_item_icon);
+                dateView = (TextView)view.FindViewById(Resource.Id.list_item_date_textview);
+                descriptionView = (TextView)view.FindViewById(Resource.Id.list_item_forecast_textview);
+                highTempView = (TextView)view.FindViewById(Resource.Id.list_item_high_textview);
+                lowTempView = (TextView)view.FindViewById(Resource.Id.list_item_low_textview);
+            }
+        }
+        public ForecastAdapter (Context context)
+        {
+            this.context = context;
+        }
+
+        public override RecyclerView.ViewHolder OnCreateViewHolder (ViewGroup parent, int viewType)
+        {
+            if (parent.GetType() == typeof(RecyclerView))
+            {
+                int layoutId = -1;
+                switch (viewType)
+                {
+                    case VIEW_TYPE_TODAY:
+                        {
+                            layoutId = Resource.Layout.list_item_forecast_today;
+                            break;
+                        }
+                    case VIEW_TYPE_FUTURE_DAY:
+                        {
+                            layoutId = Resource.Layout.list_item_forecast;
+                            break;
+                        }
+                }
+                View view = LayoutInflater.From(parent.Context).Inflate(layoutId, parent, false);
+                view.Focusable = true;
+                return new ForecastAdapterViewHolder(view);
+            }
+            else
+            {
+                throw new AndroidRuntimeException("Not bound to RecyclerViewSelection");
+            }
+        }
+
+        public override void OnBindViewHolder (RecyclerView.ViewHolder viewHolder, int position)
+        {
+            var holder = (ForecastAdapterViewHolder)viewHolder;
+            cursor.MoveToPosition(position);
+            int weatherId = cursor.GetInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
+            int defaultImage;
+
+            switch (GetItemViewType(position))
+            {
+                case VIEW_TYPE_TODAY:
+                    defaultImage = Utility.GetArtResourceForWeatherCondition(weatherId);
+                    break;
+                default:
+                    defaultImage = Utility.GetIconResourceForWeatherCondition(weatherId);
+                    break;
+            }
+
+            if (Utility.UsingLocalGraphics(context))
+            {
+                holder.iconView.SetImageResource(defaultImage);
+            }
+            else
+            {
+                Glide.With(context)
+                        .Load(Utility.GetArtUrlForWeatherCondition(context, weatherId))
+                        .Error(defaultImage)                       
+                        .Into(holder.iconView);
+            }
+
+            // Read date from cursor
+            long dateInMillis = cursor.GetLong(ForecastFragment.COL_WEATHER_DATE);
+
+            // Find TextView and set formatted date on it
+            holder.dateView.Text = Utility.GetFriendlyDayString(context, dateInMillis);
+
+            // Read weather forecast from cursor
+            String description = Utility.GetStringForWeatherCondition(context, weatherId);
+
+            // Find TextView and set weather forecast on it
+            holder.descriptionView.Text=description;
+            holder.descriptionView.ContentDescription=context.GetString(Resource.String.a11y_forecast, description);
+
+            // For accessibility, we don't want a content description for the icon field
+            // because the information is repeated in the description view and the icon
+            // is not individually selectable
+
+            // Read high temperature from cursor
+            double high = cursor.GetDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
+            String highString = Utility.FormatTemperature(context, high,Utility.IsMetric(context));
+            holder.highTempView.Text = highString;
+            holder.highTempView.ContentDescription = context.GetString(Resource.String.a11y_high_temp, highString);
+
+            // Read low temperature from cursor
+            double low = cursor.GetDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
+            String lowString = Utility.FormatTemperature(context, low, Utility.IsMetric(context));
+            holder.lowTempView.Text=lowString;
+            holder.lowTempView.ContentDescription = context.GetString(Resource.String.a11y_low_temp, lowString);
+        }
+
+        public void SetUseTodayLayout (bool useTodayLayout)
         {
             _useTodayLayout = useTodayLayout;
         }
@@ -30,199 +139,25 @@ namespace WeatherApp
             return (position == 0 && _useTodayLayout) ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
         }
 
-        public override int ViewTypeCount
+        public override int ItemCount
         {
             get
             {
-                return 2;
+                if (null == cursor) return 0;
+                return cursor.Count;
             }
         }
-        /*
-        Remember that these views are reused as needed.
-     */
-        public override View NewView (Context context, ICursor cursor, ViewGroup parent)
+
+        public void SwapCursor (ICursor newCursor)
         {
-            // Choose the layout type
-            int viewType = GetItemViewType(cursor.Position);
-            int layoutId = viewType == 0 ? Resource.Layout.list_item_forecast_today : Resource.Layout.list_item_forecast;
-
-            View view = LayoutInflater.From(context).Inflate(layoutId, parent, false);
-            MainViewHolder viewHolder = view.Tag as MainViewHolder;
-            if (viewHolder == null)
-            {
-                viewHolder = new MainViewHolder();
-                viewHolder.iconView = (ImageView)view.FindViewById(Resource.Id.list_item_icon);
-                viewHolder.dateView = (TextView)view.FindViewById(Resource.Id.list_item_date_textview);
-                viewHolder.descriptionView = (TextView)view.FindViewById(Resource.Id.list_item_forecast_textview);
-                viewHolder.highTempView = (TextView)view.FindViewById(Resource.Id.list_item_high_textview);
-                viewHolder.lowTempView = (TextView)view.FindViewById(Resource.Id.list_item_low_textview);
-                view.Tag = viewHolder;
-            }
-            return view;
+            cursor = newCursor;
+            NotifyDataSetChanged();
         }
-        /*
-        This is where we fill-in the views with the contents of the cursor.
-     */
-        public override void BindView (View view, Context context, ICursor cursor)
+
+        public ICursor GetCursor ()
         {
-
-            var viewHolder = (MainViewHolder)view.Tag;
-
-            int weatherId = cursor.GetInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
-            int fallbackIconId;
-
-            int viewType = GetItemViewType(Cursor.Position);
-
-            if (viewType == 0)
-            {
-
-                fallbackIconId = getArtResourceForWeatherCondition(weatherId);
-            }
-            else
-            {
-                fallbackIconId = getIconResourceForWeatherCondition(weatherId);
-
-            }
-
-            Glide.With(context)
-                    .Load(Utility.GetArtUrlForWeatherCondition(context, weatherId))
-                    .Error(fallbackIconId)
-                    .Into(viewHolder.iconView);
-
-            // TODO Read date from cursor
-            long date = cursor.GetLong(ForecastFragment.COL_WEATHER_DATE);
-            viewHolder.dateView.Text = Utility.GetFriendlyDayString(context, date);
-
-
-            // TODO Read weather forecast from cursor
-            string forecast = cursor.GetString(ForecastFragment.COL_WEATHER_DESC);
-            viewHolder.descriptionView.Text = forecast;
-            // Read user preference for metric or imperial temperature units
-            bool isMetric = Utility.IsMetric(context);
-
-            // Read high temperature from cursor
-            double high = cursor.GetDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
-            viewHolder.highTempView.Text = Utility.FormatTemperature(context, high, isMetric);
-
-            // TODO Read low temperature from cursor
-            double low = cursor.GetDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
-            viewHolder.lowTempView.Text = Utility.FormatTemperature(context, low, isMetric);
+            return cursor;
         }
-
-        /**
- * Helper method to provide the icon resource id according to the weather condition id returned
- * by the OpenWeatherMap call.
- * @param weatherId from OpenWeatherMap API response
- * @return resource id for the corresponding icon. -1 if no relation is found.
- */
-        public static int getIconResourceForWeatherCondition (int weatherId)
-        {
-            // Based on weather code data found at:
-            // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
-            if (weatherId >= 200 && weatherId <= 232)
-            {
-                return Resource.Drawable.ic_storm;
-            }
-            else if (weatherId >= 300 && weatherId <= 321)
-            {
-                return Resource.Drawable.ic_light_rain;
-            }
-            else if (weatherId >= 500 && weatherId <= 504)
-            {
-                return Resource.Drawable.ic_rain;
-            }
-            else if (weatherId == 511)
-            {
-                return Resource.Drawable.ic_snow;
-            }
-            else if (weatherId >= 520 && weatherId <= 531)
-            {
-                return Resource.Drawable.ic_rain;
-            }
-            else if (weatherId >= 600 && weatherId <= 622)
-            {
-                return Resource.Drawable.ic_snow;
-            }
-            else if (weatherId >= 701 && weatherId <= 761)
-            {
-                return Resource.Drawable.ic_fog;
-            }
-            else if (weatherId == 761 || weatherId == 781)
-            {
-                return Resource.Drawable.ic_storm;
-            }
-            else if (weatherId == 800)
-            {
-                return Resource.Drawable.ic_clear;
-            }
-            else if (weatherId == 801)
-            {
-                return Resource.Drawable.ic_light_clouds;
-            }
-            else if (weatherId >= 802 && weatherId <= 804)
-            {
-                return Resource.Drawable.ic_cloudy;
-            }
-            return -1;
-        }
-
-        /**
- * Helper method to provide the art resource id according to the weather condition id returned
- * by the OpenWeatherMap call.
- * @param weatherId from OpenWeatherMap API response
- * @return resource id for the corresponding image. -1 if no relation is found.
- */
-        public static int getArtResourceForWeatherCondition (int weatherId)
-        {
-            // Based on weather code data found at:
-            // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
-            if (weatherId >= 200 && weatherId <= 232)
-            {
-                return Resource.Drawable.art_storm;
-            }
-            else if (weatherId >= 300 && weatherId <= 321)
-            {
-                return Resource.Drawable.art_light_rain;
-            }
-            else if (weatherId >= 500 && weatherId <= 504)
-            {
-                return Resource.Drawable.art_rain;
-            }
-            else if (weatherId == 511)
-            {
-                return Resource.Drawable.art_snow;
-            }
-            else if (weatherId >= 520 && weatherId <= 531)
-            {
-                return Resource.Drawable.art_rain;
-            }
-            else if (weatherId >= 600 && weatherId <= 622)
-            {
-                return Resource.Drawable.art_rain;
-            }
-            else if (weatherId >= 701 && weatherId <= 761)
-            {
-                return Resource.Drawable.art_fog;
-            }
-            else if (weatherId == 761 || weatherId == 781)
-            {
-                return Resource.Drawable.art_storm;
-            }
-            else if (weatherId == 800)
-            {
-                return Resource.Drawable.art_clear;
-            }
-            else if (weatherId == 801)
-            {
-                return Resource.Drawable.art_light_clouds;
-            }
-            else if (weatherId >= 802 && weatherId <= 804)
-            {
-                return Resource.Drawable.art_clouds;
-            }
-            return -1;
-        }
-
     }
 
 }

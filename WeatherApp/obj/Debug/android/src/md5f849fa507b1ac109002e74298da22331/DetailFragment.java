@@ -15,9 +15,9 @@ public class DetailFragment
 			"n_onCreateOptionsMenu:(Landroid/view/Menu;Landroid/view/MenuInflater;)V:GetOnCreateOptionsMenu_Landroid_view_Menu_Landroid_view_MenuInflater_Handler\n" +
 			"n_onActivityCreated:(Landroid/os/Bundle;)V:GetOnActivityCreated_Landroid_os_Bundle_Handler\n" +
 			"n_onOptionsItemSelected:(Landroid/view/MenuItem;)Z:GetOnOptionsItemSelected_Landroid_view_MenuItem_Handler\n" +
-			"n_onCreateLoader:(ILandroid/os/Bundle;)Landroid/support/v4/content/Loader;:GetOnCreateLoader_ILandroid_os_Bundle_Handler:Android.Support.V4.App.LoaderManager/ILoaderCallbacksInvoker, Xamarin.Android.Support.v4\n" +
-			"n_onLoadFinished:(Landroid/support/v4/content/Loader;Ljava/lang/Object;)V:GetOnLoadFinished_Landroid_support_v4_content_Loader_Ljava_lang_Object_Handler:Android.Support.V4.App.LoaderManager/ILoaderCallbacksInvoker, Xamarin.Android.Support.v4\n" +
-			"n_onLoaderReset:(Landroid/support/v4/content/Loader;)V:GetOnLoaderReset_Landroid_support_v4_content_Loader_Handler:Android.Support.V4.App.LoaderManager/ILoaderCallbacksInvoker, Xamarin.Android.Support.v4\n" +
+			"n_onCreateLoader:(ILandroid/os/Bundle;)Landroid/support/v4/content/Loader;:GetOnCreateLoader_ILandroid_os_Bundle_Handler:Android.Support.V4.App.LoaderManager/ILoaderCallbacksInvoker, Xamarin.Android.Support.Fragment\n" +
+			"n_onLoadFinished:(Landroid/support/v4/content/Loader;Ljava/lang/Object;)V:GetOnLoadFinished_Landroid_support_v4_content_Loader_Ljava_lang_Object_Handler:Android.Support.V4.App.LoaderManager/ILoaderCallbacksInvoker, Xamarin.Android.Support.Fragment\n" +
+			"n_onLoaderReset:(Landroid/support/v4/content/Loader;)V:GetOnLoaderReset_Landroid_support_v4_content_Loader_Handler:Android.Support.V4.App.LoaderManager/ILoaderCallbacksInvoker, Xamarin.Android.Support.Fragment\n" +
 			"";
 		mono.android.Runtime.register ("WeatherApp.DetailFragment, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", DetailFragment.class, __md_methods);
 	}
