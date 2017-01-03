@@ -50,7 +50,7 @@ namespace WeatherApp
 			public const String CONTENT_ITEM_TYPE =
 				ContentResolver.CursorItemBaseType + "/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
 
-			public static Android.Net.Uri buildLocationUri (long id)
+			public static Android.Net.Uri BuildLocationUri (long id)
 			{
 				return ContentUris.WithAppendedId (CONTENT_URI, id);
 			}
@@ -80,14 +80,14 @@ namespace WeatherApp
 			}
 
 			/*
-            Student: Fill in this buildWeatherLocation function
+            Student: Fill in this BuildWeatherLocation function
          */
-			public static Android.Net.Uri buildWeatherLocation (String locationSetting)
+			public static Android.Net.Uri BuildWeatherLocation (String locationSetting)
 			{
 				return CONTENT_URI.BuildUpon ().AppendPath (locationSetting).Build ();
 			}
 
-			public static Android.Net.Uri buildWeatherLocationWithStartDate (
+			public static Android.Net.Uri BuildWeatherLocationWithStartDate (
 				String locationSetting, long startDate)
 			{
 				long normalizedDate = normalizeDate (startDate);
@@ -95,23 +95,23 @@ namespace WeatherApp
 					.AppendQueryParameter (COLUMN_DATE, normalizedDate.ToString ()).Build ();
 			}
 
-			public static Android.Net.Uri buildWeatherLocationWithDate (String locationSetting, long date)
+			public static Android.Net.Uri BuildWeatherLocationWithDate (String locationSetting, long date)
 			{
 				return CONTENT_URI.BuildUpon ().AppendPath (locationSetting)
 					.AppendQueryParameter(COLUMN_DATE,normalizeDate (date).ToString ()).Build ();
 			}
 
-			public static String getLocationSettingFromUri (Android.Net.Uri uri)
+			public static String GetLocationSettingFromUri (Android.Net.Uri uri)
 			{
 				return uri.PathSegments [1];
 			}
 
-			public static long getDateFromUri (Android.Net.Uri uri)
+			public static long GetDateFromUri (Android.Net.Uri uri)
 			{
 				return long.Parse (uri.PathSegments [2]);
 			}
 
-			public static long getStartDateFromUri (Android.Net.Uri uri)
+			public static long GetStartDateFromUri (Android.Net.Uri uri)
 			{
 				String dateString = uri.GetQueryParameter (COLUMN_DATE);
 				if (null != dateString && dateString.Length > 0)

@@ -136,8 +136,8 @@ namespace WeatherApp
             Android.Net.Uri uri = globalUri;
             if (uri != null)
             {
-                long date = WeatherContractOpen.WeatherEntryOpen.getDateFromUri(uri);
-                Android.Net.Uri updatedUri = WeatherContractOpen.WeatherEntryOpen.buildWeatherLocationWithDate(newLocation, date);
+                long date = WeatherContractOpen.WeatherEntryOpen.GetDateFromUri(uri);
+                Android.Net.Uri updatedUri = WeatherContractOpen.WeatherEntryOpen.BuildWeatherLocationWithDate(newLocation, date);
                 globalUri = updatedUri;
                 LoaderManager.RestartLoader(URL_LOADER, null, this);
             }

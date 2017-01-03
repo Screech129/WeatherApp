@@ -62,8 +62,8 @@ namespace WeatherApp
 
         private ICursor getWeatherByLocationSetting (Android.Net.Uri uri, string[] projection, string sortOrder)
         {
-            string locationSetting = WeatherContractOpen.WeatherEntryOpen.getLocationSettingFromUri(uri);
-            long startDate = WeatherContractOpen.WeatherEntryOpen.getStartDateFromUri(uri);
+            string locationSetting = WeatherContractOpen.WeatherEntryOpen.GetLocationSettingFromUri(uri);
+            long startDate = WeatherContractOpen.WeatherEntryOpen.GetStartDateFromUri(uri);
 
             string[] selectionArgs;
             string selection;
@@ -92,8 +92,8 @@ namespace WeatherApp
         private ICursor getWeatherByLocationSettingAndDate (
             Android.Net.Uri uri, string[] projection, string sortOrder)
         {
-            string locationSetting = WeatherContractOpen.WeatherEntryOpen.getLocationSettingFromUri(uri);
-            long date = WeatherContractOpen.WeatherEntryOpen.getDateFromUri(uri);
+            string locationSetting = WeatherContractOpen.WeatherEntryOpen.GetLocationSettingFromUri(uri);
+            long date = WeatherContractOpen.WeatherEntryOpen.GetDateFromUri(uri);
 
             return sWeatherByLocationSettingQueryBuilder.Query(openHelper.ReadableDatabase,
                 projection,
@@ -235,7 +235,7 @@ namespace WeatherApp
                         normalizeDate(values);
                         long _id = db.Insert(WeatherContractOpen.LocationEntryOpen.TABLE_NAME, null, values);
                         if (_id > 0)
-                            returnUri = WeatherContractOpen.LocationEntryOpen.buildLocationUri(_id);
+                            returnUri = WeatherContractOpen.LocationEntryOpen.BuildLocationUri(_id);
                         else
                             throw new SQLException("Failed to insert location " + uri);
                         break;

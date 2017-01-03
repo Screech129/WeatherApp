@@ -16,10 +16,9 @@ namespace WeatherApp
         private const int VIEW_TYPE_COUNT = 2;
         private bool _useTodayLayout;
         private Context context;
-        private ICursor cursor;
-
-      
-
+        public static ICursor cursor;
+        public event EventHandler<long> ItemClick; 
+        public static View EmptyView;
         public class ForecastAdapterViewHolder : RecyclerView.ViewHolder
         {
             public ImageView iconView;
@@ -27,7 +26,7 @@ namespace WeatherApp
             public TextView descriptionView;
             public TextView highTempView;
             public TextView lowTempView;
-            public ForecastAdapterViewHolder (View view) : base(view)
+            public ForecastAdapterViewHolder (View view, Action<ForecastAdapterViewHolder,int> listener) : base(view)
             {
 
                 iconView = (ImageView)view.FindViewById(Resource.Id.list_item_icon);
@@ -35,13 +34,18 @@ namespace WeatherApp
                 descriptionView = (TextView)view.FindViewById(Resource.Id.list_item_forecast_textview);
                 highTempView = (TextView)view.FindViewById(Resource.Id.list_item_high_textview);
                 lowTempView = (TextView)view.FindViewById(Resource.Id.list_item_low_textview);
+                view.Click += (sender, e) => listener(this,AdapterPosition);
             }
-        }
-        public ForecastAdapter (Context context)
-        {
-            this.context = context;
+
+           
         }
 
+       
+        public ForecastAdapter (Context context, View emptyView)
+        {
+            this.context = context;
+            EmptyView = emptyView;
+        }
         public override RecyclerView.ViewHolder OnCreateViewHolder (ViewGroup parent, int viewType)
         {
             if (parent.GetType() == typeof(RecyclerView))
@@ -62,11 +66,11 @@ namespace WeatherApp
                 }
                 View view = LayoutInflater.From(parent.Context).Inflate(layoutId, parent, false);
                 view.Focusable = true;
-                return new ForecastAdapterViewHolder(view);
+                return new ForecastAdapterViewHolder(view, OnClick);
             }
             else
             {
-                throw new AndroidRuntimeException("Not bound to RecyclerViewSelection");
+                throw new AndroidRuntimeException("Not bound to RecyclerView");
             }
         }
 
@@ -129,6 +133,7 @@ namespace WeatherApp
             holder.lowTempView.ContentDescription = context.GetString(Resource.String.a11y_low_temp, lowString);
         }
 
+        
         public void SetUseTodayLayout (bool useTodayLayout)
         {
             _useTodayLayout = useTodayLayout;
@@ -147,11 +152,18 @@ namespace WeatherApp
                 return cursor.Count;
             }
         }
-
+        public void OnClick (ForecastAdapterViewHolder view, int position)
+        {
+            int adapterPosition = position;
+            cursor.MoveToPosition(adapterPosition);
+            int dateColumnIndex = cursor.GetColumnIndex(WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE);
+            ItemClick?.Invoke(view,cursor.GetLong(dateColumnIndex));
+        }
         public void SwapCursor (ICursor newCursor)
         {
             cursor = newCursor;
             NotifyDataSetChanged();
+            EmptyView.Visibility = (ItemCount == 0 ? ViewStates.Visible : ViewStates.Gone);
         }
 
         public ICursor GetCursor ()

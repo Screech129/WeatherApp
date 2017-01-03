@@ -26,11 +26,11 @@ public class ForecastAdapter
 			mono.android.TypeManager.Activate ("WeatherApp.ForecastAdapter, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "", this, new java.lang.Object[] {  });
 	}
 
-	public ForecastAdapter (android.content.Context p0) throws java.lang.Throwable
+	public ForecastAdapter (android.content.Context p0, android.view.View p1) throws java.lang.Throwable
 	{
 		super ();
 		if (getClass () == ForecastAdapter.class)
-			mono.android.TypeManager.Activate ("WeatherApp.ForecastAdapter, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "Android.Content.Context, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065", this, new java.lang.Object[] { p0 });
+			mono.android.TypeManager.Activate ("WeatherApp.ForecastAdapter, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "Android.Content.Context, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065:Android.Views.View, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065", this, new java.lang.Object[] { p0, p1 });
 	}
 
 

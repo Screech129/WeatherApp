@@ -1,6 +1,8 @@
 ﻿
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Android.Preferences;
@@ -20,9 +22,12 @@ using Org.Json;
 using Android.Database;
 using WeatherApp.Sync;
 using Android.Support.V7.Widget;
+using Com.Bumptech.Glide.Manager;
+
 namespace WeatherApp
 {
-    public class ForecastFragment : Fragment, LoaderManager.ILoaderCallbacks, ISharedPreferencesOnSharedPreferenceChangeListener
+    public class ForecastFragment : Fragment, LoaderManager.ILoaderCallbacks,
+        ISharedPreferencesOnSharedPreferenceChangeListener
     {
 
         ForecastAdapter forecastAdapter;
@@ -34,14 +39,15 @@ namespace WeatherApp
         private const int URL_LOADER = 0;
 
 
-        private string[] FORECAST_COLUMNS = {
-			// In this case the id needs to be fully qualified with a table name, since
-			// the content provider joins the location & weather tables in the background
-			// (both have an _id column)
-			// On the one hand, that's annoying.  On the other, you can search the weather table
-			// using the location set by the user, which is only in the Location table.
-			// So the convenience is worth it.
-			WeatherContractOpen.WeatherEntryOpen.TABLE_NAME + "." + WeatherContractOpen.WeatherEntryOpen._ID,
+        private string[] FORECAST_COLUMNS =
+        {
+            // In this case the id needs to be fully qualified with a table name, since
+            // the content provider joins the location & weather tables in the background
+            // (both have an _id column)
+            // On the one hand, that's annoying.  On the other, you can search the weather table
+            // using the location set by the user, which is only in the Location table.
+            // So the convenience is worth it.
+            WeatherContractOpen.WeatherEntryOpen.TABLE_NAME + "." + WeatherContractOpen.WeatherEntryOpen._ID,
             WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE,
             WeatherContractOpen.WeatherEntryOpen.COLUMN_SHORT_DESC,
             WeatherContractOpen.WeatherEntryOpen.COLUMN_MAX_TEMP,
@@ -80,17 +86,18 @@ namespace WeatherApp
             base.OnCreate(savedInstanceState);
             SetHasOptionsMenu(true);
         }
+
         public override void OnResume ()
         {
             PreferenceManager.GetDefaultSharedPreferences(Activity)
-            .RegisterOnSharedPreferenceChangeListener(this);
+                .RegisterOnSharedPreferenceChangeListener(this);
             base.OnResume();
         }
 
         public override void OnPause ()
         {
             PreferenceManager.GetDefaultSharedPreferences(Activity)
-            .UnregisterOnSharedPreferenceChangeListener(this);
+                .UnregisterOnSharedPreferenceChangeListener(this);
             base.OnPause();
         }
 
@@ -107,54 +114,44 @@ namespace WeatherApp
                 OpenPreferredLocationInMap();
                 return true;
             }
-            //if (id == Resource.Id.action_refresh)
-            //{
-            //    updateWeather();
-            //    return true;
-            //}
             return base.OnOptionsItemSelected(item);
         }
 
         public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            forecastAdapter = new ForecastAdapter(Activity);
-
             var rootView = inflater.Inflate(Resource.Layout.fragment_main, container, false);
-
-            recyclerView = (RecyclerView)rootView.FindViewById(Resource.Id.recyclerview_forecast);
-
-            recyclerView.SetLayoutManager(new LinearLayoutManager(Activity));
-            //var emptyView = rootView.FindViewById(Resource.Id.recyclerview_forecast_empty);
-            recyclerView.SetAdapter(forecastAdapter);
-
-            //        recyclerView.Click(new AdapterView.OnItemClickListener() {
-
-            //                    public void onItemClick (AdapterView<?> adapterView, View view, int position, long l)
-            //    {
-            //        // CursorAdapter returns a cursor at the correct position for getItem(), or null
-            //        // if it cannot seek to that position.
-            //        Cursor cursor = (Cursor)adapterView.getItemAtPosition(position);
-            //        if (cursor != null)
-            //        {
-            //            String locationSetting = Utility.getPreferredLocation(getActivity());
-            //            ((Callback)getActivity())
-            //                    .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-            //                            locationSetting, cursor.getLong(COL_WEATHER_DATE)
-            //                    ));
-            //        }
-            //        mPosition = position;
-            //    }
-            //});
-
-            if(savedInstanceState != null && savedInstanceState.ContainsKey(SELECTED_KEY))
+            System.Diagnostics.Debug.WriteLine("On CreateView called Forecast Fragment");
+            try
             {
-                position = savedInstanceState.GetInt(SELECTED_KEY);
-            }
 
-            forecastAdapter.SetUseTodayLayout(_useTodayLayout);
+                recyclerView = (RecyclerView)rootView.FindViewById(Resource.Id.recyclerview_forecast);
+
+                var emptyView = rootView.FindViewById(Resource.Id.recyclerview_forecast_empty);
+                recyclerView.SetLayoutManager(new LinearLayoutManager(Activity));
+                recyclerView.HasFixedSize = true;
+                forecastAdapter = new ForecastAdapter(Activity, emptyView);
+                forecastAdapter.ItemClick += OnClick;
+                recyclerView.SetAdapter(forecastAdapter);
+
+
+                if (savedInstanceState != null && savedInstanceState.ContainsKey(SELECTED_KEY))
+                {
+                    position = savedInstanceState.GetInt(SELECTED_KEY);
+                }
+
+                forecastAdapter.SetUseTodayLayout(_useTodayLayout);
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                Log.WriteLine(LogPriority.Error, LOG_TAG, ex.ToString());
+                throw;
+            }
 
             return rootView;
         }
+
 
         public override void OnActivityCreated (Bundle savedInstanceState)
         {
@@ -228,7 +225,7 @@ namespace WeatherApp
             string locationSetting = Utility.GetPreferredLocation(Activity);
 
             string sortOrder = WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE + " ASC";
-            Android.Net.Uri weatherForLocationUri = WeatherContractOpen.WeatherEntryOpen.buildWeatherLocationWithStartDate(
+            Android.Net.Uri weatherForLocationUri = WeatherContractOpen.WeatherEntryOpen.BuildWeatherLocationWithStartDate(
                                                         locationSetting, DateTime.Now.Date.Ticks);
 
             return new CursorLoader(Activity, weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder);
@@ -297,6 +294,17 @@ namespace WeatherApp
             {
                 UpdateEmptyView();
             }
+        }
+
+        public void OnClick (object sender, long date)
+        {
+            var vh = (ForecastAdapter.ForecastAdapterViewHolder) sender;
+            string locationSetting = Utility.GetPreferredLocation(Activity);
+            ((Callback)Activity)
+                    .OnItemSelected(WeatherContractOpen.WeatherEntryOpen.BuildWeatherLocationWithDate(
+                                    locationSetting, date)
+                    );
+            position = vh.AdapterPosition;
         }
     }
 

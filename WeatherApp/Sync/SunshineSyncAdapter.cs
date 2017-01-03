@@ -282,7 +282,7 @@ namespace WeatherApp.Sync
                 // Last sync was more than 1 day ago, let's send a notification with the weather.
                 string locationQuery = Utility.GetPreferredLocation(_context);
 
-                Android.Net.Uri weatherUri = WeatherContractOpen.WeatherEntryOpen.buildWeatherLocationWithDate(locationQuery, currTimeMilli);
+                Android.Net.Uri weatherUri = WeatherContractOpen.WeatherEntryOpen.BuildWeatherLocationWithDate(locationQuery, currTimeMilli);
 
                 // we'll query our contentProvider, as always
                 ICursor cursor = _context.ContentResolver.Query(weatherUri, Notify_Weather_Projection, null, null, null);
