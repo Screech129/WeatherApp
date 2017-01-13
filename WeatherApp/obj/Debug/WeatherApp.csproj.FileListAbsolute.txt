@@ -34,6 +34,8 @@ C:\Users\David\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\detail_ex
 C:\Users\David\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout-sw600dp\fragment_main.xml
 C:\Users\David\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\fragment_main_base.xml
 C:\Users\David\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout-land\fragment_main.xml
+C:\Users\David\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\list_item_base_forecast_today.xml
+C:\Users\David\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout-land\list_item_forecast_today.xml
 C:\Users\David\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\main.xml
 C:\Users\David\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\values\strings.xml
 C:\Users\David\Source\Repos\WeatherApp\WeatherApp\obj\Debug\res\layout\list_item_forecast.xml

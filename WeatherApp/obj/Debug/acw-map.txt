@@ -30,6 +30,10 @@ WeatherApp.ForecastFragment, WeatherApp;md5f849fa507b1ac109002e74298da22331.Fore
 WeatherApp.ForecastFragment, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5f849fa507b1ac109002e74298da22331.ForecastFragment
 WeatherApp.ForecastFragment;md5f849fa507b1ac109002e74298da22331.ForecastFragment
 weatherapp.ForecastFragment;md5f849fa507b1ac109002e74298da22331.ForecastFragment
+WeatherApp.OnScroll, WeatherApp;md5f849fa507b1ac109002e74298da22331.OnScroll
+WeatherApp.OnScroll, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5f849fa507b1ac109002e74298da22331.OnScroll
+WeatherApp.OnScroll;md5f849fa507b1ac109002e74298da22331.OnScroll
+weatherapp.OnScroll;md5f849fa507b1ac109002e74298da22331.OnScroll
 WeatherApp.SettingsFragment, WeatherApp;md5f849fa507b1ac109002e74298da22331.SettingsFragment
 WeatherApp.SettingsFragment, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5f849fa507b1ac109002e74298da22331.SettingsFragment
 WeatherApp.SettingsFragment;md5f849fa507b1ac109002e74298da22331.SettingsFragment

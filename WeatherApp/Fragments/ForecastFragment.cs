@@ -125,14 +125,17 @@ namespace WeatherApp
             {
 
                 recyclerView = (RecyclerView)rootView.FindViewById(Resource.Id.recyclerview_forecast);
-
+                var parallaxView = rootView.FindViewById(Resource.Id.parallax_bar);
                 var emptyView = rootView.FindViewById(Resource.Id.recyclerview_forecast_empty);
                 recyclerView.SetLayoutManager(new LinearLayoutManager(Activity));
                 recyclerView.HasFixedSize = true;
                 forecastAdapter = new ForecastAdapter(Activity, emptyView);
                 forecastAdapter.ItemClick += OnClick;
                 recyclerView.SetAdapter(forecastAdapter);
-
+                if (parallaxView != null)
+                {
+                    recyclerView.AddOnScrollListener(new OnScroll(parallaxView));
+                }
 
                 if (savedInstanceState != null && savedInstanceState.ContainsKey(SELECTED_KEY))
                 {
@@ -152,163 +155,193 @@ namespace WeatherApp
             return rootView;
         }
 
+       
+    
 
-        public override void OnActivityCreated (Bundle savedInstanceState)
-        {
-            LoaderManager.InitLoader(URL_LOADER, null, this);
-            base.OnActivityCreated(savedInstanceState);
-        }
+    public override void OnActivityCreated (Bundle savedInstanceState)
+    {
+        LoaderManager.InitLoader(URL_LOADER, null, this);
+        base.OnActivityCreated(savedInstanceState);
+    }
 
-        public void OnLocationChanged ()
-        {
-            LoaderManager.RestartLoader(URL_LOADER, null, this);
-        }
+    public void OnLocationChanged ()
+    {
+        LoaderManager.RestartLoader(URL_LOADER, null, this);
+    }
 
-        private void OpenPreferredLocationInMap ()
+    private void OpenPreferredLocationInMap ()
+    {
+        ICursor c = forecastAdapter.GetCursor();
+        if (null != c)
         {
-            ICursor c = forecastAdapter.GetCursor();
-            if (null != c)
+            c.MoveToPosition(0);
+            String posLat = c.GetString(COL_COORD_LAT);
+            String posLong = c.GetString(COL_COORD_LONG);
+            Android.Net.Uri geoLocation = Android.Net.Uri.Parse("geo:" + posLat + "," + posLong);
+
+            var mapIntent = new Intent(Intent.ActionView, geoLocation);
+            if (mapIntent.ResolveActivity(Activity.PackageManager) != null)
             {
-                c.MoveToPosition(0);
-                String posLat = c.GetString(COL_COORD_LAT);
-                String posLong = c.GetString(COL_COORD_LONG);
-                Android.Net.Uri geoLocation = Android.Net.Uri.Parse("geo:" + posLat + "," + posLong);
+                StartActivity(mapIntent);
+            }
+            else
+            {
+                Toast.MakeText(Activity, "No Map App found", ToastLength.Long).Show();
+                Log.Debug("Main Activity", "Couldn't call " + geoLocation.ToString() + ", No Maps App");
+            }
 
-                var mapIntent = new Intent(Intent.ActionView, geoLocation);
-                if (mapIntent.ResolveActivity(Activity.PackageManager) != null)
+        }
+
+        //Alternative way of calling the activity but not a fully implicint intent
+        //			var geoLocation = Android.Net.Uri.Parse("http://maps.google.com/maps/place/"+zipCode);
+        //
+        //			var mapIntent = new Intent(Intent.ActionView,geoLocation);
+        //			mapIntent.SetClassName ("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+        //			try
+        //			{
+        //				StartActivity (mapIntent);
+        //
+        //			}
+        //			catch(ActivityNotFoundException ex)
+        //			{
+        //				try
+        //				{
+        //					Intent unrestrictedIntent = new Intent(Intent.ActionView, geoLocation);
+        //					StartActivity(unrestrictedIntent);
+        //				}
+        //				catch(ActivityNotFoundException innerEx)
+        //				{
+        //					Toast.MakeText(this, "Please install a maps application", ToastLength.Long).Show();
+        //				}
+        //			}
+    }
+
+    public override void OnSaveInstanceState (Bundle outState)
+    {
+        if (position != RecyclerView.NoPosition)
+        {
+            outState.PutInt(SELECTED_KEY, position);
+        }
+        base.OnSaveInstanceState(outState);
+    }
+
+    public Loader OnCreateLoader (int id, Bundle args)
+    {
+        string locationSetting = Utility.GetPreferredLocation(Activity);
+
+        string sortOrder = WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE + " ASC";
+        Android.Net.Uri weatherForLocationUri = WeatherContractOpen.WeatherEntryOpen.BuildWeatherLocationWithStartDate(
+                                                    locationSetting, DateTime.Now.Date.Ticks);
+
+        return new CursorLoader(Activity, weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder);
+    }
+
+    public void OnLoadFinished (Loader loader, Java.Lang.Object data)
+    {
+        var cursor = (ICursor)data;
+        forecastAdapter.SwapCursor(cursor);
+        if (position != RecyclerView.NoPosition)
+            recyclerView.SmoothScrollToPosition(position);
+
+        UpdateEmptyView();
+    }
+    public void OnLoaderReset (Loader loader)
+    {
+        forecastAdapter.SwapCursor(null);
+    }
+
+    public void setUseTodayLayout (bool useTodayLayout)
+    {
+        _useTodayLayout = useTodayLayout;
+        forecastAdapter?.SetUseTodayLayout(_useTodayLayout);
+    }
+
+    private void UpdateEmptyView ()
+    {
+        if (forecastAdapter.ItemCount == 0)
+        {
+
+            var tv = (TextView)View.FindViewById(Resource.Id.recyclerview_forecast_empty);
+
+            if (tv != null)
+            {
+                var locStatus = Utility.GetLocationStatus(Activity);
+
+                switch (locStatus)
                 {
-                    StartActivity(mapIntent);
+                    case (int)Helpers.LocationStatus.LocationStatusServerDown:
+                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_down);
+                        break;
+                    case (int)Helpers.LocationStatus.LocationStatusServerInvalid:
+                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_error);
+                        break;
+                    case (int)Helpers.LocationStatus.LocationStatusUnkown:
+                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_unknown);
+                        break;
+                    case (int)Helpers.LocationStatus.LocationStatusInvalid:
+                        tv.Text = Activity.GetString(Resource.String.empty_forecast_list_invalid_location);
+                        break;
+                    default:
+                        if (!Utility.CheckNetworkStatus(Activity))
+                        {
+                            tv.Text = "Weather information not available. No network connection.";
+                        }
+                        break;
                 }
-                else
-                {
-                    Toast.MakeText(Activity, "No Map App found", ToastLength.Long).Show();
-                    Log.Debug("Main Activity", "Couldn't call " + geoLocation.ToString() + ", No Maps App");
-                }
-
             }
 
-            //Alternative way of calling the activity but not a fully implicint intent
-            //			var geoLocation = Android.Net.Uri.Parse("http://maps.google.com/maps/place/"+zipCode);
-            //
-            //			var mapIntent = new Intent(Intent.ActionView,geoLocation);
-            //			mapIntent.SetClassName ("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-            //			try
-            //			{
-            //				StartActivity (mapIntent);
-            //
-            //			}
-            //			catch(ActivityNotFoundException ex)
-            //			{
-            //				try
-            //				{
-            //					Intent unrestrictedIntent = new Intent(Intent.ActionView, geoLocation);
-            //					StartActivity(unrestrictedIntent);
-            //				}
-            //				catch(ActivityNotFoundException innerEx)
-            //				{
-            //					Toast.MakeText(this, "Please install a maps application", ToastLength.Long).Show();
-            //				}
-            //			}
-        }
-
-        public override void OnSaveInstanceState (Bundle outState)
-        {
-            if (position != RecyclerView.NoPosition)
-            {
-                outState.PutInt(SELECTED_KEY, position);
-            }
-            base.OnSaveInstanceState(outState);
-        }
-
-        public Loader OnCreateLoader (int id, Bundle args)
-        {
-            string locationSetting = Utility.GetPreferredLocation(Activity);
-
-            string sortOrder = WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE + " ASC";
-            Android.Net.Uri weatherForLocationUri = WeatherContractOpen.WeatherEntryOpen.BuildWeatherLocationWithStartDate(
-                                                        locationSetting, DateTime.Now.Date.Ticks);
-
-            return new CursorLoader(Activity, weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder);
-        }
-
-        public void OnLoadFinished (Loader loader, Java.Lang.Object data)
-        {
-            var cursor = (ICursor)data;
-            forecastAdapter.SwapCursor(cursor);
-            if (position != RecyclerView.NoPosition)
-                recyclerView.SmoothScrollToPosition(position);
-
-            UpdateEmptyView();
-        }
-        public void OnLoaderReset (Loader loader)
-        {
-            forecastAdapter.SwapCursor(null);
-        }
-
-        public void setUseTodayLayout (bool useTodayLayout)
-        {
-            _useTodayLayout = useTodayLayout;
-            forecastAdapter?.SetUseTodayLayout(_useTodayLayout);
-        }
-
-        private void UpdateEmptyView ()
-        {
-            if (forecastAdapter.ItemCount == 0)
-            {
-
-                var tv = (TextView)View.FindViewById(Resource.Id.recyclerview_forecast_empty);
-
-                if (tv != null)
-                {
-                    var locStatus = Utility.GetLocationStatus(Activity);
-
-                    switch (locStatus)
-                    {
-                        case (int)Helpers.LocationStatus.LocationStatusServerDown:
-                            tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_down);
-                            break;
-                        case (int)Helpers.LocationStatus.LocationStatusServerInvalid:
-                            tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_error);
-                            break;
-                        case (int)Helpers.LocationStatus.LocationStatusUnkown:
-                            tv.Text = Activity.GetString(Resource.String.empty_forecast_list_server_unknown);
-                            break;
-                        case (int)Helpers.LocationStatus.LocationStatusInvalid:
-                            tv.Text = Activity.GetString(Resource.String.empty_forecast_list_invalid_location);
-                            break;
-                        default:
-                            if (!Utility.CheckNetworkStatus(Activity))
-                            {
-                                tv.Text = "Weather information not available. No network connection.";
-                            }
-                            break;
-                    }
-                }
-
-            }
-        }
-
-        public void OnSharedPreferenceChanged (ISharedPreferences sharedPreferences, string key)
-        {
-            if (key.Equals(GetString(Resource.String.pref_location_status_key)))
-            {
-                UpdateEmptyView();
-            }
-        }
-
-        public void OnClick (object sender, long date)
-        {
-            var vh = (ForecastAdapter.ForecastAdapterViewHolder) sender;
-            string locationSetting = Utility.GetPreferredLocation(Activity);
-            ((Callback)Activity)
-                    .OnItemSelected(WeatherContractOpen.WeatherEntryOpen.BuildWeatherLocationWithDate(
-                                    locationSetting, date)
-                    );
-            position = vh.AdapterPosition;
         }
     }
 
+    public void OnSharedPreferenceChanged (ISharedPreferences sharedPreferences, string key)
+    {
+        if (key.Equals(GetString(Resource.String.pref_location_status_key)))
+        {
+            UpdateEmptyView();
+        }
+    }
 
+    public void OnClick (object sender, long date)
+    {
+        var vh = (ForecastAdapter.ForecastAdapterViewHolder)sender;
+        string locationSetting = Utility.GetPreferredLocation(Activity);
+        ((Callback)Activity)
+                .OnItemSelected(WeatherContractOpen.WeatherEntryOpen.BuildWeatherLocationWithDate(
+                                locationSetting, date)
+                );
+        position = vh.AdapterPosition;
+    }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            recyclerView?.ClearOnScrollListeners();
+        }
+    }
+
+    public class OnScroll : RecyclerView.OnScrollListener
+    {
+        private readonly View parallaxView;
+
+        public OnScroll (View parallaxView)
+        {
+            this.parallaxView = parallaxView;
+        }
+        public override void OnScrolled (RecyclerView recyclerView, int dx, int dy)
+        {
+
+            base.OnScrolled(recyclerView, dx, dy);
+            int max = parallaxView.Height;
+            if (dy > 0)
+            {
+                parallaxView.TranslationY = Math.Max(-max, parallaxView.TranslationY - dy / 2);
+            }
+            else
+            {
+                parallaxView.TranslationY = Math.Min(0, parallaxView.TranslationY - dy / 2);
+            }
+        }
+    }
 
 }
 
