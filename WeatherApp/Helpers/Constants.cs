@@ -14,7 +14,7 @@ namespace WeatherApp.Helpers
 {
     public static class Constants
     {
-        public static Context context;
-        public static readonly string content_authority = context.GetString(Resource.String.content_authority);
+        public static Context Context;
+        public static readonly string ContentAuthority = Context.GetString(Resource.String.content_authority);
     }
 }

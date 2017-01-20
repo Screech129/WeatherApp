@@ -9,11 +9,11 @@ namespace WeatherApp
 {
     public class Utility
     {
-        public const string DATE_FORMAT = "yyyyMMdd";
+        public const string DateFormat = "yyyyMMdd";
 
         public static string GetPreferredLocation (Context context)
         {
-            ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(context);
+            var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
             var zip = prefs.GetString(context.GetString(Resource.String.pref_location_key),
                 context.GetString(Resource.String.pref_location_default));
             return zip;
@@ -21,7 +21,7 @@ namespace WeatherApp
 
         public static bool IsMetric(Context context)
         {
-            ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(context);
+            var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
             return prefs.GetString(context.GetString(Resource.String.pref_temp_key),
                 context.GetString(Resource.String.pref_temp_default))
                 .Equals(context.GetString(Resource.String.pref_units_metric));
@@ -43,7 +43,7 @@ namespace WeatherApp
 
         public static string FormatDate (long dateInMillis)
         {
-            DateTime date = new DateTime(dateInMillis);
+            var date = new DateTime(dateInMillis);
             return date.ToString("ddd, MMM dd");
         }
 
@@ -57,7 +57,7 @@ namespace WeatherApp
 
             var todayDate = DateTime.Now.Date;
 
-            long currentDay = DateTime.Today.Ticks;
+            var currentDay = DateTime.Today.Ticks;
             var  forecastDay = new DateTime(dateInMillis).Date;
             //var forecastDay = dateAsDay.AddTicks(dateInMillis).Date;
 
@@ -65,8 +65,8 @@ namespace WeatherApp
             // is "Today, June 24"
             if (todayDate == forecastDay)
             {
-                string today = context.GetString(Resource.String.today);
-                int formatId = Resource.String.format_full_friendly_date;
+                var today = context.GetString(Resource.String.today);
+                var formatId = Resource.String.format_full_friendly_date;
                 return string.Format(context.GetString(
                     formatId),
                     today,
@@ -97,7 +97,7 @@ namespace WeatherApp
 
             var todayDate = DateTime.Now.Date;
 
-            DateTime dateAsDay = new DateTime();
+            var dateAsDay = new DateTime();
             var forecastDay = dateAsDay.AddTicks(dateInMillis).Date;
 
             if (todayDate == forecastDay)
@@ -122,7 +122,7 @@ namespace WeatherApp
 
         public static string GetFormattedMonthDay (Context context, long dateInMillis)
         {
-            DateTime date = new DateTime(dateInMillis);
+            var date = new DateTime(dateInMillis);
             return date.ToString("MMMM dd");
         }
 
@@ -130,7 +130,7 @@ namespace WeatherApp
         {
 
             var day = GetDayName(context, dateInMillis);
-            int formatId = Resource.String.format_full_friendly_date;
+            var formatId = Resource.String.format_full_friendly_date;
             return string.Format(context.GetString(formatId),day,GetFormattedMonthDay(context, dateInMillis));
 
         }
@@ -151,7 +151,7 @@ namespace WeatherApp
             // From wind direction in degrees, determine compass direction as a String (e.g NW)
             // You know what's fun, writing really long if/else statements with tons of possible
             // conditions.  Seriously, try it!
-            string direction = "Unknown";
+            var direction = "Unknown";
             if (degrees >= 337.5 || degrees < 22.5)
             {
                 direction = "N";
@@ -189,8 +189,8 @@ namespace WeatherApp
 
         public static bool CheckNetworkStatus(Context context)
         {
-            ConnectivityManager connManager = (ConnectivityManager)context.GetSystemService(Context.ConnectivityService);
-            NetworkInfo networkInfo = connManager.ActiveNetworkInfo;
+            var connManager = (ConnectivityManager)context.GetSystemService(Context.ConnectivityService);
+            var networkInfo = connManager.ActiveNetworkInfo;
             return (networkInfo != null && networkInfo.IsConnected);
 
         }
@@ -213,8 +213,8 @@ namespace WeatherApp
 
         public static bool UsingLocalGraphics (Context context)
         {
-            ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(context);
-            String sunshineArtPack = context.GetString(Resource.String.pref_art_pack_sunshine);
+            var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
+            var sunshineArtPack = context.GetString(Resource.String.pref_art_pack_sunshine);
             return prefs.GetString(context.GetString(Resource.String.pref_art_pack_key),
                     sunshineArtPack).Equals(sunshineArtPack);
         }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="WeatherApp.WeatherApp" android:installLocation="auto">
+  <uses-sdk android:minSdkVersion="20" android:targetSdkVersion="24" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+  <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+  <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+  <permission android:name="com.example.android.sunshine.app.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+  <uses-permission android:name="com.example.android.sunshine.app.permission.C2D_MESSAGE" />
+  <application android:supportsRtl="true" android:label="WeatherApp" android:theme="@style/AppTheme" android:name="android.app.Application" android:allowBackup="true">
+    <receiver android:name="com.google.android.gms.gcm.GcmReceiver" android:exported="true" android:permission="com.google.android.c2dm.permission.SEND">
+      <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+        <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+        <category android:name="WeatherApp.WeatherApp" />
+      </intent-filter>
+    </receiver>
+    <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+    <provider android:authorities="WeatherApp" android:exported="true" android:syncable="true" android:name="md5f849fa507b1ac109002e74298da22331.WeatherProvider" />
+    <activity android:label="DetailActivity" android:theme="@style/AppTheme.Details" android:name="md5f849fa507b1ac109002e74298da22331.DetailActivity" />
+    <activity android:label="WeatherApp" android:theme="@style/AppTheme.Main" android:name="md5f849fa507b1ac109002e74298da22331.MainActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <activity android:label="SettingsActivity" android:theme="@style/SettingsTheme" android:name="md5f849fa507b1ac109002e74298da22331.SettingsActivity" />
+    <service android:name="md51a25d89683eef00cd111332b16d590bb.SunshineAuthenticatorService">
+      <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator" />
+      <intent-filter>
+        <action android:name="android.accounts.AccountAuthenticator" />
+      </intent-filter>
+    </service>
+    <service android:exported="true" android:name="md51a25d89683eef00cd111332b16d590bb.SunshineSyncService">
+      <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/syncadapter" />
+      <intent-filter>
+        <action android:name="android.content.SyncAdapter" />
+      </intent-filter>
+    </service>
+    <service android:exported="false" android:name="md524cf3890d91ebbfbdab11f9441fa1874.MyGcmListenerService">
+      <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+      </intent-filter>
+    </service>
+    <service android:exported="false" android:name="md524cf3890d91ebbfbdab11f9441fa1874.MyInstanceIDListenerService">
+      <intent-filter>
+        <action android:name="com.google.android.gms.iid.InstanceID" />
+      </intent-filter>
+    </service>
+    <service android:name="md524cf3890d91ebbfbdab11f9441fa1874.RegistrationIntentService" />
+    <provider android:authorities="WeatherApp.WeatherApp.google_measurement_service" android:exported="false" android:name="com.google.android.gms.measurement.AppMeasurementContentProvider" />
+    <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.measurement.AppMeasurementService" />
+    <receiver android:enabled="true" android:name="com.google.android.gms.measurement.AppMeasurementReceiver">
+      <intent-filter>
+        <action android:name="com.google.android.gms.measurement.UPLOAD" />
+      </intent-filter>
+    </receiver>
+    <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="2147483647" android:authorities="WeatherApp.WeatherApp.mono.MonoRuntimeProvider.__mono_init__" />
+  </application>
+</manifest>

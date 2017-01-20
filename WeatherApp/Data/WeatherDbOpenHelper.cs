@@ -8,57 +8,57 @@ namespace WeatherApp
 {
 	public class WeatherDbOpenHelper:SQLiteOpenHelper
 	{
-		public const int DATABASE_VERSION = 3;
+		public const int DatabaseVersion = 3;
 		public const string DATABASE_NAME = "weather.db";
 
 		public WeatherDbOpenHelper (Context context) :
-			base (context, DATABASE_NAME, null, DATABASE_VERSION)
+			base (context, DATABASE_NAME, null, DatabaseVersion)
 		{
 		}
 
 
 		public override void OnCreate (SQLiteDatabase db)
 		{
-			const string SQL_CREATE_WEATHER_TABLE = "CREATE TABLE " + WeatherContractOpen.WeatherEntryOpen.TABLE_NAME + " (" +
+			const string sqlCreateWeatherTable = "CREATE TABLE " + WeatherContractOpen.WeatherEntryOpen.TableName + " (" +
 				// Why AutoIncrement here, and not above?
 				// Unique keys will be auto-generated in either case.  But for weather
 				// forecasting, it's reasonable to assume the user will want information
 				// for a certain date and all dates *following*, so the forecast data
 				// should be sorted accordingly.
-			                                        WeatherContractOpen.WeatherEntryOpen._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+			                                        WeatherContractOpen.WeatherEntryOpen.Id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 
 				// the ID of the location entry associated with this weather data
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_LOC_KEY + " INTEGER NOT NULL, " +
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE + " INTEGER NOT NULL, " +
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_SHORT_DESC + " TEXT NOT NULL, " +
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_WEATHER_id + " INTEGER NOT NULL," +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnLocKey + " INTEGER NOT NULL, " +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnDate + " INTEGER NOT NULL, " +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnShortDesc + " TEXT NOT NULL, " +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnWeatherId + " INTEGER NOT NULL," +
 
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_MIN_TEMP + " REAL NOT NULL, " +
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_MAX_TEMP + " REAL NOT NULL, " +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnMinTemp + " REAL NOT NULL, " +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnMaxTemp + " REAL NOT NULL, " +
 
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_HUMIDITY + " REAL NOT NULL, " +
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_PRESSURE + " REAL NOT NULL, " +
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_WIND_SPEED + " REAL NOT NULL, " +
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_DEGREES + " REAL NOT NULL, " +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnHumidity + " REAL NOT NULL, " +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnPressure + " REAL NOT NULL, " +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnWindSpeed + " REAL NOT NULL, " +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnDegrees + " REAL NOT NULL, " +
 
 				// Set up the location column as a foreign key to location table.
-			                                        " FOREIGN KEY (" + WeatherContractOpen.WeatherEntryOpen.COLUMN_LOC_KEY + ") REFERENCES " +
-			                                        WeatherContractOpen.LocationEntryOpen.TABLE_NAME + " (" + WeatherContractOpen.LocationEntryOpen._ID + "), " +
+			                                        " FOREIGN KEY (" + WeatherContractOpen.WeatherEntryOpen.ColumnLocKey + ") REFERENCES " +
+			                                        WeatherContractOpen.LocationEntryOpen.TableName + " (" + WeatherContractOpen.LocationEntryOpen.Id + "), " +
 
 				// To assure the application have just one weather entry per day
 				// per location, it's created a UNIQUE constraint with REPLACE strategy
-			                                        " UNIQUE (" + WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE + ", " +
-			                                        WeatherContractOpen.WeatherEntryOpen.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
+			                                        " UNIQUE (" + WeatherContractOpen.WeatherEntryOpen.ColumnDate + ", " +
+			                                        WeatherContractOpen.WeatherEntryOpen.ColumnLocKey + ") ON CONFLICT REPLACE);";
 
-			db.ExecSQL (SQL_CREATE_WEATHER_TABLE);
+			db.ExecSQL (sqlCreateWeatherTable);
 
-			const string SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + WeatherContractOpen.LocationEntryOpen.TABLE_NAME + " (" +
-			                                         WeatherContractOpen.LocationEntryOpen._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-			                                         WeatherContractOpen.LocationEntryOpen.COLUMN_LOCATION_SETTING + " TEXT UNIQUE NOT NULL, " +
-			                                         WeatherContractOpen.LocationEntryOpen.COLUMN_CITY_NAME + " TEXT NOT NULL, " +
-			                                         WeatherContractOpen.LocationEntryOpen.COLUMN_COORD_LAT + " REAL NOT NULL, " +
-			                                         WeatherContractOpen.LocationEntryOpen.COLUMN_COORD_LONG + " REAL NOT NULL);";
-			db.ExecSQL (SQL_CREATE_LOCATION_TABLE);
+			const string sqlCreateLocationTable = "CREATE TABLE " + WeatherContractOpen.LocationEntryOpen.TableName + " (" +
+			                                         WeatherContractOpen.LocationEntryOpen.Id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+			                                         WeatherContractOpen.LocationEntryOpen.ColumnLocationSetting + " TEXT UNIQUE NOT NULL, " +
+			                                         WeatherContractOpen.LocationEntryOpen.ColumnCityName + " TEXT NOT NULL, " +
+			                                         WeatherContractOpen.LocationEntryOpen.ColumnCoordLat + " REAL NOT NULL, " +
+			                                         WeatherContractOpen.LocationEntryOpen.ColumnCoordLong + " REAL NOT NULL);";
+			db.ExecSQL (sqlCreateLocationTable);
 		}
 
 		public override void OnUpgrade (SQLiteDatabase db, int oldVersion, int newVersion)
@@ -69,8 +69,8 @@ namespace WeatherApp
 			// It does NOT depend on the version number for your application.
 			// If you want to update the schema without wiping data, commenting out the next 2 lines
 			// should be your top priority before modifying this method.
-			db.ExecSQL ("DROP TABLE IF EXISTS " + WeatherContractOpen.LocationEntryOpen.TABLE_NAME);
-			db.ExecSQL ("DROP TABLE IF EXISTS " + WeatherContractOpen.WeatherEntryOpen.TABLE_NAME);
+			db.ExecSQL ("DROP TABLE IF EXISTS " + WeatherContractOpen.LocationEntryOpen.TableName);
+			db.ExecSQL ("DROP TABLE IF EXISTS " + WeatherContractOpen.WeatherEntryOpen.TableName);
 			OnCreate (db);
 		}
 

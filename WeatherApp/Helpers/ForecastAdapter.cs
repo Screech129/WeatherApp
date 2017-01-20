@@ -2,69 +2,77 @@
 using Android.Widget;
 using Android.Content;
 using Android.Database;
+using Android.OS;
+using Android.Support.V4.View;
 using Android.Views;
 using Com.Bumptech.Glide;
 using Android.Util;
 using Android.Support.V7.Widget;
+using WeatherApp.Fragments;
+
 namespace WeatherApp
 {
     public class ForecastAdapter : RecyclerView.Adapter
 
     {
-        private const int VIEW_TYPE_TODAY = 0;
-        private const int VIEW_TYPE_FUTURE_DAY = 1;
-        private const int VIEW_TYPE_COUNT = 2;
-        private bool _useTodayLayout;
+        private const int ViewTypeToday = 0;
+        private const int ViewTypeFutureDay = 1;
+        private const int ViewTypeCount = 2;
+        private bool useTodayLayout;
         private Context context;
-        public static ICursor cursor;
+        public static ICursor Cursor;
         public event EventHandler<long> ItemClick; 
         public static View EmptyView;
+        private ItemChoiceManager itemChoiceManager;
         public class ForecastAdapterViewHolder : RecyclerView.ViewHolder
         {
-            public ImageView iconView;
-            public TextView dateView;
-            public TextView descriptionView;
-            public TextView highTempView;
-            public TextView lowTempView;
+            public ImageView IconView;
+            public TextView DateView;
+            public TextView DescriptionView;
+            public TextView HighTempView;
+            public TextView LowTempView;
             public ForecastAdapterViewHolder (View view, Action<ForecastAdapterViewHolder,int> listener) : base(view)
             {
 
-                iconView = (ImageView)view.FindViewById(Resource.Id.list_item_icon);
-                dateView = (TextView)view.FindViewById(Resource.Id.list_item_date_textview);
-                descriptionView = (TextView)view.FindViewById(Resource.Id.list_item_forecast_textview);
-                highTempView = (TextView)view.FindViewById(Resource.Id.list_item_high_textview);
-                lowTempView = (TextView)view.FindViewById(Resource.Id.list_item_low_textview);
+                IconView = (ImageView)view.FindViewById(Resource.Id.list_item_icon);
+                DateView = (TextView)view.FindViewById(Resource.Id.list_item_date_textview);
+                DescriptionView = (TextView)view.FindViewById(Resource.Id.list_item_forecast_textview);
+                HighTempView = (TextView)view.FindViewById(Resource.Id.list_item_high_textview);
+                LowTempView = (TextView)view.FindViewById(Resource.Id.list_item_low_textview);
                 view.Click += (sender, e) => listener(this,AdapterPosition);
+
             }
 
            
         }
 
        
-        public ForecastAdapter (Context context, View emptyView)
+        public ForecastAdapter (Context context, View emptyView, int choiceMode)
         {
             this.context = context;
             EmptyView = emptyView;
+            itemChoiceManager = new ItemChoiceManager(context,this);
+            itemChoiceManager.SetChoiceMode(choiceMode);
         }
         public override RecyclerView.ViewHolder OnCreateViewHolder (ViewGroup parent, int viewType)
         {
             if (parent.GetType() == typeof(RecyclerView))
             {
-                int layoutId = -1;
+                var layoutId = -1;
                 switch (viewType)
                 {
-                    case VIEW_TYPE_TODAY:
+                    case ViewTypeToday:
                         {
                             layoutId = Resource.Layout.list_item_forecast_today;
                             break;
                         }
-                    case VIEW_TYPE_FUTURE_DAY:
+                    case ViewTypeFutureDay:
                         {
                             layoutId = Resource.Layout.list_item_forecast;
                             break;
                         }
                 }
-                View view = LayoutInflater.From(parent.Context).Inflate(layoutId, parent, false);
+                var view = LayoutInflater.From(parent.Context).Inflate(layoutId, parent, false);
                 view.Focusable = true;
                 return new ForecastAdapterViewHolder(view, OnClick);
             }
@@ -77,13 +85,13 @@ namespace WeatherApp
         public override void OnBindViewHolder (RecyclerView.ViewHolder viewHolder, int position)
         {
             var holder = (ForecastAdapterViewHolder)viewHolder;
-            cursor.MoveToPosition(position);
-            int weatherId = cursor.GetInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
+            Cursor.MoveToPosition(position);
+            var weatherId = Cursor.GetInt(ForecastFragment.ColWeatherConditionId);
             int defaultImage;
 
             switch (GetItemViewType(position))
             {
-                case VIEW_TYPE_TODAY:
+                case ViewTypeToday:
                     defaultImage = Utility.GetArtResourceForWeatherCondition(weatherId);
                     break;
                 default:
@@ -93,82 +101,110 @@ namespace WeatherApp
 
             if (Utility.UsingLocalGraphics(context))
             {
-                holder.iconView.SetImageResource(defaultImage);
+                holder.IconView.SetImageResource(defaultImage);
             }
             else
             {
                 Glide.With(context)
                         .Load(Utility.GetArtUrlForWeatherCondition(context, weatherId))
                         .Error(defaultImage)                       
-                        .Into(holder.iconView);
+                        .Into(holder.IconView);
             }
 
+            ViewCompat.SetTransitionName(holder.IconView, "iconView" + position);
+
+
             // Read date from cursor
-            long dateInMillis = cursor.GetLong(ForecastFragment.COL_WEATHER_DATE);
+            var dateInMillis = Cursor.GetLong(ForecastFragment.ColWeatherDate);
 
             // Find TextView and set formatted date on it
-            holder.dateView.Text = Utility.GetFriendlyDayString(context, dateInMillis);
+            holder.DateView.Text = Utility.GetFriendlyDayString(context, dateInMillis);
 
             // Read weather forecast from cursor
-            String description = Utility.GetStringForWeatherCondition(context, weatherId);
+            var description = Utility.GetStringForWeatherCondition(context, weatherId);
 
             // Find TextView and set weather forecast on it
-            holder.descriptionView.Text=description;
-            holder.descriptionView.ContentDescription=context.GetString(Resource.String.a11y_forecast, description);
+            holder.DescriptionView.Text=description;
+            holder.DescriptionView.ContentDescription=context.GetString(Resource.String.a11y_forecast, description);
 
             // For accessibility, we don't want a content description for the icon field
             // because the information is repeated in the description view and the icon
             // is not individually selectable
 
             // Read high temperature from cursor
-            double high = cursor.GetDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
-            String highString = Utility.FormatTemperature(context, high,Utility.IsMetric(context));
-            holder.highTempView.Text = highString;
-            holder.highTempView.ContentDescription = context.GetString(Resource.String.a11y_high_temp, highString);
+            var high = Cursor.GetDouble(ForecastFragment.ColWeatherMaxTemp);
+            var highString = Utility.FormatTemperature(context, high,Utility.IsMetric(context));
+            holder.HighTempView.Text = highString;
+            holder.HighTempView.ContentDescription = context.GetString(Resource.String.a11y_high_temp, highString);
 
             // Read low temperature from cursor
-            double low = cursor.GetDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
-            String lowString = Utility.FormatTemperature(context, low, Utility.IsMetric(context));
-            holder.lowTempView.Text=lowString;
-            holder.lowTempView.ContentDescription = context.GetString(Resource.String.a11y_low_temp, lowString);
+            var low = Cursor.GetDouble(ForecastFragment.ColWeatherMinTemp);
+            var lowString = Utility.FormatTemperature(context, low, Utility.IsMetric(context));
+            holder.LowTempView.Text=lowString;
+            holder.LowTempView.ContentDescription = context.GetString(Resource.String.a11y_low_temp, lowString);
+
+            itemChoiceManager.OnBindViewHolder(viewHolder,position);
         }
 
-        
+        public void OnRestoreInstanceState (Bundle savedInstanceState)
+        {
+            itemChoiceManager.OnRestoreInstanceState(savedInstanceState);
+        }
+
+        public void OnSaveInstanceState (Bundle outState)
+        {
+            itemChoiceManager.OnSaveInstanceState(outState);
+        }
+
+        public int GetSelectedItemPosition()
+        {
+            return itemChoiceManager.GetSelectedItemPosition();
+        }
+
         public void SetUseTodayLayout (bool useTodayLayout)
         {
-            _useTodayLayout = useTodayLayout;
+            this.useTodayLayout = useTodayLayout;
         }
 
         public override int GetItemViewType (int position)
         {
-            return (position == 0 && _useTodayLayout) ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
+            return (position == 0 && useTodayLayout) ? ViewTypeToday : ViewTypeFutureDay;
         }
 
         public override int ItemCount
         {
             get
             {
-                if (null == cursor) return 0;
-                return cursor.Count;
+                if (null == Cursor) return 0;
+                return Cursor.Count;
             }
         }
         public void OnClick (ForecastAdapterViewHolder view, int position)
         {
-            int adapterPosition = position;
-            cursor.MoveToPosition(adapterPosition);
-            int dateColumnIndex = cursor.GetColumnIndex(WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE);
-            ItemClick?.Invoke(view,cursor.GetLong(dateColumnIndex));
+            var adapterPosition = position;
+            Cursor.MoveToPosition(adapterPosition);
+            var dateColumnIndex = Cursor.GetColumnIndex(WeatherContractOpen.WeatherEntryOpen.ColumnDate);
+            ItemClick?.Invoke(view,Cursor.GetLong(dateColumnIndex));
+            itemChoiceManager.OnClick(view);
         }
         public void SwapCursor (ICursor newCursor)
         {
-            cursor = newCursor;
+            Cursor = newCursor;
             NotifyDataSetChanged();
             EmptyView.Visibility = (ItemCount == 0 ? ViewStates.Visible : ViewStates.Gone);
         }
 
         public ICursor GetCursor ()
         {
-            return cursor;
+            return Cursor;
+        }
+
+        public void SelectView (RecyclerView.ViewHolder viewHolder)
+        {
+            if (viewHolder.GetType() == typeof(ForecastAdapterViewHolder) ) {
+                var vfh = (ForecastAdapterViewHolder)viewHolder;
+                OnClick(vfh,viewHolder.AdapterPosition);
+            }
         }
     }
 

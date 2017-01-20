@@ -14,18 +14,22 @@ using System.Text;
 using Android.Preferences;
 using WeatherApp.Sync;
 using Android.Gms.Common;
+using Android.Support.V4.App;
+using Android.Support.V4.Util;
 using WeatherApp.Services;
 using Android.Support.V7.App;
+using WeatherApp.Fragments;
+using Uri = Android.Net.Uri;
 
 namespace WeatherApp
 {
-    [Activity(Label = "WeatherApp", MainLauncher = true)]
-    public class MainActivity : AppCompatActivity, ForecastFragment.Callback
+    [Activity(Label = "WeatherApp", MainLauncher = true, Theme = "@style/AppTheme.Main")]
+    public class MainActivity : AppCompatActivity, ForecastFragment.ICallback
     {
         string location = "";
-        private const string DETAILFRAGMENT_TAG = "DFTAG";
-        private static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-        public const string SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+        private const string DetailfragmentTag = "DFTAG";
+        private static int _playServicesResolutionRequest = 9000;
+        public const string SentTokenToServer = "sentTokenToServer";
         bool twoPane;
 
         protected override void OnCreate (Bundle bundle)
@@ -45,7 +49,7 @@ namespace WeatherApp
                 {
                     SupportFragmentManager.BeginTransaction()
                         .Replace(Resource.Id.weather_detail_container,
-                        new DetailFragment(), DETAILFRAGMENT_TAG)
+                        new DetailFragment(), DetailfragmentTag)
                         .Commit();
 
                 }
@@ -56,18 +60,18 @@ namespace WeatherApp
                 SupportActionBar.Elevation = 0f;
             }
 
-            ForecastFragment forecastFragment = FragmentManager.FindFragmentById<ForecastFragment>(Resource.Id.fragment_forecast);
-            forecastFragment.setUseTodayLayout(!twoPane);
+            var forecastFragment = FragmentManager.FindFragmentById<ForecastFragment>(Resource.Id.fragment_forecast);
+            forecastFragment.SetUseTodayLayout(!twoPane);
 
             SunshineSyncAdapter.InitializeSyncAdapter(this);
 
             if (CheckPlayServices())
             {
-                ISharedPreferences sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(this);
-                bool sentToken = sharedPreferences.GetBoolean(SENT_TOKEN_TO_SERVER, false);
+                var sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(this);
+                var sentToken = sharedPreferences.GetBoolean(SentTokenToServer, false);
                 if (!sentToken)
                 {
-                    Intent intent = new Intent(this, typeof(RegistrationIntentService));
+                    var intent = new Intent(this, typeof(RegistrationIntentService));
                     StartService(intent);
                 }
             }
@@ -82,7 +86,7 @@ namespace WeatherApp
 
         public override bool OnOptionsItemSelected (IMenuItem item)
         {
-            int id = item.ItemId;
+            var id = item.ItemId;
             if (id == Resource.Id.action_settings)
             {
                 StartActivity(new Intent(this, typeof(SettingsActivity)));
@@ -96,13 +100,13 @@ namespace WeatherApp
             base.OnResume();
             if (Utility.GetPreferredLocation(this) != location)
             {
-                ForecastFragment ff = FragmentManager.FindFragmentById<ForecastFragment>(Resource.Id.fragment_forecast);
+                var ff = FragmentManager.FindFragmentById<ForecastFragment>(Resource.Id.fragment_forecast);
                 if (ff != null)
                 {
                     ff.OnLocationChanged();
                 }
 
-                DetailFragment df = (DetailFragment)SupportFragmentManager.FindFragmentByTag(DETAILFRAGMENT_TAG);
+                var df = (DetailFragment)SupportFragmentManager.FindFragmentByTag(DetailfragmentTag);
                 if (df != null)
                 {
                     df.OnLocationChanged(location);
@@ -112,40 +116,42 @@ namespace WeatherApp
 
         }
 
-        public void OnItemSelected (Android.Net.Uri dateUri)
+        public void OnItemSelected (Uri dateUri, ForecastAdapter.ForecastAdapterViewHolder vh)
         {
 
             if (twoPane)
             {
-                Bundle args = new Bundle();
-                args.PutParcelable(DetailFragment.DETAIL_URI, dateUri);
+                var args = new Bundle();
+                args.PutParcelable(DetailFragment.DetailUri, dateUri);
 
-                DetailFragment fragment = new DetailFragment();
+                var fragment = new DetailFragment();
                 fragment.Arguments = args;
 
                 SupportFragmentManager.BeginTransaction()
-                         .Replace(Resource.Id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
+                         .Replace(Resource.Id.weather_detail_container, fragment, DetailfragmentTag)
                          .Commit();
             }
             else
             {
-                Intent intent = new Intent(this, typeof(DetailActivity))
+                var intent = new Intent(this, typeof(DetailActivity))
                              .SetData(dateUri);
-                StartActivity(intent);
+
+                var options = ActivityOptionsCompat.MakeSceneTransitionAnimation(this, new Android.Support.V4.Util.Pair(vh.IconView,GetString(Resource.String.detail_icon_transition_name)));
+                ActivityCompat.StartActivity(this,intent,options.ToBundle());
             }
         }
 
 
         private bool CheckPlayServices ()
         {
-            GoogleApiAvailability apiAvailability = GoogleApiAvailability.Instance;
-            int resultCode = apiAvailability.IsGooglePlayServicesAvailable(this);
+            var apiAvailability = GoogleApiAvailability.Instance;
+            var resultCode = apiAvailability.IsGooglePlayServicesAvailable(this);
             if (resultCode != ConnectionResult.Success)
             {
                 if (apiAvailability.IsUserResolvableError(resultCode))
                 {
                     apiAvailability.GetErrorDialog(this, resultCode,
-                    PLAY_SERVICES_RESOLUTION_REQUEST).Show();
+                    _playServicesResolutionRequest).Show();
                 }
                 else
                 {
@@ -157,6 +163,7 @@ namespace WeatherApp
             return true;
         }
 
+   
     }
 }
 

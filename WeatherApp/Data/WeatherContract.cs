@@ -9,10 +9,10 @@ namespace WeatherApp
 {
 	public static class WeatherContract
 	{
-		public static long normalizeDate (long startDate)
+		public static long NormalizeDate (long startDate)
 		{
 			// normalize the start date to the beginning of the (UTC) day
-			DateTime time = new DateTime ();
+			var time = new DateTime ();
 			time = DateTime.Parse (startDate.ToString ());
 			return long.Parse (time.ToString ());
 		}
@@ -35,16 +35,16 @@ namespace WeatherApp
 		public int LocationId{ get; set; }
 
 		[NotNull]
-		public string location_setting{ get; set; }
+		public string LocationSetting{ get; set; }
 
 		[NotNull]
-		public double coord_lat{ get; set; }
+		public double CoordLat{ get; set; }
 
 		[NotNull]
-		public double coord_long{ get; set; }
+		public double CoordLong{ get; set; }
 
 		[NotNull]
-		public string city_name { get; set; }
+		public string CityName { get; set; }
 
 		[OneToMany]
 		public List<WeatherEntry> WeatherEntries{ get; set; }
@@ -69,38 +69,38 @@ namespace WeatherApp
 		[NotNull]
 		[Unique]
 		[Indexed (Name = "LocationDate", Order = 1)]
-		public int date{ get; set; }
+		public int Date{ get; set; }
 		// Weather id as returned by API, to identify the icon to be used
 		[NotNull]
-		public int weather_id{ get; set; }
+		public int WeatherId{ get; set; }
 
 		// Short description and long description of the weather, as provided by API.
 		// e.g "clear" vs "sky is clear".
 		[NotNull]
-		public  String short_desc { get; set; }
+		public  String ShortDesc { get; set; }
 
 		// Min and max temperatures for the day (stored as floats)
 		[NotNull]
-		public  decimal min_temp{ get; set; }
+		public  decimal MinTemp{ get; set; }
 
 		[NotNull]
-		public  decimal max_temp{ get; set; }
-
-		// Humidity is stored as a float representing percentage
-		[NotNull]
-		public  decimal humidity{ get; set; }
+		public  decimal MaxTemp{ get; set; }
 
 		// Humidity is stored as a float representing percentage
 		[NotNull]
-		public  decimal pressure{ get; set; }
+		public  decimal Humidity{ get; set; }
+
+		// Humidity is stored as a float representing percentage
+		[NotNull]
+		public  decimal Pressure{ get; set; }
 
 		// Windspeed is stored as a float representing windspeed  mph
 		[NotNull]
-		public  decimal wind{ get; set; }
+		public  decimal Wind{ get; set; }
 
 		// Degrees are meteorological degrees (e.g, 0 is north, 180 is south).  Stored as floats.
 		[NotNull]
-		public  decimal degrees{ get; set; }
+		public  decimal Degrees{ get; set; }
 
 		[ManyToOne]
 		public LocationEntry LocationEntry{ get; set; }

@@ -62,18 +62,18 @@ namespace WeatherApp
             else if (key.Equals(GetString(Resource.String.pref_temp_key)))
             {
                 // units have changed. update lists of weather entries accordingly
-                Activity.ContentResolver.NotifyChange(WeatherContractOpen.WeatherEntryOpen.CONTENT_URI, null);
+                Activity.ContentResolver.NotifyChange(WeatherContractOpen.WeatherEntryOpen.ContentUri, null);
             }
             else if (key.Equals(GetString(Resource.String.pref_location_status_key)))
             {
                 // our location status has changed.  Update the summary accordingly
-                Preference locationPreference = FindPreference(GetString(Resource.String.pref_location_key));
+                var locationPreference = FindPreference(GetString(Resource.String.pref_location_key));
                 BindPreferenceSummaryToValue(locationPreference);
             }
             else if (key.Equals(GetString(Resource.String.pref_art_pack_key)))
             {
                 // art pack have changed. update lists of weather entries accordingly
-                Activity.ContentResolver.NotifyChange(WeatherContractOpen.WeatherEntryOpen.CONTENT_URI, null);
+                Activity.ContentResolver.NotifyChange(WeatherContractOpen.WeatherEntryOpen.ContentUri, null);
             }
         }
 
@@ -89,7 +89,7 @@ namespace WeatherApp
             if (pref.GetType() == typeof(ListPreference))
             {
                 var listPref = (ListPreference)pref;
-                int prefIndex = listPref.FindIndexOfValue(stringValue);
+                var prefIndex = listPref.FindIndexOfValue(stringValue);
                 if (prefIndex > 0)
                     pref.Summary = listPref.Value;
             }

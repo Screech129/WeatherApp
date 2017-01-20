@@ -15,9 +15,9 @@ namespace WeatherApp.Services
 {
     [Service(Exported = false)]
     [IntentFilter(new string[] {"com.google.android.gms.iid.InstanceID"})]
-    public class MyInstanceIDListenerService : InstanceIDListenerService
+    public class MyInstanceIdListenerService : InstanceIDListenerService
     {
-        private const string TAG = "MyInstanceIDLS";
+        private const string Tag = "MyInstanceIDLS";
 
    /**
     * Called if InstanceID token is updated. This may occur if the security of
@@ -28,7 +28,7 @@ namespace WeatherApp.Services
     public override void OnTokenRefresh ()
         {
             // Fetch updated Instance ID token.
-            Intent intent = new Intent(this, typeof(RegistrationIntentService));
+            var intent = new Intent(this, typeof(RegistrationIntentService));
             StartService(intent);
         }
 

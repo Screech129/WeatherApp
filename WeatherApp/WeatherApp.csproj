@@ -78,6 +78,10 @@
       <HintPath>..\packages\Xamarin.Android.Support.Core.Utils.24.2.1\lib\MonoAndroid70\Xamarin.Android.Support.Core.Utils.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin.Android.Support.Design, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.Android.Support.Design.24.2.1\lib\MonoAndroid70\Xamarin.Android.Support.Design.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.Android.Support.Fragment, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Android.Support.Fragment.24.2.1\lib\MonoAndroid70\Xamarin.Android.Support.Fragment.dll</HintPath>
       <Private>True</Private>
@@ -92,6 +96,10 @@
     </Reference>
     <Reference Include="Xamarin.Android.Support.v7.AppCompat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Android.Support.v7.AppCompat.24.2.1\lib\MonoAndroid70\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v7.CardView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.Android.Support.v7.CardView.24.2.1\lib\MonoAndroid70\Xamarin.Android.Support.v7.CardView.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Android.Support.v7.GridLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -126,6 +134,7 @@
   <ItemGroup>
     <Compile Include="CustomViews\LocationEditTextPreference.cs" />
     <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\ItemChoiceManager.cs" />
     <Compile Include="Helpers\LocationStatus.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -174,6 +183,7 @@
     <AndroidResource Include="Resources\layout-land\fragment_main.axml" />
     <AndroidResource Include="Resources\layout\list_item_base_forecast_today.axml" />
     <AndroidResource Include="Resources\layout-land\list_item_forecast_today.axml" />
+    <AndroidResource Include="Resources\layout\fragment_detail_twopane.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />
@@ -343,6 +353,14 @@
     <AndroidResource Include="Resources\values\refs.xml" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\transition-land-v21\details_window_enter_transition.xml" />
+    <AndroidResource Include="Resources\transition-land-v21\details_window_return_transition.xml" />
+    <AndroidResource Include="Resources\transition-v21\details_window_enter_transition.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\transition-v21\details_window_return_transition.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <Content Include="Resources\values-sw600dp-land\refs.xml" />
     <AndroidResource Include="Resources\values-sw720dp\dimens.xml">
       <SubType>Designer</SubType>

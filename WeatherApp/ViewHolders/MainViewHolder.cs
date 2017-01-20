@@ -6,11 +6,11 @@ namespace WeatherApp
 {
 	public  class MainViewHolder: Java.Lang.Object
 	{
-		public ImageView iconView;
-		public TextView dateView;
-		public TextView descriptionView;
-		public TextView highTempView;
-		public TextView lowTempView;
+		public ImageView IconView;
+		public TextView DateView;
+		public TextView DescriptionView;
+		public TextView HighTempView;
+		public TextView LowTempView;
 
 		public MainViewHolder ()
 		{

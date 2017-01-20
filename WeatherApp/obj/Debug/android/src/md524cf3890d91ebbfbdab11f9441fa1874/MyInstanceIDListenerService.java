@@ -1,7 +1,7 @@
 package md524cf3890d91ebbfbdab11f9441fa1874;
 
 
-public class MyInstanceIDListenerService
+public class MyInstanceIdListenerService
 	extends com.google.android.gms.iid.InstanceIDListenerService
 	implements
 		mono.android.IGCUserPeer
@@ -12,15 +12,15 @@ public class MyInstanceIDListenerService
 		__md_methods = 
 			"n_onTokenRefresh:()V:GetOnTokenRefreshHandler\n" +
 			"";
-		mono.android.Runtime.register ("WeatherApp.Services.MyInstanceIDListenerService, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", MyInstanceIDListenerService.class, __md_methods);
+		mono.android.Runtime.register ("WeatherApp.Services.MyInstanceIdListenerService, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", MyInstanceIdListenerService.class, __md_methods);
 	}
 
 
-	public MyInstanceIDListenerService () throws java.lang.Throwable
+	public MyInstanceIdListenerService () throws java.lang.Throwable
 	{
 		super ();
-		if (getClass () == MyInstanceIDListenerService.class)
-			mono.android.TypeManager.Activate ("WeatherApp.Services.MyInstanceIDListenerService, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "", this, new java.lang.Object[] {  });
+		if (getClass () == MyInstanceIdListenerService.class)
+			mono.android.TypeManager.Activate ("WeatherApp.Services.MyInstanceIdListenerService, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "", this, new java.lang.Object[] {  });
 	}
 
 

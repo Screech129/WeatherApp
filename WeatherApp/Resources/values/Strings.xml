@@ -6,6 +6,7 @@
 	<string name="action_settings" translatable="false">Settings</string>
 	<string name="action_viewLocation" translatable="false">View Location</string>
 	<string name="action_share" translatable="false">Share</string>
+  <string name="detail_icon_transition_name" translatable="false">DetailTransition</string>
   <string name="empty_forecast_list" translatable="false">No Weather Information Available</string>
   <string name="empty_forecast_list_server_down" translatable="false">No Weather Information Available.The server is not returning data.</string>
   <string name="empty_forecast_list_server_error" translatable="false">No Weather Information Available.The server is not returning valid data. Please check for an updated version of Sunshine.</string>

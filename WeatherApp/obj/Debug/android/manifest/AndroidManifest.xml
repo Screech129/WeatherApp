@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="WeatherApp.WeatherApp" android:installLocation="auto">
-  <uses-sdk android:minSdkVersion="20" android:targetSdkVersion="24" />
+  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="24" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
   <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
@@ -21,8 +21,8 @@
     </receiver>
     <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
     <provider android:authorities="WeatherApp" android:exported="true" android:syncable="true" android:name="md5f849fa507b1ac109002e74298da22331.WeatherProvider" />
-    <activity android:label="DetailActivity" android:name="md5f849fa507b1ac109002e74298da22331.DetailActivity" />
-    <activity android:label="WeatherApp" android:name="md5f849fa507b1ac109002e74298da22331.MainActivity">
+    <activity android:label="DetailActivity" android:theme="@style/AppTheme.Details" android:name="md5f849fa507b1ac109002e74298da22331.DetailActivity" />
+    <activity android:label="WeatherApp" android:theme="@style/AppTheme.Main" android:name="md5f849fa507b1ac109002e74298da22331.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -46,7 +46,7 @@
         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
       </intent-filter>
     </service>
-    <service android:exported="false" android:name="md524cf3890d91ebbfbdab11f9441fa1874.MyInstanceIDListenerService">
+    <service android:exported="false" android:name="md524cf3890d91ebbfbdab11f9441fa1874.MyInstanceIdListenerService">
       <intent-filter>
         <action android:name="com.google.android.gms.iid.InstanceID" />
       </intent-filter>

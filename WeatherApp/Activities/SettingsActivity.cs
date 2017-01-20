@@ -29,7 +29,7 @@ namespace WeatherApp
 			//ActionBar.Title = "Settings";
 			// For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
 			// updated when the preference changes.
-			FragmentTransaction fragTx = this.FragmentManager.BeginTransaction ();
+			var fragTx = this.FragmentManager.BeginTransaction ();
 
 			fragTx.Replace (Resource.Id.weather_detail_container, new SettingsFragment ())
 				.Commit ();
@@ -44,7 +44,7 @@ namespace WeatherApp
 
 		public override bool OnOptionsItemSelected (IMenuItem item)
 		{
-			int id = item.ItemId;
+			var id = item.ItemId;
 			if (id == Android.Resource.Id.Home) {
 				Finish ();
 			}

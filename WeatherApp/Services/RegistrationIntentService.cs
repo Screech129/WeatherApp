@@ -20,15 +20,15 @@ namespace WeatherApp.Services
     [Service]
     public class RegistrationIntentService : IntentService
     {
-        private const string TAG = "RegIntentService";
+        private const string Tag = "RegIntentService";
 
-        public RegistrationIntentService () : base(TAG)
+        public RegistrationIntentService () : base(Tag)
         {
         }
 
         protected override void OnHandleIntent (Intent intent)
         {
-            ISharedPreferences sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(this);
+            var sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(this);
 
             try
             {
@@ -37,24 +37,24 @@ namespace WeatherApp.Services
 
                 // Initially this call goes out to the network to retrieve the token, subsequent calls
                 // are local.
-                InstanceID instanceID = InstanceID.GetInstance(this);
-                var token = instanceID.GetToken(GetString(Resource.String.gcm_defaultSenderId),
+                var instanceId = InstanceID.GetInstance(this);
+                var token = instanceId.GetToken(GetString(Resource.String.gcm_defaultSenderId),
                 GoogleCloudMessaging.InstanceIdScope, null);
                 SendRegistrationToServer(token);
 
                 // You should store a boolean that indicates whether the generated token has been
                 // sent to your server. If the boolean is false, send the token to your server,
                 // otherwise your server should have already received the token.
-                sharedPreferences.Edit().PutBoolean(MainActivity.SENT_TOKEN_TO_SERVER, true).Apply();
+                sharedPreferences.Edit().PutBoolean(MainActivity.SentTokenToServer, true).Apply();
 
             }
             catch (Exception e)
             {
-                Log.Debug(TAG, "Failed to complete token refresh", e);
+                Log.Debug(Tag, "Failed to complete token refresh", e);
 
                 // If an exception happens while fetching the new token or updating our registration data
                 // on a third-party server, this ensures that we'll attempt the update at a later time.
-                sharedPreferences.Edit().PutBoolean(MainActivity.SENT_TOKEN_TO_SERVER, false).Apply();
+                sharedPreferences.Edit().PutBoolean(MainActivity.SentTokenToServer, false).Apply();
             }
         }
 
@@ -67,7 +67,7 @@ namespace WeatherApp.Services
          */
         private void SendRegistrationToServer (String token)
         {
-            Log.Info(TAG, "GCM Registration Token: " + token);
+            Log.Info(Tag, "GCM Registration Token: " + token);
         }
     }
 }

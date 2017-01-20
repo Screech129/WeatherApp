@@ -17,66 +17,66 @@ namespace WeatherApp
 
 
         // The URI Matcher used by this content provider.
-        private UriMatcher sUriMatcher = buildUriMatcher();
+        private UriMatcher sUriMatcher = BuildUriMatcher();
         private WeatherDbOpenHelper openHelper;
-        private static Context context = Android.App.Application.Context;
-        public const int WEATHER = 100;
-        public const int WEATHER_WITH_LOCATION = 101;
-        public const int WEATHER_WITH_LOCATION_AND_DATE = 102;
-        public const int LOCATION = 300;
-        public const int content_authority_id = Resource.String.content_authority;
+        private static Context _context = Android.App.Application.Context;
+        public const int Weather = 100;
+        public const int WeatherWithLocation = 101;
+        public const int WeatherWithLocationAndDate = 102;
+        public const int Location = 300;
+        public const int ContentAuthorityId = Resource.String.content_authority;
         //public const string content_authority = context.GetString(Resource.String.content_authority);
-        static string AUTHORITY = context.GetString(Resource.String.content_authority);
+        static string _authority = _context.GetString(Resource.String.content_authority);
         SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder()
         {
             //This is an inner join which looks like
             //weather INNER JOIN location ON weather.location_id = location._id
             Tables = (
-                WeatherContractOpen.WeatherEntryOpen.TABLE_NAME + " INNER JOIN " +
-                WeatherContractOpen.LocationEntryOpen.TABLE_NAME +
-                " ON " + WeatherContractOpen.WeatherEntryOpen.TABLE_NAME +
-                "." + WeatherContractOpen.WeatherEntryOpen.COLUMN_LOC_KEY +
-                " = " + WeatherContractOpen.LocationEntryOpen.TABLE_NAME +
-                "." + WeatherContractOpen.LocationEntryOpen._ID)
+                WeatherContractOpen.WeatherEntryOpen.TableName + " INNER JOIN " +
+                WeatherContractOpen.LocationEntryOpen.TableName +
+                " ON " + WeatherContractOpen.WeatherEntryOpen.TableName +
+                "." + WeatherContractOpen.WeatherEntryOpen.ColumnLocKey +
+                " = " + WeatherContractOpen.LocationEntryOpen.TableName +
+                "." + WeatherContractOpen.LocationEntryOpen.Id)
         };
 
 
 
 
         //location.location_setting = ?
-        private const string sLocationSettingSelection =
-            WeatherContractOpen.LocationEntryOpen.TABLE_NAME +
-            "." + WeatherContractOpen.LocationEntryOpen.COLUMN_LOCATION_SETTING + " = ? ";
+        private const string SLocationSettingSelection =
+            WeatherContractOpen.LocationEntryOpen.TableName +
+            "." + WeatherContractOpen.LocationEntryOpen.ColumnLocationSetting + " = ? ";
 
         //location.location_setting = ? AND date >= ?
-        private const string sLocationSettingWithStartDateSelection =
-            WeatherContractOpen.LocationEntryOpen.TABLE_NAME +
-            "." + WeatherContractOpen.LocationEntryOpen.COLUMN_LOCATION_SETTING + " = ? AND " +
-            WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE + " >= ? ";
+        private const string SLocationSettingWithStartDateSelection =
+            WeatherContractOpen.LocationEntryOpen.TableName +
+            "." + WeatherContractOpen.LocationEntryOpen.ColumnLocationSetting + " = ? AND " +
+            WeatherContractOpen.WeatherEntryOpen.ColumnDate + " >= ? ";
 
         //location.location_setting = ? AND date = ?
-        private const string sLocationSettingAndDaySelection =
-            WeatherContractOpen.LocationEntryOpen.TABLE_NAME +
-            "." + WeatherContractOpen.LocationEntryOpen.COLUMN_LOCATION_SETTING + " = ? AND " +
-            WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE + " = ? ";
+        private const string SLocationSettingAndDaySelection =
+            WeatherContractOpen.LocationEntryOpen.TableName +
+            "." + WeatherContractOpen.LocationEntryOpen.ColumnLocationSetting + " = ? AND " +
+            WeatherContractOpen.WeatherEntryOpen.ColumnDate + " = ? ";
 
-        private ICursor getWeatherByLocationSetting (Android.Net.Uri uri, string[] projection, string sortOrder)
+        private ICursor GetWeatherByLocationSetting (Android.Net.Uri uri, string[] projection, string sortOrder)
         {
-            string locationSetting = WeatherContractOpen.WeatherEntryOpen.GetLocationSettingFromUri(uri);
-            long startDate = WeatherContractOpen.WeatherEntryOpen.GetStartDateFromUri(uri);
+            var locationSetting = WeatherContractOpen.WeatherEntryOpen.GetLocationSettingFromUri(uri);
+            var startDate = WeatherContractOpen.WeatherEntryOpen.GetStartDateFromUri(uri);
 
             string[] selectionArgs;
             string selection;
 
             if (startDate == 0)
             {
-                selection = sLocationSettingSelection;
+                selection = SLocationSettingSelection;
                 selectionArgs = new string[] { locationSetting };
             }
             else
             {
                 selectionArgs = new string[] { locationSetting, Long.ToString(startDate) };
-                selection = sLocationSettingWithStartDateSelection;
+                selection = SLocationSettingWithStartDateSelection;
             }
 
             return sWeatherByLocationSettingQueryBuilder.Query(openHelper.ReadableDatabase,
@@ -89,15 +89,15 @@ namespace WeatherApp
             );
         }
 
-        private ICursor getWeatherByLocationSettingAndDate (
+        private ICursor GetWeatherByLocationSettingAndDate (
             Android.Net.Uri uri, string[] projection, string sortOrder)
         {
-            string locationSetting = WeatherContractOpen.WeatherEntryOpen.GetLocationSettingFromUri(uri);
-            long date = WeatherContractOpen.WeatherEntryOpen.GetDateFromUri(uri);
+            var locationSetting = WeatherContractOpen.WeatherEntryOpen.GetLocationSettingFromUri(uri);
+            var date = WeatherContractOpen.WeatherEntryOpen.GetDateFromUri(uri);
 
             return sWeatherByLocationSettingQueryBuilder.Query(openHelper.ReadableDatabase,
                 projection,
-                sLocationSettingAndDaySelection,
+                SLocationSettingAndDaySelection,
                 new string[] { locationSetting, Long.ToString(date) },
                 null,
                 null,
@@ -111,18 +111,18 @@ namespace WeatherApp
         and LOCATION integer constants defined above.  You can test this by uncommenting the
         testUriMatcher test within TestUriMatcher.
      */
-        public static UriMatcher buildUriMatcher ()
+        public static UriMatcher BuildUriMatcher ()
         {
             // 1) The code passed into the constructor represents the code to return for the root
             // URI.  It's common to use NO_MATCH as the code for this case. Add the constructor below.
             var matcher = new UriMatcher(UriMatcher.NoMatch);
             // 2) Use the addURI function to match each of the types.  Use the constants from
             // WeatherContract to help define the types to the UriMatcher.
-            matcher.AddURI(AUTHORITY, WeatherContractOpen.PATH_WEATHER, WEATHER);
-            matcher.AddURI(AUTHORITY, WeatherContractOpen.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
-            matcher.AddURI(AUTHORITY, WeatherContractOpen.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
+            matcher.AddURI(_authority, WeatherContractOpen.PathWeather, Weather);
+            matcher.AddURI(_authority, WeatherContractOpen.PathWeather + "/*", WeatherWithLocation);
+            matcher.AddURI(_authority, WeatherContractOpen.PathWeather + "/*/#", WeatherWithLocationAndDate);
 
-            matcher.AddURI(AUTHORITY, WeatherContractOpen.PATH_LOCATION, LOCATION);
+            matcher.AddURI(_authority, WeatherContractOpen.PathLocation, Location);
 
             // 3) Return the new matcher!
             return matcher;
@@ -135,7 +135,7 @@ namespace WeatherApp
 
         public override bool OnCreate ()
         {
-            openHelper = new WeatherDbOpenHelper(context);
+            openHelper = new WeatherDbOpenHelper(_context);
             return true;
         }
 
@@ -149,21 +149,21 @@ namespace WeatherApp
         {
 
             // Use the Uri Matcher to determine what kind of URI this is.
-            int match = sUriMatcher.Match(uri);
+            var match = sUriMatcher.Match(uri);
 
             switch (match)
             {
                 // Student: Uncomment and fill out these two cases
                 //            case WEATHER_WITH_LOCATION_AND_DATE:
                 //            case WEATHER_WITH_LOCATION:
-                case WEATHER:
-                    return WeatherContractOpen.WeatherEntryOpen.CONTENT_TYPE;
-                case LOCATION:
-                    return WeatherContractOpen.LocationEntryOpen.CONTENT_TYPE;
-                case WEATHER_WITH_LOCATION:
-                    return WeatherContractOpen.WeatherEntryOpen.CONTENT_TYPE;
-                case WEATHER_WITH_LOCATION_AND_DATE:
-                    return WeatherContractOpen.WeatherEntryOpen.CONTENT_ITEM_TYPE;
+                case Weather:
+                    return WeatherContractOpen.WeatherEntryOpen.ContentType;
+                case Location:
+                    return WeatherContractOpen.LocationEntryOpen.ContentType;
+                case WeatherWithLocation:
+                    return WeatherContractOpen.WeatherEntryOpen.ContentType;
+                case WeatherWithLocationAndDate:
+                    return WeatherContractOpen.WeatherEntryOpen.ContentItemType;
                 default:
                     throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
@@ -178,33 +178,33 @@ namespace WeatherApp
             switch (sUriMatcher.Match(uri))
             {
                 // "weather/*/*"
-                case WEATHER_WITH_LOCATION_AND_DATE:
+                case WeatherWithLocationAndDate:
                     {
-                        retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
+                        retCursor = GetWeatherByLocationSettingAndDate(uri, projection, sortOrder);
                         break;
                     }
                 // "weather/*"
-                case WEATHER_WITH_LOCATION:
+                case WeatherWithLocation:
                     {
-                        retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
+                        retCursor = GetWeatherByLocationSetting(uri, projection, sortOrder);
                         break;
                     }
                 // "weather"
-                case WEATHER:
+                case Weather:
                     {
-                        retCursor = openHelper.ReadableDatabase.Query(WeatherContractOpen.WeatherEntryOpen.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                        retCursor = openHelper.ReadableDatabase.Query(WeatherContractOpen.WeatherEntryOpen.TableName, projection, selection, selectionArgs, null, null, sortOrder);
                         break;
                     }
                 // "location"
-                case LOCATION:
+                case Location:
                     {
-                        retCursor = openHelper.ReadableDatabase.Query(WeatherContractOpen.LocationEntryOpen.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                        retCursor = openHelper.ReadableDatabase.Query(WeatherContractOpen.LocationEntryOpen.TableName, projection, selection, selectionArgs, null, null, sortOrder);
                         break;
                     }
 
 
             }
-            retCursor.SetNotificationUri(context.ContentResolver, uri);
+            retCursor.SetNotificationUri(_context.ContentResolver, uri);
             return retCursor;
         }
 
@@ -214,28 +214,28 @@ namespace WeatherApp
 
         public override Android.Net.Uri Insert (Android.Net.Uri uri, ContentValues values)
         {
-            SQLiteDatabase db = openHelper.WritableDatabase;
-            int match = sUriMatcher.Match(uri);
+            var db = openHelper.WritableDatabase;
+            var match = sUriMatcher.Match(uri);
             Android.Net.Uri returnUri;
 
             switch (match)
             {
-                case WEATHER:
+                case Weather:
                     {
-                        normalizeDate(values);
-                        long _id = db.Insert(WeatherContractOpen.WeatherEntryOpen.TABLE_NAME, null, values);
-                        if (_id > 0)
-                            returnUri = WeatherContractOpen.WeatherEntryOpen.buildWeatherUri(_id);
+                        NormalizeDate(values);
+                        var id = db.Insert(WeatherContractOpen.WeatherEntryOpen.TableName, null, values);
+                        if (id > 0)
+                            returnUri = WeatherContractOpen.WeatherEntryOpen.BuildWeatherUri(id);
                         else
                             throw new SQLException("Failed to insert row into " + uri);
                         break;
                     }
-                case LOCATION:
+                case Location:
                     {
-                        normalizeDate(values);
-                        long _id = db.Insert(WeatherContractOpen.LocationEntryOpen.TABLE_NAME, null, values);
-                        if (_id > 0)
-                            returnUri = WeatherContractOpen.LocationEntryOpen.BuildLocationUri(_id);
+                        NormalizeDate(values);
+                        var id = db.Insert(WeatherContractOpen.LocationEntryOpen.TableName, null, values);
+                        if (id > 0)
+                            returnUri = WeatherContractOpen.LocationEntryOpen.BuildLocationUri(id);
                         else
                             throw new SQLException("Failed to insert location " + uri);
                         break;
@@ -243,7 +243,7 @@ namespace WeatherApp
                 default:
                     throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
-            context.ContentResolver.NotifyChange(uri, null);
+            _context.ContentResolver.NotifyChange(uri, null);
             return returnUri;
         }
 
@@ -260,11 +260,11 @@ namespace WeatherApp
                 selection = "1";
             switch (match)
             {
-                case WEATHER:
-                    deletedRows = db.Delete(WeatherContractOpen.WeatherEntryOpen.TABLE_NAME, selection, selectionArgs);
+                case Weather:
+                    deletedRows = db.Delete(WeatherContractOpen.WeatherEntryOpen.TableName, selection, selectionArgs);
                     break;
-                case LOCATION:
-                    deletedRows = db.Delete(WeatherContractOpen.LocationEntryOpen.TABLE_NAME, selection, selectionArgs);
+                case Location:
+                    deletedRows = db.Delete(WeatherContractOpen.LocationEntryOpen.TableName, selection, selectionArgs);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -276,17 +276,17 @@ namespace WeatherApp
 
             // Student: return the actual rows deleted
             if (deletedRows > 0 || selection == null)
-                context.ContentResolver.NotifyChange(uri, null);
+                _context.ContentResolver.NotifyChange(uri, null);
             return deletedRows;
         }
 
-        private void normalizeDate (ContentValues values)
+        private void NormalizeDate (ContentValues values)
         {
             // normalize the date value
-            if (values.ContainsKey(WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE))
+            if (values.ContainsKey(WeatherContractOpen.WeatherEntryOpen.ColumnDate))
             {
-                long dateValue = values.GetAsLong(WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE);
-                values.Put(WeatherContractOpen.WeatherEntryOpen.COLUMN_DATE, WeatherContractOpen.normalizeDate(dateValue));
+                var dateValue = values.GetAsLong(WeatherContractOpen.WeatherEntryOpen.ColumnDate);
+                values.Put(WeatherContractOpen.WeatherEntryOpen.ColumnDate, WeatherContractOpen.NormalizeDate(dateValue));
             }
         }
 
@@ -301,38 +301,38 @@ namespace WeatherApp
             // by the update.
             switch (match)
             {
-                case WEATHER:
-                    updatedRows = db.Update(WeatherContractOpen.WeatherEntryOpen.TABLE_NAME, values, selection, selectionArgs);
+                case Weather:
+                    updatedRows = db.Update(WeatherContractOpen.WeatherEntryOpen.TableName, values, selection, selectionArgs);
                     break;
-                case LOCATION:
-                    updatedRows = db.Update(WeatherContractOpen.LocationEntryOpen.TABLE_NAME, values, selection, selectionArgs);
+                case Location:
+                    updatedRows = db.Update(WeatherContractOpen.LocationEntryOpen.TableName, values, selection, selectionArgs);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
 
             if (updatedRows > 0 || selection == null)
-                context.ContentResolver.NotifyChange(uri, null);
+                _context.ContentResolver.NotifyChange(uri, null);
             return updatedRows;
         }
 
 
         public override int BulkInsert (Android.Net.Uri uri, ContentValues[] values)
         {
-            SQLiteDatabase db = openHelper.WritableDatabase;
-            int match = sUriMatcher.Match(uri);
+            var db = openHelper.WritableDatabase;
+            var match = sUriMatcher.Match(uri);
             switch (match)
             {
-                case WEATHER:
+                case Weather:
                     db.BeginTransaction();
-                    int returnCount = 0;
+                    var returnCount = 0;
                     try
                     {
-                        foreach (ContentValues value in values)
+                        foreach (var value in values)
                         {
-                            normalizeDate(value);
-                            long _id = db.Insert(WeatherContractOpen.WeatherEntryOpen.TABLE_NAME, null, value);
-                            if (_id != -1)
+                            NormalizeDate(value);
+                            var id = db.Insert(WeatherContractOpen.WeatherEntryOpen.TableName, null, value);
+                            if (id != -1)
                             {
                                 returnCount++;
                             }
@@ -343,7 +343,7 @@ namespace WeatherApp
                     {
                         db.EndTransaction();
                     }
-                    context.ContentResolver.NotifyChange(uri, null);
+                    _context.ContentResolver.NotifyChange(uri, null);
                     return returnCount;
                 default:
                     return base.BulkInsert(uri, values);

@@ -16,7 +16,7 @@ using Android.Support.V7.App;
 
 namespace WeatherApp
 {
-	[Activity (Label = "DetailActivity")]			
+	[Activity (Label = "DetailActivity",Theme = "@style/AppTheme.Details")]			
 	public class DetailActivity : AppCompatActivity
 	{
 		
@@ -27,14 +27,16 @@ namespace WeatherApp
 			SetContentView (Resource.Layout.activity_detail);
            
             if (savedInstanceState == null) {
-				Bundle arguments = new Bundle ();
-				arguments.PutParcelable (DetailFragment.DETAIL_URI, Intent.Data);
-
-				DetailFragment fragment = new DetailFragment ();
+				var arguments = new Bundle ();
+				arguments.PutParcelable (DetailFragment.DetailUri, Intent.Data);
+                arguments.PutBoolean(DetailFragment.DetailTransitionAnimation,true);
+				var fragment = new DetailFragment ();
 				fragment.Arguments = arguments;
 
 				SupportFragmentManager.BeginTransaction().Add(Resource.Id.weather_detail_container, fragment)
 					.Commit ();
+
+                SupportPostponeEnterTransition();
 			}
 		}
 

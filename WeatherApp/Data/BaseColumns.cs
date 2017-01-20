@@ -11,10 +11,10 @@ namespace WeatherApp
 		}
 
 
-		public  const string _ID = "_id";
+		public  const string Id = "_id";
 
 
-		public  const string COUNT = "Count";
+		public  const string Count = "Count";
 
 	}
 }

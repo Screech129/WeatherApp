@@ -8,11 +8,11 @@ namespace WeatherApp
 {
 	public class WeatherDbHelper: SQLiteConnection
 	{
-		const int DATABASE_VERSION = 2;
+		const int DatabaseVersion = 2;
 
-		const String DATABASE_NAME = "weather.db";
-		static string personalFolder = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-		static readonly string DATABASE_PATH = Path.Combine (personalFolder, DATABASE_NAME);
+		const String DatabaseName = "weather.db";
+		static string _personalFolder = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+		static readonly string DATABASE_PATH = Path.Combine (_personalFolder, DatabaseName);
 
 
 
