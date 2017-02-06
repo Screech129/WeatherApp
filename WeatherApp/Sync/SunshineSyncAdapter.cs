@@ -15,6 +15,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Org.Json;
 using System.Collections;
+using System.Globalization;
 using Android.Content.Res;
 using Android.Preferences;
 using Android.Database;
@@ -39,7 +40,7 @@ namespace WeatherApp.Sync
         public const int SyncFlextime = SyncInterval / 3;
         private const long DayInMilis = 1000 * 60 * 60 * 24;
         private const int WeatherNotificationId = 3004;
-
+        public const string ActionDataUpdated = "WeatherApp.ActionDataUpdated";
         private static string[] _notifyWeatherProjection = new string[]
         {
             WeatherContractOpen.WeatherEntryOpen.ColumnWeatherId,
@@ -61,11 +62,12 @@ namespace WeatherApp.Sync
 
         public override void OnPerformSync (Account account, Bundle extras, string authority, ContentProviderClient provider, SyncResult syncResult)
         {
+            Log.Debug("SunshineSyncAdapter", "Starting Sync Time: " + DateTime.Now);
+
+
             var locationQuery = Utility.GetPreferredLocation(context);
-            Log.Debug("SunshineSyncAdapter", "Starting Sync Time: " + DateTime.Now + "Zip: " + locationQuery);
-
-
-            string forecastJsonStr = null;
+            var locationLatitude = Utility.GetLocationLatitude(context).ToString(CultureInfo.InvariantCulture);
+            var locationLongitude = Utility.GetLocationLongitude(context).ToString(CultureInfo.InvariantCulture);
 
             var format = "json";
             var units = "metric";
@@ -74,14 +76,21 @@ namespace WeatherApp.Sync
 
             try
             {
-                // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are available at OWM's forecast API page, at
-                // http://openweathermap.org/API#forecast
-                //http://api.openweathermap.org/data/2.5/forecast/daily?q=
-                var uri = "http://api.openweathermap.org/data/2.5/forecast/daily?zip=" + locationQuery + ",us&mode=" + format + "&units=" + units + "&cnt=" + numDays.ToString() + "&APPID=83fde89b086ca4abec16cb2a8c245bb8";
+                var uri = "";
+                if (Utility.IsLocationLatLonAvailable(context))
+                {
+                    uri = "http://api.openweathermap.org/data/2.5/forecast/daily?lat=" + locationLatitude + "&lon=" + locationLongitude + "&mode=" + format + "&units=" + units + "&cnt=" + numDays.ToString() + "&APPID=83fde89b086ca4abec16cb2a8c245bb8";
+
+
+                }
+                else
+                {
+                    uri = "http://api.openweathermap.org/data/2.5/forecast/daily?zip=" + locationQuery + ",us&mode=" + format + "&units=" + units + "&cnt=" + numDays.ToString() + "&APPID=83fde89b086ca4abec16cb2a8c245bb8";
+                }
+
                 var getJson =
                     httpClient.GetStringAsync(uri);
-                forecastJsonStr = getJson.Result;
+                var forecastJsonStr = getJson.Result;
                 GetWeatherDataFromJson(forecastJsonStr, locationQuery);
             }
 
@@ -241,8 +250,8 @@ namespace WeatherApp.Sync
                         WeatherContractOpen.WeatherEntryOpen.ColumnDate + " <= ?",
                         new string[] { dayTime.AddDays(1).Ticks.ToString() });
                     context.ContentResolver.BulkInsert(WeatherContractOpen.WeatherEntryOpen.ContentUri, cvArray);
-                    
 
+                    UpdateWidgets();
                     NotifyWeather();
                 }
 
@@ -510,6 +519,15 @@ namespace WeatherApp.Sync
 
             prefsEditor.PutInt(context.GetString(Resource.String.pref_location_status_key), locationStatus);
             prefsEditor.Commit();
+        }
+
+        private void UpdateWidgets ()
+        {
+
+            // Setting the package ensures that only components in our app will receive the broadcast
+            var dataUpdatedIntent = new Intent(ActionDataUpdated)
+                  .SetPackage(context.PackageName);
+            context.SendBroadcast(dataUpdatedIntent);
         }
 
         //public void BulkInsertWeather (ArrayList weatherValues, string locationSetting)

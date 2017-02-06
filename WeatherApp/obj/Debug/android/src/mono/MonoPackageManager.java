@@ -120,6 +120,8 @@ class MonoPackageManager_Resources {
 		"Xamarin.GooglePlayServices.Base.dll",
 		"Xamarin.GooglePlayServices.Basement.dll",
 		"Xamarin.GooglePlayServices.Gcm.dll",
+		"Xamarin.GooglePlayServices.Location.dll",
+		"Xamarin.GooglePlayServices.Maps.dll",
 		"Xamarin.GooglePlayServices.Measurement.dll",
 		"System.Runtime.dll",
 		"System.IO.dll",

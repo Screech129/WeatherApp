@@ -88,14 +88,17 @@ namespace WeatherApp
             Cursor.MoveToPosition(position);
             var weatherId = Cursor.GetInt(ForecastFragment.ColWeatherConditionId);
             int defaultImage;
+            bool useLongToday;
 
             switch (GetItemViewType(position))
             {
                 case ViewTypeToday:
                     defaultImage = Utility.GetArtResourceForWeatherCondition(weatherId);
+                    useLongToday = true;
                     break;
                 default:
                     defaultImage = Utility.GetIconResourceForWeatherCondition(weatherId);
+                    useLongToday = false;
                     break;
             }
 
@@ -118,7 +121,7 @@ namespace WeatherApp
             var dateInMillis = Cursor.GetLong(ForecastFragment.ColWeatherDate);
 
             // Find TextView and set formatted date on it
-            holder.DateView.Text = Utility.GetFriendlyDayString(context, dateInMillis);
+            holder.DateView.Text = Utility.GetFriendlyDayString(context, dateInMillis, useLongToday);
 
             // Read weather forecast from cursor
             var description = Utility.GetStringForWeatherCondition(context, weatherId);

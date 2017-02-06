@@ -23,12 +23,12 @@ namespace WeatherApp.Fragments
         ForecastAdapter forecastAdapter;
         private const string LogTag = "ForecastAdapter";
         private RecyclerView recyclerView;
-        private int position = RecyclerView.NoPosition;
         private bool useTodayLayout, autoSelectView;
         private static readonly string SelectedKey = "selected_position";
         private const int UrlLoader = 0;
         private bool holdForTransition;
         private int choiceMode;
+        private long initialSelectedDate = -1;
 
         private readonly string[] forecastColumns =
         {
@@ -146,10 +146,7 @@ namespace WeatherApp.Fragments
                 }
                 if (savedInstanceState != null)
                 {
-                    if (savedInstanceState.ContainsKey(SelectedKey))
-                    {
-                        position = savedInstanceState.GetInt(SelectedKey);
-                    }
+                   
                     forecastAdapter.OnRestoreInstanceState(savedInstanceState);
                 }
 
@@ -236,10 +233,7 @@ namespace WeatherApp.Fragments
 
         public override void OnSaveInstanceState (Bundle outState)
         {
-            if (position != RecyclerView.NoPosition)
-            {
-                outState.PutInt(SelectedKey, position);
-            }
+           
             forecastAdapter.OnSaveInstanceState(outState);
             base.OnSaveInstanceState(outState);
         }
@@ -259,8 +253,7 @@ namespace WeatherApp.Fragments
         {
             var cursor = (ICursor)data;
             forecastAdapter.SwapCursor(cursor);
-            if (position != RecyclerView.NoPosition)
-                recyclerView.SmoothScrollToPosition(position);
+            
 
             UpdateEmptyView();
 
@@ -276,9 +269,28 @@ namespace WeatherApp.Fragments
                         // we see Children.
                         if (recyclerView.ChildCount > 0)
                         {
-                            var itemPosition = forecastAdapter.GetSelectedItemPosition();
-                            if (RecyclerView.NoPosition == itemPosition) itemPosition = 0;
-                            var vh = recyclerView.FindViewHolderForAdapterPosition(itemPosition);
+                            var position = forecastAdapter.GetSelectedItemPosition();
+                            if (position == RecyclerView.NoPosition &&
+                                    -1 != initialSelectedDate)
+                            {
+                                var cursorData = forecastAdapter.GetCursor();
+                                var count = cursorData.Count;
+                                var dateColumn = cursorData.GetColumnIndex(WeatherContractOpen.WeatherEntryOpen.ColumnDate);
+                                for (var i = 0; i < count; i++)
+                                {
+                                    cursorData.MoveToPosition(i);
+                                    if (cursorData.GetLong(dateColumn) == initialSelectedDate)
+                                    {
+                                        position = i;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (position == RecyclerView.NoPosition) position = 0;
+                            // If we don't need to restart the loader, and there's a desired position to restore
+                            // to, do so now.
+                            recyclerView.SmoothScrollToPosition(position);
+                            var vh = recyclerView.FindViewHolderForAdapterPosition(position);
                             if (null != vh && autoSelectView)
                             {
                                 forecastAdapter.SelectView(vh);
@@ -303,6 +315,11 @@ namespace WeatherApp.Fragments
         {
             this.useTodayLayout = useTodayLayout;
             forecastAdapter?.SetUseTodayLayout(this.useTodayLayout);
+        }
+
+        public void SetInitialSelectedDate (long initialSelectedDate)
+        {
+            this.initialSelectedDate = initialSelectedDate;
         }
 
         private void UpdateEmptyView ()
@@ -357,7 +374,6 @@ namespace WeatherApp.Fragments
             ((ICallback)Activity)
                     .OnItemSelected(WeatherContractOpen.WeatherEntryOpen.BuildWeatherLocationWithDate(
                                     locationSetting, date), vh);
-            position = vh.AdapterPosition;
         }
 
         public override void OnDestroy ()

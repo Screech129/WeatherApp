@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="WeatherApp.WeatherApp" android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="24" />
+	<uses-sdk />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
@@ -10,7 +10,8 @@
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 	<permission android:name="com.example.android.sunshine.app.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	<uses-permission android:name="com.example.android.sunshine.app.permission.C2D_MESSAGE" />
-	<application android:supportsRtl="true" android:label="WeatherApp" android:theme="@style/AppTheme">
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<application android:supportsRtl="true" android:label="WeatherApp" android:theme="@style/AppTheme" android:icon="@drawable/ic_logo">
 		<receiver android:name="com.google.android.gms.gcm.GcmReceiver" android:exported="true" android:permission="com.google.android.c2dm.permission.SEND">
 			<intent-filter>
 				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -18,5 +19,14 @@
 				<category android:name="WeatherApp.WeatherApp" />
 			</intent-filter>
 		</receiver>
+    <receiver android:enabled="@bool/widget_detail_enabled" android:label="@string/title_widget_detail" android:name="widget.DetailWidgetProvider">
+      <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_info_detail" />
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        <action android:name="WeatherApp.ActionDataUpdated" />
+      </intent-filter>
+    </receiver>
+    <service android:name="widget.DetailWidgetRemoteViewsService" android:enabled="@bool/widget_detail_enabled" android:exported="false" android:permission="android.permission.BIND_REMOTEVIEWS" />
+		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDEaxZFI_XgNN3YWe5MOjk1zxEx5ndi-Hs" />
 	</application>
 </manifest>

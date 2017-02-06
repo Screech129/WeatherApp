@@ -251,7 +251,6 @@ namespace WeatherApp
         {
             // Student: Start by getting a writable database
             var db = openHelper.WritableDatabase;
-            Android.Net.Uri returnUri;
             var deletedRows = 0;
             // Student: Use the uriMatcher to match the WEATHER and LOCATION URI's we are going to
             // handle.  If it doesn't match these, throw an UnsupportedOperationException.

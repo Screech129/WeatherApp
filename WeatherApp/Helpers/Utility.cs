@@ -10,7 +10,7 @@ namespace WeatherApp
     public class Utility
     {
         public const string DateFormat = "yyyyMMdd";
-
+        public static float DefaultLatLong = 0F;
         public static string GetPreferredLocation (Context context)
         {
             var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
@@ -19,7 +19,7 @@ namespace WeatherApp
             return zip;
         }
 
-        public static bool IsMetric(Context context)
+        public static bool IsMetric (Context context)
         {
             var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
             return prefs.GetString(context.GetString(Resource.String.pref_temp_key),
@@ -47,7 +47,7 @@ namespace WeatherApp
             return date.ToString("ddd, MMM dd");
         }
 
-        public static string GetFriendlyDayString (Context context, long dateInMillis)
+        public static string GetFriendlyDayString (Context context, long dateInMillis, bool displayLongToday)
         {
             // The day String for forecast uses the following logic:
             // For today: "Today, June 8"
@@ -58,12 +58,12 @@ namespace WeatherApp
             var todayDate = DateTime.Now.Date;
 
             var currentDay = DateTime.Today.Ticks;
-            var  forecastDay = new DateTime(dateInMillis).Date;
+            var forecastDay = new DateTime(dateInMillis).Date;
             //var forecastDay = dateAsDay.AddTicks(dateInMillis).Date;
 
             // If the date we're building the String for is today's date, the format
             // is "Today, June 24"
-            if (todayDate == forecastDay)
+            if (displayLongToday && todayDate == forecastDay)
             {
                 var today = context.GetString(Resource.String.today);
                 var formatId = Resource.String.format_full_friendly_date;
@@ -131,7 +131,7 @@ namespace WeatherApp
 
             var day = GetDayName(context, dateInMillis);
             var formatId = Resource.String.format_full_friendly_date;
-            return string.Format(context.GetString(formatId),day,GetFormattedMonthDay(context, dateInMillis));
+            return string.Format(context.GetString(formatId), day, GetFormattedMonthDay(context, dateInMillis));
 
         }
 
@@ -145,7 +145,7 @@ namespace WeatherApp
             else
             {
                 windFormat = Resource.String.format_wind_mph;
-                windSpeed = .621371192237334f*windSpeed;
+                windSpeed = .621371192237334f * windSpeed;
             }
 
             // From wind direction in degrees, determine compass direction as a String (e.g NW)
@@ -187,7 +187,7 @@ namespace WeatherApp
             return string.Format(context.GetString(windFormat), windSpeed, direction);
         }
 
-        public static bool CheckNetworkStatus(Context context)
+        public static bool CheckNetworkStatus (Context context)
         {
             var connManager = (ConnectivityManager)context.GetSystemService(Context.ConnectivityService);
             var networkInfo = connManager.ActiveNetworkInfo;
@@ -195,14 +195,14 @@ namespace WeatherApp
 
         }
 
-        public static int GetLocationStatus(Context context)
+        public static int GetLocationStatus (Context context)
         {
             var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
-            var status = prefs.GetInt(context.GetString(Resource.String.pref_location_status),0);
+            var status = prefs.GetInt(context.GetString(Resource.String.pref_location_status), 0);
             return status;
         }
 
-        public static void ResetLocationStatus(Context context)
+        public static void ResetLocationStatus (Context context)
         {
             var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
             var prefsEditor = prefs.Edit();
@@ -219,7 +219,7 @@ namespace WeatherApp
                     sunshineArtPack).Equals(sunshineArtPack);
         }
 
-        public static Object GetArtUrlForWeatherCondition(Context context, int weatherId)
+        public static Object GetArtUrlForWeatherCondition (Context context, int weatherId)
         {
             var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
             var formatArtUrl = prefs.GetString(context.GetString(Resource.String.pref_art_pack_key),
@@ -238,7 +238,7 @@ namespace WeatherApp
                 var test = string.Format(formatArtUrl, "rain");
                 return string.Format(formatArtUrl, "rain");
             }
-            if (weatherId == 511) 
+            if (weatherId == 511)
             {
                 return string.Format(formatArtUrl, "snow");
             }
@@ -277,37 +277,48 @@ namespace WeatherApp
         {
             // Based on weather code data found at:
             // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
-            if (weatherId >= 200 && weatherId <= 232) {
+            if (weatherId >= 200 && weatherId <= 232)
+            {
                 return Resource.Drawable.ic_storm;
             }
-            if (weatherId >= 300 && weatherId <= 321) {
+            if (weatherId >= 300 && weatherId <= 321)
+            {
                 return Resource.Drawable.ic_light_rain;
             }
-            if (weatherId >= 500 && weatherId <= 504) {
+            if (weatherId >= 500 && weatherId <= 504)
+            {
                 return Resource.Drawable.ic_rain;
             }
-            if (weatherId == 511) {
+            if (weatherId == 511)
+            {
                 return Resource.Drawable.ic_snow;
             }
-            if (weatherId >= 520 && weatherId <= 531) {
+            if (weatherId >= 520 && weatherId <= 531)
+            {
                 return Resource.Drawable.ic_rain;
             }
-            if (weatherId >= 600 && weatherId <= 622) {
+            if (weatherId >= 600 && weatherId <= 622)
+            {
                 return Resource.Drawable.ic_snow;
             }
-            if (weatherId >= 701 && weatherId <= 761) {
+            if (weatherId >= 701 && weatherId <= 761)
+            {
                 return Resource.Drawable.ic_fog;
             }
-            if (weatherId == 761 || weatherId == 781) {
+            if (weatherId == 761 || weatherId == 781)
+            {
                 return Resource.Drawable.ic_storm;
             }
-            if (weatherId == 800) {
+            if (weatherId == 800)
+            {
                 return Resource.Drawable.ic_clear;
             }
-            if (weatherId == 801) {
+            if (weatherId == 801)
+            {
                 return Resource.Drawable.ic_light_clouds;
             }
-            if (weatherId >= 802 && weatherId <= 804) {
+            if (weatherId >= 802 && weatherId <= 804)
+            {
                 return Resource.Drawable.ic_cloudy;
             }
             return -1;
@@ -317,37 +328,48 @@ namespace WeatherApp
         {
             // Based on weather code data found at:
             // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
-            if (weatherId >= 200 && weatherId <= 232) {
+            if (weatherId >= 200 && weatherId <= 232)
+            {
                 return Resource.Drawable.art_storm;
             }
-            if (weatherId >= 300 && weatherId <= 321) {
+            if (weatherId >= 300 && weatherId <= 321)
+            {
                 return Resource.Drawable.art_light_rain;
             }
-            if (weatherId >= 500 && weatherId <= 504) {
+            if (weatherId >= 500 && weatherId <= 504)
+            {
                 return Resource.Drawable.art_rain;
             }
-            if (weatherId == 511) {
+            if (weatherId == 511)
+            {
                 return Resource.Drawable.art_snow;
             }
-            if (weatherId >= 520 && weatherId <= 531) {
+            if (weatherId >= 520 && weatherId <= 531)
+            {
                 return Resource.Drawable.art_rain;
             }
-            if (weatherId >= 600 && weatherId <= 622) {
+            if (weatherId >= 600 && weatherId <= 622)
+            {
                 return Resource.Drawable.art_rain;
             }
-            if (weatherId >= 701 && weatherId <= 761) {
+            if (weatherId >= 701 && weatherId <= 761)
+            {
                 return Resource.Drawable.art_fog;
             }
-            if (weatherId == 761 || weatherId == 781) {
+            if (weatherId == 761 || weatherId == 781)
+            {
                 return Resource.Drawable.art_storm;
             }
-            if (weatherId == 800) {
+            if (weatherId == 800)
+            {
                 return Resource.Drawable.art_clear;
             }
-            if (weatherId == 801) {
+            if (weatherId == 801)
+            {
                 return Resource.Drawable.art_light_clouds;
             }
-            if (weatherId >= 802 && weatherId <= 804) {
+            if (weatherId >= 802 && weatherId <= 804)
+            {
                 return Resource.Drawable.art_clouds;
             }
             return -1;
@@ -529,6 +551,27 @@ namespace WeatherApp
                 }
             return context.GetString(stringId);
         }
+
+        public static bool IsLocationLatLonAvailable (Context context)
+        {
+            var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
+
+            return prefs.Contains(context.GetString(Resource.String.pref_location_latitude)) &&
+                   prefs.Contains(context.GetString(Resource.String.pref_location_longitude));
+        }
+
+        public static float GetLocationLatitude (Context context)
+        {
+            var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
+            return prefs.GetFloat(context.GetString(Resource.String.pref_location_latitude), DefaultLatLong);
+        }
+
+        public static float GetLocationLongitude (Context context)
+        {
+            var prefs = PreferenceManager.GetDefaultSharedPreferences(context);
+            return prefs.GetFloat(context.GetString(Resource.String.pref_location_longitude), DefaultLatLong);
+        }
+
 
     }
 }

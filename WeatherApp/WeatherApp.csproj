@@ -126,6 +126,14 @@
       <HintPath>..\packages\Xamarin.GooglePlayServices.Gcm.29.0.0.2\lib\MonoAndroid41\Xamarin.GooglePlayServices.Gcm.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Location, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Location.29.0.0.2\lib\MonoAndroid41\Xamarin.GooglePlayServices.Location.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Maps, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Maps.29.0.0.2\lib\MonoAndroid41\Xamarin.GooglePlayServices.Maps.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.GooglePlayServices.Measurement, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.GooglePlayServices.Measurement.29.0.0.2\lib\MonoAndroid41\Xamarin.GooglePlayServices.Measurement.dll</HintPath>
       <Private>True</Private>
@@ -160,6 +168,10 @@
     <Compile Include="Fragments\SettingsFragment.cs" />
     <Compile Include="Helpers\ForecastAdapter.cs" />
     <Compile Include="Helpers\Utility.cs" />
+    <Compile Include="Widget\DetailWidgetProvider.cs" />
+    <Compile Include="Widget\DetailWidgetRemoteViewsService.cs" />
+    <Compile Include="Widget\TodayWidgetIntentService.cs" />
+    <Compile Include="Widget\TodayWidgetProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -184,6 +196,24 @@
     <AndroidResource Include="Resources\layout\list_item_base_forecast_today.axml" />
     <AndroidResource Include="Resources\layout-land\list_item_forecast_today.axml" />
     <AndroidResource Include="Resources\layout\fragment_detail_twopane.axml" />
+    <AndroidResource Include="Resources\layout\pref_current_location.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\widget_today_small.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\widget_today.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\widget_today_large.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\widget_detail.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\widget_detail_list_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />
@@ -361,10 +391,25 @@
     <AndroidResource Include="Resources\transition-v21\details_window_return_transition.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <Content Include="Resources\values-sw600dp-land\refs.xml" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_current_location.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_current_location.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_current_location.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_current_location.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\widget_preview_today.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\widget_preview_detail.png" />
+    <Content Include="Resources\values-sw600dp-land\refs.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <AndroidResource Include="Resources\values-sw720dp\dimens.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\values-v14\widget_dimens.xml" />
+    <AndroidResource Include="Resources\values\widget_dimens.xml" />
+    <AndroidResource Include="Resources\xml\widget_info_today.xml" />
+    <AndroidResource Include="Resources\values\bools.xml" />
+    <AndroidResource Include="Resources\values-sw600dp\bools.xml" />
+    <AndroidResource Include="Resources\xml\widget_info_detail.xml" />
+    <AndroidResource Include="Resources\values-v11\bools.xml" />
   </ItemGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -36,7 +36,7 @@ namespace WeatherApp
         {
             base.OnCreate(bundle);
             location = Utility.GetPreferredLocation(this);
-
+            var contentUri = Intent?.Data;
             SetContentView(Resource.Layout.Main);
             var toolbar = (Toolbar)FindViewById(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
@@ -47,9 +47,16 @@ namespace WeatherApp
                 twoPane = true;
                 if (bundle == null)
                 {
+                    var fragment = new DetailFragment();
+                    if (contentUri != null)
+                    {
+                        var args = new Bundle();
+                        args.PutParcelable(DetailFragment.DetailUri,contentUri);
+                        fragment.Arguments = args;
+                    }
                     SupportFragmentManager.BeginTransaction()
                         .Replace(Resource.Id.weather_detail_container,
-                        new DetailFragment(), DetailfragmentTag)
+                        fragment, DetailfragmentTag)
                         .Commit();
 
                 }
@@ -62,6 +69,11 @@ namespace WeatherApp
 
             var forecastFragment = FragmentManager.FindFragmentById<ForecastFragment>(Resource.Id.fragment_forecast);
             forecastFragment.SetUseTodayLayout(!twoPane);
+
+            if (contentUri != null)
+            {
+                forecastFragment.SetInitialSelectedDate(WeatherContractOpen.WeatherEntryOpen.GetDateFromUri(contentUri));
+            }
 
             SunshineSyncAdapter.InitializeSyncAdapter(this);
 

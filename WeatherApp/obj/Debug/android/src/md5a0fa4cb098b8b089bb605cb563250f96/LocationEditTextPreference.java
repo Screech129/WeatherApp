@@ -11,6 +11,7 @@ public class LocationEditTextPreference
 	static {
 		__md_methods = 
 			"n_showDialog:(Landroid/os/Bundle;)V:GetShowDialog_Landroid_os_Bundle_Handler\n" +
+			"n_onCreateView:(Landroid/view/ViewGroup;)Landroid/view/View;:GetOnCreateView_Landroid_view_ViewGroup_Handler\n" +
 			"";
 		mono.android.Runtime.register ("WeatherApp.CustomViews.LocationEditTextPreference, WeatherApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", LocationEditTextPreference.class, __md_methods);
 	}
@@ -54,6 +55,14 @@ public class LocationEditTextPreference
 	}
 
 	private native void n_showDialog (android.os.Bundle p0);
+
+
+	public android.view.View onCreateView (android.view.ViewGroup p0)
+	{
+		return n_onCreateView (p0);
+	}
+
+	private native android.view.View n_onCreateView (android.view.ViewGroup p0);
 
 	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)
